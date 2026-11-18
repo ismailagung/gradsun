@@ -27,4 +27,5 @@ export const env = createEnv({
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
     NEXT_PUBLIC_STORAGE_BASE_URL: process.env.NEXT_PUBLIC_STORAGE_BASE_URL,
   },
+  skipValidation: !!process.env.CI || !!process.env.SKIP_ENV_VALIDATION,
 });
