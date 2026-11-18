@@ -44,7 +44,8 @@
     "unmatch",
     "evenodd",
     "viewport",
-    "viewports"
+    "viewports",
+    "amannn"
   ],
   "ignorePaths": [
     "node_modules/**",
@@ -56,6 +57,7 @@
     "coverage/**",
     "*.log",
     "*.tsbuildinfo",
-    "public/**"
+    "public/**",
+    "CHANGELOG.md"
   ]
 }
