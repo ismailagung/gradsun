@@ -16,10 +16,7 @@
       "!**/.git",
       "!**/coverage",
       "!**/.agents",
-      "!**/public",
-      "!**/PM_AUDIT_REPORT.md",
-      "!**/PROJECT_MEMORY.md",
-      "!**/blueprint.md"
+      "!**/public"
     ]
   },
   "formatter": {

@@ -56,9 +56,6 @@
     "coverage/**",
     "*.log",
     "*.tsbuildinfo",
-    "blueprint.md",
-    "PM_AUDIT_REPORT.md",
-    "PROJECT_MEMORY.md",
     "public/**"
   ]
 }
