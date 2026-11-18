@@ -1,0 +1,26 @@
+{
+  "app": {
+    "title": "Photography Reservation System",
+    "description": "Studio booking and client photo proofing platform"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "loading": "Loading...",
+    "confirm": "Confirm",
+    "back": "Back",
+    "continue": "Continue"
+  },
+  "booking": {
+    "title": "Book a Photo Session",
+    "subtitle": "Select your package, date, and time slot",
+    "selectDate": "Select Date",
+    "selectSlot": "Select Time Slot",
+    "selectPackage": "Select Package",
+    "depositRequired": "Down payment required to confirm reservation"
+  },
+  "gallery": {
+    "title": "Client Photo Proofing",
+    "description": "Review and select your favorite shots"
+  }
+}

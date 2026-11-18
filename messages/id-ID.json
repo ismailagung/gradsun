@@ -1,0 +1,26 @@
+{
+  "app": {
+    "title": "Sistem Reservasi Fotografi",
+    "description": "Platform pemesanan studio dan proofing foto klien"
+  },
+  "common": {
+    "save": "Simpan",
+    "cancel": "Batal",
+    "loading": "Memuat...",
+    "confirm": "Konfirmasi",
+    "back": "Kembali",
+    "continue": "Lanjutkan"
+  },
+  "booking": {
+    "title": "Pesan Sesi Foto",
+    "subtitle": "Pilih paket, tanggal, dan slot waktu Anda",
+    "selectDate": "Pilih Tanggal",
+    "selectSlot": "Pilih Slot Waktu",
+    "selectPackage": "Pilih Paket",
+    "depositRequired": "Uang muka (DP) diperlukan untuk konfirmasi reservasi"
+  },
+  "gallery": {
+    "title": "Proofing Foto Klien",
+    "description": "Tinjau dan pilih foto favorit Anda"
+  }
+}
