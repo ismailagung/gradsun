@@ -1,0 +1,58 @@
+name: Feature Slice
+description: Propose a new feature slice or vertical capability
+title: "feat: "
+labels: ["feature", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please specify the feature slice with clear acceptance criteria in US English (`en-US`).
+  - type: input
+    id: summary
+    attributes:
+      label: Summary
+      description: Brief one-line description of the feature slice.
+    validations:
+      required: true
+  - type: input
+    id: wave_track
+    attributes:
+      label: Wave & Track
+      description: "e.g., Wave 3, Track A"
+    validations:
+      required: true
+  - type: dropdown
+    id: schema_pr
+    attributes:
+      label: Schema PR?
+      description: Does this issue modify schema.prisma? (Must be merged first)
+      options:
+        - "No"
+        - "Yes (Schema PR isolation required)"
+    validations:
+      required: true
+  - type: textarea
+    id: owned_paths
+    attributes:
+      label: Owned Paths (Mandatory Concurrency Boundary)
+      description: List the exact file paths or glob patterns this issue exclusively modifies.
+      placeholder: |
+        - src/modules/reservations/use-cases/book-session.use-case.ts
+        - src/modules/reservations/actions/book-session.action.ts
+        - tests/unit/book-session.test.ts
+    validations:
+      required: true
+  - type: textarea
+    id: requirements
+    attributes:
+      label: Acceptance Criteria (TDD First)
+      description: Detailed acceptance criteria, edge cases, and expected behaviors.
+    validations:
+      required: true
+  - type: textarea
+    id: architecture
+    attributes:
+      label: Packages (@latest) & Dependencies
+      description: Mention designated packages, banned packages, and required permissions.
+    validations:
+      required: false
