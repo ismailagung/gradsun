@@ -16,7 +16,8 @@
       "!**/.git",
       "!**/coverage",
       "!**/.agents",
-      "!**/public"
+      "!**/public",
+      "!**/CHANGELOG.md"
     ]
   },
   "formatter": {

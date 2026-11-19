@@ -45,7 +45,9 @@
     "evenodd",
     "viewport",
     "viewports",
-    "amannn"
+    "amannn",
+    "pkey",
+    "fkey"
   ],
   "ignorePaths": [
     "node_modules/**",
