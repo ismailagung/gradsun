@@ -1,51 +1,61 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #09090b;
+  --font-serif: var(--font-serif), Georgia, serif;
+  --font-sans: var(--font-sans), system-ui, sans-serif;
+  --background: #faf9f7;
+  --foreground: #1a1c1b;
   --card: #ffffff;
-  --card-foreground: #09090b;
+  --card-foreground: #1a1c1b;
   --popover: #ffffff;
-  --popover-foreground: #09090b;
-  --primary: #18181b;
-  --primary-foreground: #fafafa;
-  --secondary: #f4f4f5;
-  --secondary-foreground: #18181b;
-  --muted: #f4f4f5;
-  --muted-foreground: #71717a;
-  --accent: #f4f4f5;
-  --accent-foreground: #18181b;
-  --destructive: #ef4444;
-  --destructive-foreground: #fafafa;
-  --border: #e4e4e7;
-  --input: #e4e4e7;
-  --ring: #18181b;
+  --popover-foreground: #1a1c1b;
+  --primary: #c4871a;
+  --primary-foreground: #ffffff;
+  --secondary: #f4f3f1;
+  --secondary-foreground: #1a1c1b;
+  --muted: #efeeec;
+  --muted-foreground: #605e5a;
+  --accent: #f4f3f1;
+  --accent-foreground: #1a1c1b;
+  --destructive: #ba1a1a;
+  --destructive-foreground: #ffffff;
+  --border: #e5e5e2;
+  --input: #e5e5e2;
+  --ring: #d99b26;
   --radius: 0.5rem;
 }
 
 .dark {
-  --background: #09090b;
-  --foreground: #fafafa;
-  --card: #09090b;
-  --card-foreground: #fafafa;
-  --popover: #09090b;
-  --popover-foreground: #fafafa;
-  --primary: #fafafa;
-  --primary-foreground: #18181b;
-  --secondary: #27272a;
-  --secondary-foreground: #fafafa;
-  --muted: #27272a;
-  --muted-foreground: #a1a1aa;
-  --accent: #27272a;
-  --accent-foreground: #fafafa;
-  --destructive: #7f1d1d;
-  --destructive-foreground: #fafafa;
-  --border: #27272a;
-  --input: #27272a;
-  --ring: #d4d4d8;
+  --background: #1a1c1b;
+  --foreground: #faf9f7;
+  --card: #242220;
+  --card-foreground: #faf9f7;
+  --popover: #242220;
+  --popover-foreground: #faf9f7;
+  --primary: #d99b26;
+  --primary-foreground: #1a1c1b;
+  --secondary: #2f2d2b;
+  --secondary-foreground: #faf9f7;
+  --muted: #2f2d2b;
+  --muted-foreground: #a29f9a;
+  --accent: #2f2d2b;
+  --accent-foreground: #faf9f7;
+  --destructive: #ffdad6;
+  --destructive-foreground: #93000a;
+  --border: #383532;
+  --input: #383532;
+  --ring: #d99b26;
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
+}
+
+.font-serif {
+  font-family: var(--font-serif);
+}
+
+.font-sans {
+  font-family: var(--font-sans);
 }
