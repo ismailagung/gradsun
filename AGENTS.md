@@ -18,6 +18,7 @@ Welcome, agentic collaborators. This repository is built strictly with Next.js 1
    - Schemas: `src/modules/<feature>/schemas/<name>.schema.ts` (one Zod schema per use-case)
 3. **Strict Dependency Flow:** `Page/Route -> Action -> Use Case -> Repository -> Prisma -> Database`. Never query Prisma in pages, components, actions, or route handlers.
 4. **Issue-Driven Git Workflow:**
+   - **Zero Direct Coding:** No code changes without a tracked issue. Even for ad-hoc requests, exploratory spikes, or freeform coding, the agent MUST create a GitHub Issue first (`gh issue create`), create branch `feat/issue-<N>-<slug>` (or `chore/...`), execute, open PR, and Squash & Merge.
    - 1 Issue = 1 Dedicated Branch: `feat/issue-<N>-<slug>`. Direct pushes to `main` are strictly forbidden.
    - Mandatory Audit Trail: Assign self & post kickoff comment on issue before creating branch; post completion comment linking opened PR.
    - Schema-PR Isolation: Schema modifications in `schema.prisma` must be merged as an isolated Schema PR before UI/use-case work.
@@ -26,6 +27,7 @@ Welcome, agentic collaborators. This repository is built strictly with Next.js 1
 5. **TDD Iron Law:** Write failing unit tests in `tests/unit/` before writing use-case or repository implementations.
 6. **Data Privacy:** Real customer names, phone numbers, or credentials are strictly forbidden in repo commits, seeders, or test fixtures. Use fake data only.
 7. **Language Mandate:** 100% US English (`en-US`) across all code, identifiers, comments, commit messages, and PRs (enforced by `cspell`).
+8. **SemVer Advisory Mandate:** After merging any issue PR, the agent MUST explicitly advise the user whether to cut a new release (merge the pending Release Please PR to bump version) or stay on the current version.
 
 ## The 6 Mechanical Laws
 
