@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.3.0](https://github.com/najmialazhar/gradsun/compare/photo-reserve-v0.2.0...photo-reserve-v0.3.0) (2026-11-21)
+
+
+### Features
+
+* **database:** define master data domain models and relations ([#21](https://github.com/najmialazhar/gradsun/issues/21)) ([f43975b](https://github.com/najmialazhar/gradsun/commit/f43975b797447445a302ba1a3261eaded4e84d6b)), closes [#12](https://github.com/najmialazhar/gradsun/issues/12)
+* **packages:** implement packages domain slice with repository, use-cases, and safe actions ([#42](https://github.com/najmialazhar/gradsun/issues/42)) ([95ecfb1](https://github.com/najmialazhar/gradsun/commit/95ecfb1348b15df2cfa76e4e3da3a16ccce44401))
+* **reservations:** implement slot-calculator and pricing-calculator domain services ([#13](https://github.com/najmialazhar/gradsun/issues/13)) ([#25](https://github.com/najmialazhar/gradsun/issues/25)) ([bbb193b](https://github.com/najmialazhar/gradsun/commit/bbb193b7f747b20f270ea3f8b319a387717bba65))
+* **storage:** setup supabase s3 client and sharp webp watermarking pipeline ([#14](https://github.com/najmialazhar/gradsun/issues/14)) ([#26](https://github.com/najmialazhar/gradsun/issues/26)) ([e3a7d2f](https://github.com/najmialazhar/gradsun/commit/e3a7d2f46ef827c5ffdbac5394f71f196ff48df2))
+* **ui:** implement complete public and admin ui framework for [#23](https://github.com/najmialazhar/gradsun/issues/23) ([#24](https://github.com/najmialazhar/gradsun/issues/24)) ([1ec032d](https://github.com/najmialazhar/gradsun/commit/1ec032d34fe4b6bf52e4ec1ab6c1ace83fc192a3))
+
+
+### Miscellaneous Chores
+
+* **toolchain:** prune default create-next-app boilerplate assets and unused svgs ([#41](https://github.com/najmialazhar/gradsun/issues/41)) ([81e3dd9](https://github.com/najmialazhar/gradsun/commit/81e3dd9012b9cafcf0fe2d16816d0c57cd8ca7ad))
+
 ## [0.2.0](https://github.com/najmialazhar/gradsun/compare/photo-reserve-v0.1.0...photo-reserve-v0.2.0) (2026-11-18)
 
 
