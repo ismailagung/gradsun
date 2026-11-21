@@ -64,3 +64,7 @@ This skill defines the standard procedure for implementing an assigned GitHub Is
     gh pr create --title "feat(<scope>): ..." --body "Closes #<N> ..." --base main
     gh issue comment <N> --body "Implementation complete. Opened PR #<PR_NUMBER> for review."
     ```
+
+11. **SemVer Advisory & Release Prompt:**
+    - Immediately after PR merge, inspect the pending Release Please PR.
+    - Explicitly advise the user whether to bump the release version now (e.g. milestone reached) or stay on the current version while further issues are developed.

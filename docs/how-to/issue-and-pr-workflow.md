@@ -22,6 +22,11 @@ Every task must strictly adhere to its assigned `Owned Paths` to prevent merge c
 
 All pull requests must be merged via **Squash and Merge**.
 
+## Issue-First Protocol & SemVer Advisory
+
+1. **Issue-First Protocol:** Every task, feature request, ad-hoc change, or maintenance chore must originate with a tracked GitHub Issue before creating a branch. Direct pushes to `main` are strictly forbidden.
+2. **SemVer Advisory:** Collaborating agents must proactively advise the user after every merged issue on whether to trigger a release or maintain current version status.
+
 ## Pull Request Title & Conventional Commits
 
 All pull request titles are strictly validated via the `Semantic PR Check` GitHub Action (`amannn/action-semantic-pull-request`). Titles must follow Conventional Commits:
