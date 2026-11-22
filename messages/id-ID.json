@@ -347,7 +347,12 @@
     "paidFull": "Lunas Penuh",
     "dpPaid": "DP 50% Terbayar",
     "unpaid": "Belum Bayar",
-    "btnWhatsApp": "WhatsApp Klien"
+    "btnWhatsApp": "WhatsApp Klien",
+    "totalRecorded": "{count} Total Pemesanan Tercatat di Database",
+    "thAction": "Aksi",
+    "btnApprove": "Setujui",
+    "btnVerifyPayment": "Verifikasi DP / Lunas",
+    "statusUpdated": "Status berhasil diperbarui"
   },
   "adminPackages": {
     "title": "Master Paket & Layanan Tambahan",

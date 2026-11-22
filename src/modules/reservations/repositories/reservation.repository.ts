@@ -56,6 +56,14 @@ export interface IReservationRepository {
   findBlackoutDates(studioRoomId: string | null, date: Date): Promise<BlackoutDateInfo[]>;
   findByCode(code: string): Promise<ReservationWithRelations | null>;
   create(data: CreateReservationData): Promise<ReservationWithRelations>;
+  updateStatus(code: string, status: string): Promise<ReservationWithRelations>;
+  updatePaymentStatus(
+    code: string,
+    paymentStatus: string,
+    paymentProofUrl?: string | null,
+    status?: string,
+  ): Promise<ReservationWithRelations>;
+  findAll(): Promise<ReservationWithRelations[]>;
 }
 
 export class ReservationRepository implements IReservationRepository {
@@ -174,6 +182,38 @@ export class ReservationRepository implements IReservationRepository {
       include: {
         addons: true,
       },
+    });
+  }
+
+  async updateStatus(code: string, status: string): Promise<ReservationWithRelations> {
+    return prisma.reservation.update({
+      where: { code },
+      data: { status },
+      include: { addons: true },
+    });
+  }
+
+  async updatePaymentStatus(
+    code: string,
+    paymentStatus: string,
+    paymentProofUrl?: string | null,
+    status?: string,
+  ): Promise<ReservationWithRelations> {
+    return prisma.reservation.update({
+      where: { code },
+      data: {
+        paymentStatus,
+        ...(paymentProofUrl !== undefined ? { paymentProofUrl } : {}),
+        ...(status ? { status } : {}),
+      },
+      include: { addons: true },
+    });
+  }
+
+  async findAll(): Promise<ReservationWithRelations[]> {
+    return prisma.reservation.findMany({
+      orderBy: { createdAt: "desc" },
+      include: { addons: true },
     });
   }
 }

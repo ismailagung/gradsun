@@ -61,6 +61,9 @@ describe("CreateReservationUseCase (TDD)", () => {
     findBlackoutDates: vi.fn().mockResolvedValue([]),
     findByCode: vi.fn().mockResolvedValue(null),
     create: vi.fn().mockResolvedValue(mockCreatedReservation),
+    updateStatus: vi.fn().mockResolvedValue(mockCreatedReservation),
+    updatePaymentStatus: vi.fn().mockResolvedValue(mockCreatedReservation),
+    findAll: vi.fn().mockResolvedValue([mockCreatedReservation]),
     ...overrides,
   });
 
