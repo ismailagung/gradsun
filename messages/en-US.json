@@ -418,6 +418,8 @@
     "thCampus": "Campus",
     "thOrders": "Total Bookings",
     "thSpent": "Lifetime Value",
+    "thAction": "Action",
+    "description": "Directory of past and upcoming commencement clients.",
     "btnContact": "Message"
   },
   "booking": {

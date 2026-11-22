@@ -418,6 +418,8 @@
     "thCampus": "Kampus",
     "thOrders": "Total Pemesanan",
     "thSpent": "Total Transaksi",
+    "thAction": "Aksi",
+    "description": "Direktori klien wisuda terdahulu dan yang akan datang.",
     "btnContact": "Kirim Pesan"
   },
   "booking": {
