@@ -325,7 +325,12 @@
     "roomOverviewTitle": "Ketersediaan Ruang Studio",
     "roomA": "Studio Ruang A (Cahaya Alami)",
     "roomB": "Studio Ruang B (Kamar Gelap Monokrom)",
-    "roomCampus": "Pelataran Luar Kampus"
+    "roomCampus": "Pelataran Luar Kampus",
+    "scheduledBadge": "{count} Sesi Terjadwal",
+    "available": "Tersedia",
+    "roomADesc": "Pemesanan aktif sedang berlangsung",
+    "roomBDesc": "Siap untuk sesi studio berikutnya",
+    "roomCampusDesc": "Lokasi luar ruangan pencahayaan alami"
   },
   "adminBookings": {
     "title": "Manajemen Reservasi",
