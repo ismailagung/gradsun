@@ -425,7 +425,14 @@
   },
   "gallery": {
     "title": "Client Photo Proofing",
-    "description": "Review and select your favorite shots"
+    "description": "Review and select your favorite shots",
+    "selectionCounter": "{count} of {quota} Photos Selected",
+    "submitSelection": "Finalize Selection",
+    "selectionSubmitted": "Selection Approved for Retouching",
+    "retouchNotesPlaceholder": "Special retouching instructions (e.g. skin tone, blemishes, lighting)...",
+    "selectedBadge": "Selected",
+    "limitReached": "Selection limit reached",
+    "watermarkText": "Gradsun Proof"
   },
   "footer": {
     "description": "Fine-art photography studio dedicated to timeless graduation and milestone portraiture.",

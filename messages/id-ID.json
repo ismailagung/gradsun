@@ -425,7 +425,14 @@
   },
   "gallery": {
     "title": "Proofing Foto Klien",
-    "description": "Tinjau dan pilih foto favorit Anda"
+    "description": "Tinjau dan pilih foto favorit Anda",
+    "selectionCounter": "{count} dari {quota} Foto Dipilih",
+    "submitSelection": "Kirim Pilihan Foto",
+    "selectionSubmitted": "Pilihan Disetujui untuk Retouch",
+    "retouchNotesPlaceholder": "Instruksi khusus retouch (cth. warna kulit, noda, pencahayaan)...",
+    "selectedBadge": "Terpilih",
+    "limitReached": "Batas pilihan tercapai",
+    "watermarkText": "Gradsun Proof"
   },
   "footer": {
     "description": "Studio fotografi seni rupa yang didedikasikan untuk potret wisuda dan momen bersejarah abadi.",

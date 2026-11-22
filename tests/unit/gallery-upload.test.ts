@@ -41,6 +41,7 @@ function createMockGalleryRepository(): IGalleryRepository {
     createGallery: vi.fn(),
     addPhotos: vi.fn(),
     updateStatus: vi.fn(),
+    saveSelections: vi.fn(),
   };
 }
 
