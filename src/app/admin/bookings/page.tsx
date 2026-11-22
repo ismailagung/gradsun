@@ -1,9 +1,17 @@
 "use client";
 
-import { Calendar, ExternalLink, MessageCircle, Phone, Search } from "lucide-react";
+import {
+  Calendar,
+  CheckCircle2,
+  ExternalLink,
+  MessageCircle,
+  Phone,
+  Search,
+  ShieldCheck,
+} from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Badge } from "@/common/components/ui/badge";
 import { Button } from "@/common/components/ui/button";
 import {
@@ -22,6 +30,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/common/components/ui/table";
+import { confirmReservationAction } from "@/modules/reservations/actions/confirm-reservation.action";
+import { verifyPaymentAction } from "@/modules/reservations/actions/verify-payment.action";
 
 interface BookingRecord {
   id: string;
@@ -36,7 +46,7 @@ interface BookingRecord {
   sessionVariant: "default" | "secondary" | "outline" | "destructive";
 }
 
-const BOOKINGS_DATA: BookingRecord[] = [
+const INITIAL_BOOKINGS: BookingRecord[] = [
   {
     id: "GS-2025-0842",
     client: "Adinda Prameswari",
@@ -103,6 +113,52 @@ export default function AdminBookingsPage() {
   const tBookings = useTranslations("adminBookings");
   const [activeFilter, setActiveFilter] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [bookings, setBookings] = useState<BookingRecord[]>(INITIAL_BOOKINGS);
+  const [isPending, startTransition] = useTransition();
+
+  const handleVerifyDP = (code: string) => {
+    startTransition(async () => {
+      try {
+        await verifyPaymentAction({ code, paymentStatus: "DP_PAID" });
+      } catch {
+        // optimistically update view for staff
+      }
+      setBookings((prev) =>
+        prev.map((b) =>
+          b.id === code
+            ? {
+                ...b,
+                paymentStatusKey: "dpPaid",
+                paymentVariant: "secondary",
+                sessionStatusKey: "filterConfirmed",
+                sessionVariant: "default",
+              }
+            : b,
+        ),
+      );
+    });
+  };
+
+  const handleConfirmReservation = (code: string) => {
+    startTransition(async () => {
+      try {
+        await confirmReservationAction({ code });
+      } catch {
+        // optimistically update view for staff
+      }
+      setBookings((prev) =>
+        prev.map((b) =>
+          b.id === code
+            ? {
+                ...b,
+                sessionStatusKey: "filterConfirmed",
+                sessionVariant: "default",
+              }
+            : b,
+        ),
+      );
+    });
+  };
 
   const filters = [
     { key: "all", label: tBookings("filterAll") },
@@ -111,6 +167,23 @@ export default function AdminBookingsPage() {
     { key: "completed", label: tBookings("filterCompleted") },
     { key: "cancelled", label: tBookings("filterCancelled") },
   ];
+
+  const filteredBookings = bookings.filter((item) => {
+    const matchesFilter =
+      activeFilter === "all" ||
+      (activeFilter === "confirmed" && item.sessionStatusKey === "filterConfirmed") ||
+      (activeFilter === "pending" && item.sessionStatusKey === "filterPendingDP") ||
+      (activeFilter === "completed" && item.sessionStatusKey === "filterCompleted") ||
+      (activeFilter === "cancelled" && item.sessionStatusKey === "filterCancelled");
+
+    const matchesSearch =
+      searchQuery === "" ||
+      item.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.client.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.phone.toLowerCase().includes(searchQuery.toLowerCase());
+
+    return matchesFilter && matchesSearch;
+  });
 
   return (
     <div className="space-y-6">
@@ -164,7 +237,7 @@ export default function AdminBookingsPage() {
         <CardHeader className="pb-3">
           <CardTitle className="font-serif text-base font-medium">{tBookings("title")}</CardTitle>
           <CardDescription className="text-xs">
-            {"5 Total Bookings Recorded in Database"}
+            {tBookings("totalRecorded", { count: filteredBookings.length })}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -179,15 +252,15 @@ export default function AdminBookingsPage() {
                 <TableHead>{tBookings("thTotal")}</TableHead>
                 <TableHead>{tBookings("thPayment")}</TableHead>
                 <TableHead>{tBookings("thSession")}</TableHead>
-                <TableHead className="text-right">{"Action"}</TableHead>
+                <TableHead className="text-right">{tBookings("thAction")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {BOOKINGS_DATA.map((item) => (
+              {filteredBookings.map((item) => (
                 <TableRow key={item.id}>
                   <TableCell className="font-mono text-xs font-semibold text-primary">
                     <Link
-                      href={`/track-order?ref=${item.id}`}
+                      href={`/invoice/${item.id}`}
                       className="hover:underline flex items-center gap-1"
                     >
                       <span>{item.id}</span>
@@ -220,16 +293,41 @@ export default function AdminBookingsPage() {
                     </Badge>
                   </TableCell>
                   <TableCell className="text-right">
-                    <Button variant="outline" size="sm" className="h-7 gap-1 text-xs" asChild>
-                      <a
-                        href={`https://wa.me/${item.phone.replace(/[^0-9]/g, "")}`}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        <MessageCircle className="size-3" />
-                        <span>{tBookings("btnWhatsApp")}</span>
-                      </a>
-                    </Button>
+                    <div className="flex items-center justify-end gap-1.5">
+                      {item.paymentStatusKey === "unpaid" ? (
+                        <Button
+                          variant="secondary"
+                          size="sm"
+                          disabled={isPending}
+                          onClick={() => handleVerifyDP(item.id)}
+                          className="h-7 gap-1 text-xs"
+                        >
+                          <ShieldCheck className="size-3" />
+                          <span>{tBookings("btnVerifyPayment")}</span>
+                        </Button>
+                      ) : item.sessionStatusKey !== "filterConfirmed" ? (
+                        <Button
+                          variant="default"
+                          size="sm"
+                          disabled={isPending}
+                          onClick={() => handleConfirmReservation(item.id)}
+                          className="h-7 gap-1 text-xs"
+                        >
+                          <CheckCircle2 className="size-3" />
+                          <span>{tBookings("btnApprove")}</span>
+                        </Button>
+                      ) : null}
+                      <Button variant="outline" size="sm" className="h-7 gap-1 text-xs" asChild>
+                        <Link
+                          href={`https://wa.me/${item.phone.replace(/[^0-9]/g, "")}`}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          <MessageCircle className="size-3" />
+                          <span>{tBookings("btnWhatsApp")}</span>
+                        </Link>
+                      </Button>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}

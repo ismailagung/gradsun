@@ -347,7 +347,12 @@
     "paidFull": "Paid in Full",
     "dpPaid": "50% DP Paid",
     "unpaid": "Unpaid",
-    "btnWhatsApp": "WhatsApp Client"
+    "btnWhatsApp": "WhatsApp Client",
+    "totalRecorded": "{count} Total Bookings Recorded in Database",
+    "thAction": "Action",
+    "btnApprove": "Approve",
+    "btnVerifyPayment": "Verify DP / Full",
+    "statusUpdated": "Status updated successfully"
   },
   "adminPackages": {
     "title": "Master Packages & Add-ons",
