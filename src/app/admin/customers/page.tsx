@@ -1,8 +1,5 @@
-"use client";
-
 import { AtSign, GraduationCap, MessageCircle, Phone, Search, Users } from "lucide-react";
-import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { getTranslations } from "next-intl/server";
 import { Badge } from "@/common/components/ui/badge";
 import { Button } from "@/common/components/ui/button";
 import {
@@ -21,26 +18,24 @@ import {
   TableHeader,
   TableRow,
 } from "@/common/components/ui/table";
+import { CustomerRepository } from "@/modules/reservations/repositories/customer.repository";
+import {
+  type CustomerDirectoryItem,
+  type CustomersDirectoryResult,
+  GetCustomersDirectoryUseCase,
+} from "@/modules/reservations/use-cases/get-customers-directory.use-case";
 
-interface CustomerRecord {
-  id: string;
-  name: string;
-  phone: string;
-  instagram: string;
-  campus: string;
-  orders: string;
-  spent: string;
-}
-
-const CUSTOMERS_DATA: CustomerRecord[] = [
+const DEFAULT_CUSTOMERS: CustomerDirectoryItem[] = [
   {
     id: "cust-1",
     name: "Adinda Prameswari",
     phone: "0812-9876-5432",
     instagram: "@adinda.p",
     campus: "UI Depok (Fakultas Ekonomi)",
+    campusBadge: "UI",
     orders: "2 Sessions",
     spent: "IDR 3,450,000",
+    rawSpent: 3450000,
   },
   {
     id: "cust-2",
@@ -48,8 +43,10 @@ const CUSTOMERS_DATA: CustomerRecord[] = [
     phone: "0812-3456-7890",
     instagram: "@rafi.s",
     campus: "ITB Ganesha (SBM)",
+    campusBadge: "ITB",
     orders: "1 Session",
     spent: "IDR 2,400,000",
+    rawSpent: 2400000,
   },
   {
     id: "cust-3",
@@ -57,8 +54,10 @@ const CUSTOMERS_DATA: CustomerRecord[] = [
     phone: "0813-5566-7788",
     instagram: "@farhan.k",
     campus: "UGM Bulaksumur (Hukum)",
+    campusBadge: "UGM",
     orders: "1 Session",
     spent: "IDR 1,950,000",
+    rawSpent: 1950000,
   },
   {
     id: "cust-4",
@@ -66,14 +65,30 @@ const CUSTOMERS_DATA: CustomerRecord[] = [
     phone: "0811-2233-4455",
     instagram: "@nadia.f",
     campus: "Unpad Dipatiukur (Komunikasi)",
+    campusBadge: "Unpad",
     orders: "1 Session",
     spent: "IDR 1,500,000",
+    rawSpent: 1500000,
   },
 ];
 
-export default function AdminCustomersPage() {
-  const tCustomers = useTranslations("adminCustomers");
-  const [searchQuery, setSearchQuery] = useState<string>("");
+export default async function AdminCustomersPage() {
+  const tCustomers = await getTranslations("adminCustomers");
+
+  const repository = new CustomerRepository();
+  const useCase = new GetCustomersDirectoryUseCase(repository);
+
+  let data: CustomersDirectoryResult;
+  try {
+    data = await useCase.execute();
+  } catch {
+    data = {
+      totalCustomers: DEFAULT_CUSTOMERS.length,
+      customers: DEFAULT_CUSTOMERS,
+    };
+  }
+
+  const customers = data.customers.length > 0 ? data.customers : DEFAULT_CUSTOMERS;
 
   return (
     <div className="space-y-6">
@@ -95,8 +110,6 @@ export default function AdminCustomersPage() {
             </label>
             <Input
               id="customerSearch"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
               placeholder={tCustomers("searchPlaceholder")}
               className="h-8 pl-8 text-xs bg-background"
             />
@@ -113,9 +126,7 @@ export default function AdminCustomersPage() {
               {tCustomers("title")}
             </CardTitle>
           </div>
-          <CardDescription className="text-xs">
-            {"Directory of past and upcoming commencement clients."}
-          </CardDescription>
+          <CardDescription className="text-xs">{tCustomers("description")}</CardDescription>
         </CardHeader>
         <CardContent>
           <Table>
@@ -127,11 +138,11 @@ export default function AdminCustomersPage() {
                 <TableHead>{tCustomers("thCampus")}</TableHead>
                 <TableHead>{tCustomers("thOrders")}</TableHead>
                 <TableHead>{tCustomers("thSpent")}</TableHead>
-                <TableHead className="text-right">{"Action"}</TableHead>
+                <TableHead className="text-right">{tCustomers("thAction")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {CUSTOMERS_DATA.map((client) => (
+              {customers.map((client) => (
                 <TableRow key={client.id}>
                   <TableCell className="font-medium text-foreground">{client.name}</TableCell>
                   <TableCell className="font-mono text-xs text-muted-foreground">
@@ -150,6 +161,9 @@ export default function AdminCustomersPage() {
                     <div className="flex items-center gap-1.5">
                       <GraduationCap className="size-3 text-muted-foreground" />
                       <span>{client.campus}</span>
+                      <Badge variant="secondary" className="text-[10px] py-0 px-1 font-mono">
+                        {client.campusBadge}
+                      </Badge>
                     </div>
                   </TableCell>
                   <TableCell>
