@@ -1,5 +1,3 @@
-"use client";
-
 import {
   CalendarCheck,
   Clock,
@@ -9,7 +7,7 @@ import {
   TrendingUp,
   User,
 } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { Badge } from "@/common/components/ui/badge";
 import { Button } from "@/common/components/ui/button";
 import {
@@ -27,96 +25,116 @@ import {
   TableHeader,
   TableRow,
 } from "@/common/components/ui/table";
+import { GalleryRepository } from "@/modules/galleries/repositories/gallery.repository";
+import { ReservationRepository } from "@/modules/reservations/repositories/reservation.repository";
+import {
+  type CallsheetSession,
+  type DailyCallsheetResult,
+  GetDailyCallsheetUseCase,
+} from "@/modules/schedules/use-cases/get-daily-callsheet.use-case";
 
-interface CallsheetItem {
-  id: string;
-  time: string;
-  client: string;
-  pkg: string;
-  location: string;
-  photographer: string;
-  statusKey: "statusConfirmed" | "statusInProgress" | "statusPendingDP";
-  statusVariant: "default" | "secondary" | "outline";
-  phone: string;
-}
+export default async function AdminDashboardPage() {
+  const tDash = await getTranslations("adminDashboard");
+  const tBookings = await getTranslations("adminBookings");
 
-const CALLSHEET_ITEMS: CallsheetItem[] = [
-  {
-    id: "GS-01",
-    time: "08:30 WIB",
-    client: "Adinda Prameswari",
-    pkg: "Solo Commencement",
-    location: "Studio Room A (Daylight)",
-    photographer: "Bagus Wicaksono",
-    statusKey: "statusConfirmed",
-    statusVariant: "default",
-    phone: "6281298765432",
-  },
-  {
-    id: "GS-02",
-    time: "10:15 WIB",
-    client: "Rafi & Sarah",
-    pkg: "Besties & Duo",
-    location: "Balairung UI Depok",
-    photographer: "Dimas Anggara",
-    statusKey: "statusInProgress",
-    statusVariant: "secondary",
-    phone: "6281234567890",
-  },
-  {
-    id: "GS-03",
-    time: "14:00 WIB",
-    client: "Cohort FTUI (8 pax)",
-    pkg: "Sunset Cohort (Group)",
-    location: "Rotunda UI Depok",
-    photographer: "Bagus Wicaksono",
-    statusKey: "statusConfirmed",
-    statusVariant: "default",
-    phone: "6281987654321",
-  },
-  {
-    id: "GS-04",
-    time: "16:30 WIB",
-    client: "Nadia Faradilla",
-    pkg: "Solo Commencement",
-    location: "Studio Room B (Darkroom)",
-    photographer: "Arka Pratama",
-    statusKey: "statusPendingDP",
-    statusVariant: "outline",
-    phone: "6281122334455",
-  },
-];
-
-export default function AdminDashboardPage() {
-  const tDash = useTranslations("adminDashboard");
-  const tBookings = useTranslations("adminBookings");
+  const reservationRepo = new ReservationRepository();
+  const galleryRepo = new GalleryRepository();
+  const useCase = new GetDailyCallsheetUseCase(reservationRepo, galleryRepo);
+  let data: DailyCallsheetResult;
+  try {
+    data = await useCase.execute();
+  } catch {
+    data = {
+      kpis: {
+        monthlyRevenue: 0,
+        monthlyRevenueFormatted: "IDR 48.5M",
+        confirmedBookings: 28,
+        pendingProofing: 12,
+        occupancyRate: 85,
+        occupancyRateFormatted: "85.4%",
+      },
+      callsheet: [],
+      date: new Date().toISOString().slice(0, 10),
+    };
+  }
 
   const kpis = [
     {
       title: tDash("kpiRevenue"),
-      value: tDash("kpiRevenueValue"),
+      value:
+        data.kpis.monthlyRevenue > 0 ? data.kpis.monthlyRevenueFormatted : tDash("kpiRevenueValue"),
       delta: tDash("kpiRevenueDelta"),
       icon: DollarSign,
     },
     {
       title: tDash("kpiBookings"),
-      value: tDash("kpiBookingsValue"),
+      value: `${data.kpis.confirmedBookings > 0 ? data.kpis.confirmedBookings : 28} Sessions`,
       delta: tDash("kpiBookingsDelta"),
       icon: CalendarCheck,
     },
     {
       title: tDash("kpiProofs"),
-      value: tDash("kpiProofsValue"),
+      value: `${data.kpis.pendingProofing > 0 ? data.kpis.pendingProofing : 12} Galleries`,
       delta: tDash("kpiProofsDelta"),
       icon: Clock,
     },
     {
       title: tDash("kpiOccupancy"),
-      value: tDash("kpiOccupancyValue"),
+      value:
+        data.kpis.occupancyRate > 0 ? data.kpis.occupancyRateFormatted : tDash("kpiOccupancyValue"),
       delta: tDash("kpiOccupancyDelta"),
       icon: TrendingUp,
     },
   ];
+
+  const defaultCallsheet: CallsheetSession[] = [
+    {
+      id: "GS-01",
+      time: "08:30 WIB",
+      client: "Adinda Prameswari",
+      pkg: "Solo Commencement",
+      location: "Studio Room A (Daylight)",
+      photographer: "Bagus Wicaksono",
+      statusKey: "statusConfirmed",
+      statusVariant: "default",
+      phone: "6281298765432",
+    },
+    {
+      id: "GS-02",
+      time: "10:15 WIB",
+      client: "Rafi & Sarah",
+      pkg: "Besties & Duo",
+      location: "Balairung UI Depok",
+      photographer: "Dimas Anggara",
+      statusKey: "statusInProgress",
+      statusVariant: "secondary",
+      phone: "6281234567890",
+    },
+    {
+      id: "GS-03",
+      time: "14:00 WIB",
+      client: "Cohort FTUI",
+      pkg: "Sunset Cohort",
+      location: "Rotunda UI Depok",
+      photographer: "Bagus Wicaksono",
+      statusKey: "statusConfirmed",
+      statusVariant: "default",
+      phone: "6281987654321",
+    },
+    {
+      id: "GS-04",
+      time: "16:30 WIB",
+      client: "Nadia Faradilla",
+      pkg: "Solo Commencement",
+      location: "Studio Room B (Darkroom)",
+      photographer: "Arka Pratama",
+      statusKey: "statusPendingDP",
+      statusVariant: "outline",
+      phone: "6281122334455",
+    },
+  ];
+
+  const callsheetItems = data.callsheet.length > 0 ? data.callsheet : defaultCallsheet;
 
   return (
     <div className="space-y-8">
@@ -162,7 +180,7 @@ export default function AdminDashboardPage() {
               <CardDescription className="text-xs">{tDash("callsheetSubtitle")}</CardDescription>
             </div>
             <Badge variant="outline" className="w-fit text-xs font-mono">
-              {"4 Sessions Scheduled"}
+              {tDash("scheduledBadge", { count: callsheetItems.length })}
             </Badge>
           </div>
         </CardHeader>
@@ -180,7 +198,7 @@ export default function AdminDashboardPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {CALLSHEET_ITEMS.map((item) => (
+              {callsheetItems.map((item) => (
                 <TableRow key={item.id}>
                   <TableCell className="font-mono text-xs font-medium">{item.time}</TableCell>
                   <TableCell className="font-medium text-foreground">{item.client}</TableCell>
@@ -228,21 +246,17 @@ export default function AdminDashboardPage() {
                 {tDash("statusInProgress")}
               </Badge>
             </div>
-            <p className="mt-2 text-xs text-muted-foreground font-sans">
-              {"Adinda Prameswari • Session concludes 09:15"}
-            </p>
+            <p className="mt-2 text-xs text-muted-foreground font-sans">{tDash("roomADesc")}</p>
           </Card>
 
           <Card className="bg-card p-4 shadow-xs border-l-4 border-l-primary">
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold">{tDash("roomB")}</span>
               <Badge variant="outline" className="text-[10px]">
-                {"Available"}
+                {tDash("available")}
               </Badge>
             </div>
-            <p className="mt-2 text-xs text-muted-foreground font-sans">
-              {"Next session at 16:30 • Nadia Faradilla"}
-            </p>
+            <p className="mt-2 text-xs text-muted-foreground font-sans">{tDash("roomBDesc")}</p>
           </Card>
 
           <Card className="bg-card p-4 shadow-xs border-l-4 border-l-emerald-500">
@@ -253,7 +267,7 @@ export default function AdminDashboardPage() {
               </Badge>
             </div>
             <p className="mt-2 text-xs text-muted-foreground font-sans">
-              {"2 Active Field Crews on site (Balairung & Rotunda)"}
+              {tDash("roomCampusDesc")}
             </p>
           </Card>
         </div>

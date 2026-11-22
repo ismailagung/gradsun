@@ -325,7 +325,12 @@
     "roomOverviewTitle": "Studio Room Availability",
     "roomA": "Studio Room A (Natural Daylight)",
     "roomB": "Studio Room B (Darkroom Monochrome)",
-    "roomCampus": "Campus Outdoor Grounds"
+    "roomCampus": "Campus Outdoor Grounds",
+    "scheduledBadge": "{count} Sessions Scheduled",
+    "available": "Available",
+    "roomADesc": "Active booking in progress",
+    "roomBDesc": "Ready for next studio session",
+    "roomCampusDesc": "Natural lighting outdoor location"
   },
   "adminBookings": {
     "title": "Bookings Management",
