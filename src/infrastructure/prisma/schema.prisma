@@ -51,13 +51,42 @@ model UserRole {
 }
 
 model Reservation {
-  id          String   @id @default(uuid())
-  userId      String
-  user        User     @relation(fields: [userId], references: [id])
-  status      String   @default("requested")
-  sessionDate DateTime
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id              String             @id @default(uuid())
+  code            String             @unique
+  userId          String?
+  packageId       String
+  studioRoomId    String?
+  clientName      String
+  clientPhone     String
+  instagramHandle String?
+  campusName      String?
+  packagePrice    Int
+  addonsTotal     Int                @default(0)
+  grandTotal      Int
+  status          String             @default("PENDING_CONFIRMATION")
+  paymentStatus   String             @default("UNPAID")
+  paymentProofUrl String?
+  sessionDate     DateTime
+  startTime       String?
+  endTime         String?
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+  user            User?              @relation(fields: [userId], references: [id], onDelete: SetNull)
+  package         Package            @relation(fields: [packageId], references: [id])
+  studioRoom      StudioRoom?        @relation(fields: [studioRoomId], references: [id], onDelete: SetNull)
+  addons          ReservationAddon[]
+}
+
+model ReservationAddon {
+  id            String      @id @default(uuid())
+  reservationId String
+  addonName     String
+  unitPrice     Int
+  quantity      Int         @default(1)
+  subtotal      Int
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  reservation   Reservation @relation(fields: [reservationId], references: [id], onDelete: Cascade)
 }
 
 model Package {
@@ -73,6 +102,7 @@ model Package {
   createdAt          DateTime       @default(now())
   updatedAt          DateTime       @updatedAt
   addons             PackageAddon[]
+  reservations       Reservation[]
 }
 
 model PackageAddon {
@@ -97,6 +127,7 @@ model StudioRoom {
   updatedAt     DateTime       @updatedAt
   slots         ScheduleSlot[]
   blackoutDates BlackoutDate[]
+  reservations  Reservation[]
 }
 
 model ScheduleSlot {
