@@ -20,7 +20,7 @@ const plusJakarta = Plus_Jakarta_Sans({
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("app");
-  const baseUrl = env.NEXT_PUBLIC_APP_URL.replace(/\/$/, "");
+  const baseUrl = (env.NEXT_PUBLIC_APP_URL || "http://localhost:3000").replace(/\/$/, "");
 
   return {
     metadataBase: new URL(baseUrl),

@@ -26,7 +26,7 @@ export interface PhotographyStudioSchema {
 }
 
 export function getPhotographyStudioSchema(): PhotographyStudioSchema {
-  const baseUrl = env.NEXT_PUBLIC_APP_URL.replace(/\/$/, "");
+  const baseUrl = (env.NEXT_PUBLIC_APP_URL || "http://localhost:3000").replace(/\/$/, "");
 
   return {
     "@context": "https://schema.org",
