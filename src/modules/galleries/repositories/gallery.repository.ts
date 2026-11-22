@@ -35,6 +35,10 @@ export interface IGalleryRepository {
   createGallery(data: CreateGalleryData): Promise<GalleryWithDetails>;
   addPhotos(galleryId: string, photos: AddPhotoData[]): Promise<number>;
   updateStatus(galleryId: string, status: string): Promise<GalleryWithDetails>;
+  saveSelections(
+    galleryId: string,
+    selections: Array<{ photoId: string; notes?: string }>,
+  ): Promise<number>;
 }
 
 export class GalleryRepository implements IGalleryRepository {
@@ -200,5 +204,29 @@ export class GalleryRepository implements IGalleryRepository {
     });
 
     return gallery as GalleryWithDetails;
+  }
+
+  async saveSelections(
+    galleryId: string,
+    selections: Array<{ photoId: string; notes?: string }>,
+  ): Promise<number> {
+    await prisma.photoSelection.deleteMany({
+      where: { galleryId },
+    });
+
+    if (selections.length === 0) {
+      return 0;
+    }
+
+    const result = await prisma.photoSelection.createMany({
+      data: selections.map((s) => ({
+        galleryId,
+        photoId: s.photoId,
+        notes: s.notes ?? null,
+        retouchingStatus: "PENDING",
+      })),
+    });
+
+    return result.count;
   }
 }
