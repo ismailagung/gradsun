@@ -75,6 +75,48 @@ model Reservation {
   package         Package            @relation(fields: [packageId], references: [id])
   studioRoom      StudioRoom?        @relation(fields: [studioRoomId], references: [id], onDelete: SetNull)
   addons          ReservationAddon[]
+  gallery         Gallery?
+}
+
+model Gallery {
+  id                  String           @id @default(uuid())
+  reservationId       String           @unique
+  status              String           @default("UPLOADING")
+  watermarkConfig     String?          @default("diagonal-fine-art")
+  paxelTrackingNumber String?
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+  reservation         Reservation      @relation(fields: [reservationId], references: [id], onDelete: Cascade)
+  photos              Photo[]
+  selections          PhotoSelection[]
+}
+
+model Photo {
+  id             String           @id @default(uuid())
+  galleryId      String
+  originalKey    String
+  previewKey     String
+  thumbnailKey   String
+  dimensions     String?
+  sequenceNumber Int              @default(0)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  gallery        Gallery          @relation(fields: [galleryId], references: [id], onDelete: Cascade)
+  selections     PhotoSelection[]
+}
+
+model PhotoSelection {
+  id               String   @id @default(uuid())
+  galleryId        String
+  photoId          String
+  notes            String?
+  retouchingStatus String   @default("PENDING")
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  gallery          Gallery  @relation(fields: [galleryId], references: [id], onDelete: Cascade)
+  photo            Photo    @relation(fields: [photoId], references: [id], onDelete: Cascade)
+
+  @@unique([galleryId, photoId])
 }
 
 model ReservationAddon {
