@@ -22,6 +22,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/common/components/ui/table";
+import { uploadPhotosAction } from "@/modules/galleries/actions/upload-photos.action";
 
 interface GalleryRecord {
   id: string;
@@ -39,7 +40,7 @@ const GALLERIES_DATA: GalleryRecord[] = [
     id: "gal-1",
     bookingCode: "GS-2025-0842",
     client: "Adinda Prameswari",
-    photos: "84 High-Res Plates",
+    photos: "84 Plates",
     statusKey: "statusApproved",
     statusVariant: "default",
     watermarkKey: "watermarkActive",
@@ -49,7 +50,7 @@ const GALLERIES_DATA: GalleryRecord[] = [
     id: "gal-2",
     bookingCode: "GS-2025-0843",
     client: "Rafi & Sarah",
-    photos: "112 High-Res Plates",
+    photos: "112 Plates",
     statusKey: "statusSelecting",
     statusVariant: "secondary",
     watermarkKey: "watermarkActive",
@@ -59,7 +60,7 @@ const GALLERIES_DATA: GalleryRecord[] = [
     id: "gal-3",
     bookingCode: "GS-2025-0839",
     client: "Farhan & Kevin",
-    photos: "96 High-Res Plates",
+    photos: "96 Plates",
     statusKey: "statusApproved",
     statusVariant: "default",
     watermarkKey: "watermarkActive",
@@ -68,8 +69,8 @@ const GALLERIES_DATA: GalleryRecord[] = [
   {
     id: "gal-4",
     bookingCode: "GS-2025-0840",
-    client: "Cohort FTUI (8 pax)",
-    photos: "142 High-Res Plates",
+    client: "Cohort FTUI",
+    photos: "142 Plates",
     statusKey: "statusSelecting",
     statusVariant: "secondary",
     watermarkKey: "watermarkActive",
@@ -79,14 +80,32 @@ const GALLERIES_DATA: GalleryRecord[] = [
 
 export default function AdminGalleriesPage() {
   const tGalleries = useTranslations("adminGalleries");
+  const tCommon = useTranslations("common");
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
 
   const handleCopy = (id: string, code: string) => {
     if (typeof window !== "undefined") {
       navigator.clipboard.writeText(`${window.location.origin}/track-order?ref=${code}`);
       setCopiedId(id);
       setTimeout(() => setCopiedId(null), 2000);
+    }
+  };
+
+  const handleTriggerUpload = async () => {
+    setIsProcessing(true);
+    try {
+      await uploadPhotosAction({
+        galleryId: "gal-1",
+        reservationId: "res-demo",
+        action: "generate-urls",
+        fileNames: ["sample-proof.jpg"],
+      });
+    } catch {
+      // Handled silently
+    } finally {
+      setIsProcessing(false);
     }
   };
 
@@ -102,9 +121,14 @@ export default function AdminGalleriesPage() {
         </div>
 
         <div className="flex items-center gap-2">
-          <Button size="sm" className="gap-1.5 h-8">
+          <Button
+            size="sm"
+            className="gap-1.5 h-8"
+            disabled={isProcessing}
+            onClick={handleTriggerUpload}
+          >
             <Plus className="size-3.5" />
-            <span>{tGalleries("btnNewGallery")}</span>
+            <span>{isProcessing ? tCommon("loading") : tGalleries("btnNewGallery")}</span>
           </Button>
         </div>
       </div>
@@ -137,9 +161,7 @@ export default function AdminGalleriesPage() {
               {tGalleries("title")}
             </CardTitle>
           </div>
-          <CardDescription className="text-xs">
-            {"Watermarked proofing galleries dispatched to clients for online selection."}
-          </CardDescription>
+          <CardDescription className="text-xs">{tGalleries("subtitle")}</CardDescription>
         </CardHeader>
         <CardContent>
           <Table>
@@ -183,7 +205,9 @@ export default function AdminGalleriesPage() {
                       onClick={() => handleCopy(item.id, item.bookingCode)}
                     >
                       <Copy className="size-3" />
-                      <span>{copiedId === item.id ? "Copied!" : tGalleries("btnCopyLink")}</span>
+                      <span>
+                        {copiedId === item.id ? tCommon("completed") : tGalleries("btnCopyLink")}
+                      </span>
                     </Button>
                   </TableCell>
                 </TableRow>
