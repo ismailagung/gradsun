@@ -2,7 +2,6 @@ import {
   ArrowRight,
   Check,
   Heart,
-  MessageCircle,
   Quote,
   Sparkles,
   Star,
@@ -594,12 +593,6 @@ export default async function HomePage() {
         <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
           <div className="relative rounded-3xl overflow-hidden border border-border bg-foreground text-background p-8 sm:p-14 shadow-xl">
             <div className="relative z-10 max-w-2xl flex flex-col gap-4">
-              <Badge
-                variant="outline"
-                className="text-primary border-primary/40 self-start px-3 py-1 text-xs"
-              >
-                {tMani("badge")}
-              </Badge>
               <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl tracking-tight leading-tight">
                 {tMani("title")}
               </h2>
@@ -619,8 +612,7 @@ export default async function HomePage() {
                   asChild
                   className="gap-2 rounded-xl text-sm border-background/20 text-background hover:bg-background/10"
                 >
-                  <Link href="https://wa.me/6281234567890">
-                    <MessageCircle className="size-4" />
+                  <Link href="/packages">
                     <span>{tMani("secondaryCta")}</span>
                   </Link>
                 </Button>
