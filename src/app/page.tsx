@@ -1,12 +1,4 @@
-import {
-  ArrowRight,
-  Check,
-  Heart,
-  Quote,
-  Sparkles,
-  Star,
-  Sun,
-} from "lucide-react";
+import { ArrowRight, Check, Heart, Quote, Sparkles, Star, Sun } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
@@ -174,9 +166,7 @@ export default async function HomePage() {
                   {tPortfolio("title")}
                 </h2>
               </div>
-              <p className="text-sm text-muted-foreground max-w-md">
-                {tPortfolio("subtitle")}
-              </p>
+              <p className="text-sm text-muted-foreground max-w-md">{tPortfolio("subtitle")}</p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -294,13 +284,14 @@ export default async function HomePage() {
                     <h3 className="font-serif text-base sm:text-lg font-bold text-foreground group-hover:text-primary transition-colors">
                       {tPkg("pkg1Title")}
                     </h3>
-                    <Badge variant="outline" className="text-xs font-semibold border-primary/40 text-primary shrink-0">
+                    <Badge
+                      variant="outline"
+                      className="text-xs font-semibold border-primary/40 text-primary shrink-0"
+                    >
                       {tPkg("pkg1Price")}
                     </Badge>
                   </div>
-                  <p className="text-xs font-medium text-foreground/80">
-                    {tPkg("pkg1Scope")}
-                  </p>
+                  <p className="text-xs font-medium text-foreground/80">{tPkg("pkg1Scope")}</p>
                   <ul className="space-y-1.5 pt-2 text-xs text-muted-foreground border-t border-border/50">
                     <li className="flex items-start gap-2">
                       <Check className="size-3.5 text-primary shrink-0 mt-0.5" />
@@ -343,13 +334,14 @@ export default async function HomePage() {
                     <h3 className="font-serif text-base sm:text-lg font-bold text-foreground group-hover:text-primary transition-colors">
                       {tPkg("pkg2Title")}
                     </h3>
-                    <Badge variant="outline" className="text-xs font-semibold border-primary/40 text-primary shrink-0">
+                    <Badge
+                      variant="outline"
+                      className="text-xs font-semibold border-primary/40 text-primary shrink-0"
+                    >
                       {tPkg("pkg2Price")}
                     </Badge>
                   </div>
-                  <p className="text-xs font-medium text-foreground/80">
-                    {tPkg("pkg2Scope")}
-                  </p>
+                  <p className="text-xs font-medium text-foreground/80">{tPkg("pkg2Scope")}</p>
                   <ul className="space-y-1.5 pt-2 text-xs text-muted-foreground border-t border-border/50">
                     <li className="flex items-start gap-2">
                       <Check className="size-3.5 text-primary shrink-0 mt-0.5" />
@@ -392,13 +384,14 @@ export default async function HomePage() {
                     <h3 className="font-serif text-base sm:text-lg font-bold text-foreground group-hover:text-primary transition-colors">
                       {tPkg("pkg3Title")}
                     </h3>
-                    <Badge variant="outline" className="text-xs font-semibold border-primary/40 text-primary shrink-0">
+                    <Badge
+                      variant="outline"
+                      className="text-xs font-semibold border-primary/40 text-primary shrink-0"
+                    >
                       {tPkg("pkg3Price")}
                     </Badge>
                   </div>
-                  <p className="text-xs font-medium text-foreground/80">
-                    {tPkg("pkg3Scope")}
-                  </p>
+                  <p className="text-xs font-medium text-foreground/80">{tPkg("pkg3Scope")}</p>
                   <ul className="space-y-1.5 pt-2 text-xs text-muted-foreground border-t border-border/50">
                     <li className="flex items-start gap-2">
                       <Check className="size-3.5 text-primary shrink-0 mt-0.5" />
@@ -441,13 +434,14 @@ export default async function HomePage() {
                     <h3 className="font-serif text-base sm:text-lg font-bold text-foreground group-hover:text-primary transition-colors">
                       {tPkg("pkg4Title")}
                     </h3>
-                    <Badge variant="outline" className="text-xs font-semibold border-primary/40 text-primary shrink-0">
+                    <Badge
+                      variant="outline"
+                      className="text-xs font-semibold border-primary/40 text-primary shrink-0"
+                    >
                       {tPkg("pkg4Price")}
                     </Badge>
                   </div>
-                  <p className="text-xs font-medium text-foreground/80">
-                    {tPkg("pkg4Scope")}
-                  </p>
+                  <p className="text-xs font-medium text-foreground/80">{tPkg("pkg4Scope")}</p>
                   <ul className="space-y-1.5 pt-2 text-xs text-muted-foreground border-t border-border/50">
                     <li className="flex items-start gap-2">
                       <Check className="size-3.5 text-primary shrink-0 mt-0.5" />
