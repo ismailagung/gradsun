@@ -49,7 +49,7 @@ This repository adheres to Feature-Driven and Use-Case Driven Clean Architecture
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/najmialazhar/gradsun.git
+   git clone https://github.com/ismailagung/gradsun.git
    cd gradsun
    ```
 

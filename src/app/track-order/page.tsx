@@ -50,7 +50,6 @@ export default async function TrackOrderPage(props: TrackOrderPageProps) {
 
   const tNav = await getTranslations("nav");
   const tTrack = await getTranslations("trackOrderPage");
-  const tFoot = await getTranslations("footer");
 
   const galleryRepo = new GalleryRepository();
   const gallery = await galleryRepo.findByBookingCode(bookingCode);
@@ -83,7 +82,7 @@ export default async function TrackOrderPage(props: TrackOrderPageProps) {
   const isStep5Active = galleryStatus === "DELIVERED";
 
   return (
-    <div className="flex flex-col min-h-screen bg-background text-foreground">
+    <div className="flex flex-col flex-1 bg-background text-foreground">
       {/* Navigation Header */}
       <header className="sticky top-0 z-50 w-full border-b border-border bg-background/90 backdrop-blur-md">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -375,13 +374,6 @@ export default async function TrackOrderPage(props: TrackOrderPageProps) {
           </div>
         </Card>
       </main>
-
-      {/* Footer */}
-      <footer className="border-t border-border bg-card py-8 text-center text-xs text-muted-foreground">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <p>{tFoot("copyright")}</p>
-        </div>
-      </footer>
     </div>
   );
 }

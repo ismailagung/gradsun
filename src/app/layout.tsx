@@ -3,6 +3,7 @@ import { Playfair_Display, Plus_Jakarta_Sans } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
 import { JsonLd } from "@/common/components/json-ld";
+import { SiteFooter } from "@/common/components/shared/site-footer";
 import { env } from "@/env";
 import "./globals.css";
 
@@ -54,10 +55,11 @@ export default async function RootLayout({
 
   return (
     <html lang="en" className={`${plusJakarta.variable} ${playfair.variable}`}>
-      <body className="font-sans antialiased bg-background text-foreground min-h-screen">
+      <body className="font-sans antialiased bg-background text-foreground min-h-screen flex flex-col">
         <NextIntlClientProvider messages={messages}>
           <JsonLd />
-          {children}
+          <div className="flex-1 flex flex-col">{children}</div>
+          <SiteFooter />
         </NextIntlClientProvider>
       </body>
     </html>
