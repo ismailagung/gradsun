@@ -18,7 +18,7 @@ describe("SEO - Sitemap Generation", () => {
     const urls = items.map((item) => item.url);
     expect(urls.some((url) => url === "https://gradsun.id/")).toBe(true);
     expect(urls.some((url) => url === "https://gradsun.id/packages")).toBe(true);
-    expect(urls.some((url) => url === "https://gradsun.id/portfolio")).toBe(true);
+    expect(urls.some((url) => url === "https://gradsun.id/gallery")).toBe(true);
     expect(urls.some((url) => url === "https://gradsun.id/track-order")).toBe(true);
 
     for (const item of items) {

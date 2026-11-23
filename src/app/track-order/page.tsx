@@ -112,7 +112,7 @@ export default async function TrackOrderPage(props: TrackOrderPageProps) {
               <Link href="/">{tNav("home")}</Link>
             </Button>
             <Button variant="ghost" size="default" asChild className="rounded-full px-4 text-xs">
-              <Link href="/portfolio">{tNav("portfolio")}</Link>
+              <Link href="/gallery">{tNav("portfolio")}</Link>
             </Button>
             <Button variant="ghost" size="default" asChild className="rounded-full px-4 text-xs">
               <Link href="/packages">{tNav("packages")}</Link>

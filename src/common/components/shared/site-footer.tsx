@@ -49,7 +49,7 @@ export function SiteFooter() {
             {tFoot("navTitle")}
           </span>
           <div className="flex flex-col gap-1.5 text-xs text-muted-foreground">
-            <Link href="/portfolio" className="hover:text-foreground transition-colors">
+            <Link href="/gallery" className="hover:text-foreground transition-colors">
               {tNav("portfolio")}
             </Link>
             <Link href="/packages" className="hover:text-foreground transition-colors">

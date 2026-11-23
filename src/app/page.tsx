@@ -45,7 +45,7 @@ export default async function HomePage() {
               <Link href="/">{tNav("home")}</Link>
             </Button>
             <Button variant="ghost" size="default" asChild className="rounded-full px-4 text-xs">
-              <Link href="/portfolio">{tNav("portfolio")}</Link>
+              <Link href="/gallery">{tNav("portfolio")}</Link>
             </Button>
             <Button variant="ghost" size="default" asChild className="rounded-full px-4 text-xs">
               <Link href="/packages">{tNav("packages")}</Link>
@@ -109,7 +109,7 @@ export default async function HomePage() {
                   asChild
                   className="gap-2 rounded-xl text-sm border-border"
                 >
-                  <Link href="/portfolio">
+                  <Link href="/gallery">
                     <span>{tHero("secondaryCta")}</span>
                     <ArrowRight className="size-4" />
                   </Link>
