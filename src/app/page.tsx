@@ -154,7 +154,7 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* RECENT PORTFOLIO SHOWCASE */}
+        {/* RECENT GALLERY SHOWCASE */}
         <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 border-t border-border bg-secondary/20 w-full">
           <div className="max-w-7xl mx-auto">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">

@@ -29,7 +29,7 @@
     "brand": "Gradsun",
     "tagline": "Studio Seni Rupa",
     "home": "Beranda",
-    "portfolio": "Galeri",
+    "portfolio": "Gallery",
     "packages": "Paket & Reservasi",
     "trackOrder": "Lacak Pesanan",
     "admin": "Admin Studio",
@@ -43,13 +43,13 @@
     "titlePart2": "Layak untuk Diabadikan.",
     "subtitle": "Selamat kepada seluruh wisudawan! Kerja keras, tekad, dan ketekunan telah membawa Anda sampai di titik ini. Sebuah pencapaian luar biasa yang menjadi awal dari perjalanan baru. Mari rayakan, kenang, dan abadikan setiap momen berharga bersama Gradsun Studio.",
     "primaryCta": "Pesan Sesi Anda",
-    "secondaryCta": "Jelajahi Galeri",
+    "secondaryCta": "Jelajahi Gallery",
     "imageAlt": "Potret editorial wisuda dengan pancaran sinar matahari senja",
     "badgeTitle": "Standar Kamar Gelap",
     "badgeSubtitle": "Terjaga untuk generasi mendatang"
   },
   "landingPortfolio": {
-    "tag": "Galeri Pilihan",
+    "tag": "Gallery Pilihan",
     "title": "Sorotan Momen Wisuda Terbaru",
     "subtitle": "Galeri kurasi momen berharga yang diabadikan oleh Gradsun Studio, terbingkai abadi sepanjang masa.",
     "item1Title": "Adinda Prameswari",
@@ -105,7 +105,7 @@
   },
   "categories": {
     "tag": "Gaya Sesi Pilihan",
-    "title": "Portofolio Kenangan Khusus",
+    "title": "Galeri Kenangan Khusus",
     "subtitle": "Setiap pencapaian memiliki ritme tersendiri. Pilih format potret yang mewakili momen kejayaan Anda.",
     "gradTitle": "Kisah Wisuda",
     "gradDesc": "Sesi kelulusan individu & bersama sahabat dengan latar ikonik kampus.",
