@@ -18,10 +18,9 @@ export default async function PortfolioPage() {
   const tNav = await getTranslations("nav");
   const tPort = await getTranslations("portfolioPage");
   const tCat = await getTranslations("categories");
-  const tFoot = await getTranslations("footer");
 
   return (
-    <div className="flex flex-col min-h-screen bg-background text-foreground">
+    <div className="flex flex-col flex-1 bg-background text-foreground">
       {/* Navigation Header */}
       <header className="sticky top-0 z-50 w-full border-b border-border bg-background/90 backdrop-blur-md">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -371,24 +370,6 @@ export default async function PortfolioPage() {
           </Button>
         </div>
       </main>
-
-      {/* Footer */}
-      <footer className="border-t border-border bg-card py-6 px-4 sm:px-6 lg:px-8 mt-auto">
-        <div className="mx-auto max-w-7xl flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
-          <p>{tFoot("copyright")}</p>
-          <div className="flex items-center gap-4">
-            <Link href="/" className="hover:text-foreground transition-colors">
-              {tNav("home")}
-            </Link>
-            <Link href="/packages" className="hover:text-foreground transition-colors">
-              {tNav("packages")}
-            </Link>
-            <Link href="/admin" className="hover:text-primary transition-colors font-medium">
-              {tNav("admin")}
-            </Link>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }
