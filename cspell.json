@@ -117,6 +117,7 @@
     "*.tsbuildinfo",
     "public/**",
     "CHANGELOG.md",
-    "Desain UI/**"
+    "Desain UI/**",
+    "data-*.md"
   ]
 }
