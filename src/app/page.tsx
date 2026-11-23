@@ -131,45 +131,6 @@ export default async function HomePage() {
                   </Link>
                 </Button>
               </div>
-
-              {/* Social Proof Stats */}
-              <div className="grid grid-cols-3 gap-4 pt-6 w-full max-w-lg">
-                <Card className="border-border bg-card/60 p-3 shadow-xs">
-                  <CardContent className="p-0 flex flex-col">
-                    <span className="font-serif text-xl sm:text-2xl font-semibold text-foreground">
-                      {tHero("gradsHonoredCount")}
-                    </span>
-                    <span className="text-xs text-muted-foreground mt-0.5">
-                      {tHero("gradsHonoredLabel")}
-                    </span>
-                  </CardContent>
-                </Card>
-
-                <Card className="border-border bg-card/60 p-3 shadow-xs">
-                  <CardContent className="p-0 flex flex-col">
-                    <div className="flex items-center gap-1">
-                      <span className="font-serif text-xl sm:text-2xl font-semibold text-foreground">
-                        {tHero("ratingValue")}
-                      </span>
-                      <Star className="size-3.5 fill-primary text-primary" />
-                    </div>
-                    <span className="text-xs text-muted-foreground mt-0.5">
-                      {tHero("ratingLabel")}
-                    </span>
-                  </CardContent>
-                </Card>
-
-                <Card className="border-border bg-card/60 p-3 shadow-xs">
-                  <CardContent className="p-0 flex flex-col">
-                    <span className="font-serif text-xl sm:text-2xl font-semibold text-foreground">
-                      {tHero("qualityValue")}
-                    </span>
-                    <span className="text-xs text-muted-foreground mt-0.5">
-                      {tHero("qualityLabel")}
-                    </span>
-                  </CardContent>
-                </Card>
-              </div>
             </div>
 
             {/* Right Column (5 cols) — Arched Hero Showcase */}
@@ -185,29 +146,11 @@ export default async function HomePage() {
                     priority
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 via-transparent to-transparent pointer-events-none" />
-
-                  {/* Caption Bar */}
-                  <div className="absolute bottom-4 left-4 right-4 p-3 rounded-xl bg-card/90 backdrop-blur-md border border-border/80 flex items-center justify-between shadow-xs">
-                    <div className="flex flex-col">
-                      <span className="text-xs font-semibold text-foreground tracking-wide font-serif">
-                        {tHero("plateTitle")}
-                      </span>
-                      <span className="text-[11px] text-muted-foreground italic">
-                        {tHero("plateSubtitle")}
-                      </span>
-                    </div>
-                    <Badge
-                      variant="outline"
-                      className="text-[10px] uppercase font-mono tracking-widest border-border"
-                    >
-                      {tHero("plateBadge")}
-                    </Badge>
-                  </div>
                 </div>
 
                 {/* Floating Polaroid Offset Card */}
-                <div className="absolute -bottom-6 -left-6 sm:-left-8 w-44 sm:w-52 p-2 rounded-2xl bg-card border border-border shadow-xl rotate-[-3deg] transition-transform duration-300 hover:rotate-0">
-                  <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden bg-muted">
+                <div className="absolute -bottom-6 -left-6 sm:-left-8 w-44 sm:w-52 p-2.5 rounded-2xl bg-card border-2 border-border shadow-2xl rotate-[-3deg] transition-transform duration-300 hover:rotate-0">
+                  <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden bg-muted border border-border/40">
                     <Image
                       src="/logo-bg.jpg"
                       alt={tHero("imageAlt")}
