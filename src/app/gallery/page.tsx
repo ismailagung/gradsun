@@ -1,8 +1,7 @@
-import { ArrowRight, Camera, Eye, Filter, Sparkles, Sun } from "lucide-react";
+import { ArrowRight, Filter, Sparkles } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
-import { Badge } from "@/common/components/ui/badge";
 import { Button } from "@/common/components/ui/button";
 import { Card, CardContent } from "@/common/components/ui/card";
 import {
@@ -17,7 +16,65 @@ import {
 export default async function GalleryPage() {
   const tNav = await getTranslations("nav");
   const tPort = await getTranslations("portfolioPage");
-  const tCat = await getTranslations("categories");
+
+  const galleryItems = [
+    {
+      id: "gallery-item-1",
+      title: tPort("item1Title"),
+      desc: tPort("item1Desc"),
+      alt: tPort("item1Alt"),
+      image: "/logo-bg.jpg",
+    },
+    {
+      id: "gallery-item-2",
+      title: tPort("item2Title"),
+      desc: tPort("item2Desc"),
+      alt: tPort("item2Alt"),
+      image: "/logo-bg.jpg",
+    },
+    {
+      id: "gallery-item-3",
+      title: tPort("item3Title"),
+      desc: tPort("item3Desc"),
+      alt: tPort("item3Alt"),
+      image: "/logo-bg.jpg",
+    },
+    {
+      id: "gallery-item-4",
+      title: tPort("item4Title"),
+      desc: tPort("item4Desc"),
+      alt: tPort("item4Alt"),
+      image: "/logo-bg.jpg",
+    },
+    {
+      id: "gallery-item-5",
+      title: tPort("item5Title"),
+      desc: tPort("item5Desc"),
+      alt: tPort("item5Alt"),
+      image: "/logo-bg.jpg",
+    },
+    {
+      id: "gallery-item-6",
+      title: tPort("item6Title"),
+      desc: tPort("item6Desc"),
+      alt: tPort("item6Alt"),
+      image: "/logo-bg.jpg",
+    },
+    {
+      id: "gallery-item-7",
+      title: tPort("item7Title"),
+      desc: tPort("item7Desc"),
+      alt: tPort("item7Alt"),
+      image: "/logo-bg.jpg",
+    },
+    {
+      id: "gallery-item-8",
+      title: tPort("item8Title"),
+      desc: tPort("item8Desc"),
+      alt: tPort("item8Alt"),
+      image: "/logo-bg.jpg",
+    },
+  ];
 
   return (
     <div className="flex flex-col flex-1 bg-background text-foreground">
@@ -140,211 +197,41 @@ export default async function GalleryPage() {
           </Button>
         </div>
 
-        {/* Masonry / Grid Gallery Showcase */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {/* Gallery Card 1 */}
-          <Dialog>
-            <DialogTrigger asChild>
-              <Card className="group border-border bg-card p-3 rounded-3xl shadow-xs hover:shadow-lg transition-all cursor-pointer">
-                <div className="relative aspect-[4/5] w-full rounded-2xl overflow-hidden bg-muted mb-3">
-                  <Image
-                    src="/logo-bg.jpg"
-                    alt={tCat("gradImageAlt")}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute bottom-3 left-3 bg-card/90 backdrop-blur-md px-2.5 py-1 rounded-lg border border-border text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
-                    {tPort("cameraMetaStamp")}
+        {/* Gallery Grid Showcase (Matching Home Card Concept: Box -> Title -> Description) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {galleryItems.map((item) => (
+            <Dialog key={item.id}>
+              <DialogTrigger asChild>
+                <Card className="group border-border bg-card p-3 rounded-3xl shadow-xs hover:shadow-lg transition-all cursor-pointer">
+                  <div className="relative aspect-[4/5] w-full rounded-2xl overflow-hidden bg-muted mb-3">
+                    <Image
+                      src={item.image}
+                      alt={item.alt}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
                   </div>
-                  <div className="absolute top-3 right-3 size-8 rounded-full bg-card/90 backdrop-blur-md flex items-center justify-center text-foreground opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Eye className="size-4" />
-                  </div>
-                </div>
-                <CardContent className="p-2 flex flex-col gap-1.5">
-                  <div className="flex items-center justify-between">
-                    <h3 className="font-serif text-base font-semibold text-foreground group-hover:text-primary transition-colors">
-                      {tCat("gradTitle")}
+                  <CardContent className="p-2 flex flex-col gap-1.5">
+                    <h3 className="font-serif text-base sm:text-lg font-bold text-foreground group-hover:text-primary transition-colors">
+                      {item.title}
                     </h3>
-                    <Badge variant="secondary" className="text-[10px]">
-                      {tCat("gradBadge")}
-                    </Badge>
-                  </div>
-                  <p className="text-xs text-muted-foreground leading-relaxed">
-                    {tCat("gradDesc")}
-                  </p>
-                </CardContent>
-              </Card>
-            </DialogTrigger>
-            <DialogContent className="max-w-2xl bg-card border-border">
-              <DialogHeader>
-                <DialogTitle className="font-serif text-xl">{tPort("proofModalTitle")}</DialogTitle>
-                <DialogDescription className="text-xs text-muted-foreground">
-                  {tPort("proofModalDescription")}
-                </DialogDescription>
-              </DialogHeader>
-              <div className="relative aspect-[4/3] w-full rounded-xl overflow-hidden bg-muted mt-2">
-                <Image
-                  src="/logo-bg.jpg"
-                  alt={tCat("gradImageAlt")}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            </DialogContent>
-          </Dialog>
-
-          {/* Gallery Card 2 */}
-          <Dialog>
-            <DialogTrigger asChild>
-              <Card className="group border-border bg-card p-3 rounded-3xl shadow-xs hover:shadow-lg transition-all cursor-pointer">
-                <div className="relative aspect-[4/5] w-full rounded-2xl overflow-hidden bg-muted mb-3">
-                  <Image
-                    src="/logo-bg.jpg"
-                    alt={tCat("outdoorImageAlt")}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute bottom-3 left-3 bg-card/90 backdrop-blur-md px-2.5 py-1 rounded-lg border border-border text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
-                    {tPort("cameraMetaStamp")}
-                  </div>
-                  <div className="absolute top-3 right-3 size-8 rounded-full bg-card/90 backdrop-blur-md flex items-center justify-center text-foreground opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Sun className="size-4 text-primary" />
-                  </div>
+                    <p className="text-xs text-muted-foreground leading-relaxed">{item.desc}</p>
+                  </CardContent>
+                </Card>
+              </DialogTrigger>
+              <DialogContent className="max-w-2xl bg-card border-border">
+                <DialogHeader>
+                  <DialogTitle className="font-serif text-xl">{item.title}</DialogTitle>
+                  <DialogDescription className="text-xs text-muted-foreground">
+                    {item.desc}
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="relative aspect-[4/3] w-full rounded-xl overflow-hidden bg-muted mt-2">
+                  <Image src={item.image} alt={item.alt} fill className="object-cover" />
                 </div>
-                <CardContent className="p-2 flex flex-col gap-1.5">
-                  <div className="flex items-center justify-between">
-                    <h3 className="font-serif text-base font-semibold text-foreground group-hover:text-primary transition-colors">
-                      {tCat("outdoorTitle")}
-                    </h3>
-                    <Badge variant="secondary" className="text-[10px]">
-                      {tCat("outdoorBadge")}
-                    </Badge>
-                  </div>
-                  <p className="text-xs text-muted-foreground leading-relaxed">
-                    {tCat("outdoorDesc")}
-                  </p>
-                </CardContent>
-              </Card>
-            </DialogTrigger>
-            <DialogContent className="max-w-2xl bg-card border-border">
-              <DialogHeader>
-                <DialogTitle className="font-serif text-xl">{tPort("proofModalTitle")}</DialogTitle>
-                <DialogDescription className="text-xs text-muted-foreground">
-                  {tPort("proofModalDescription")}
-                </DialogDescription>
-              </DialogHeader>
-              <div className="relative aspect-[4/3] w-full rounded-xl overflow-hidden bg-muted mt-2">
-                <Image
-                  src="/logo-bg.jpg"
-                  alt={tCat("outdoorImageAlt")}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            </DialogContent>
-          </Dialog>
-
-          {/* Gallery Card 3 */}
-          <Dialog>
-            <DialogTrigger asChild>
-              <Card className="group border-border bg-card p-3 rounded-3xl shadow-xs hover:shadow-lg transition-all cursor-pointer">
-                <div className="relative aspect-[4/5] w-full rounded-2xl overflow-hidden bg-muted mb-3">
-                  <Image
-                    src="/logo-bg.jpg"
-                    alt={tCat("studioImageAlt")}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute bottom-3 left-3 bg-card/90 backdrop-blur-md px-2.5 py-1 rounded-lg border border-border text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
-                    {tPort("cameraMetaStamp")}
-                  </div>
-                  <div className="absolute top-3 right-3 size-8 rounded-full bg-card/90 backdrop-blur-md flex items-center justify-center text-foreground opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Camera className="size-4" />
-                  </div>
-                </div>
-                <CardContent className="p-2 flex flex-col gap-1.5">
-                  <div className="flex items-center justify-between">
-                    <h3 className="font-serif text-base font-semibold text-foreground group-hover:text-primary transition-colors">
-                      {tCat("studioTitle")}
-                    </h3>
-                    <Badge variant="secondary" className="text-[10px]">
-                      {tCat("studioBadge")}
-                    </Badge>
-                  </div>
-                  <p className="text-xs text-muted-foreground leading-relaxed">
-                    {tCat("studioDesc")}
-                  </p>
-                </CardContent>
-              </Card>
-            </DialogTrigger>
-            <DialogContent className="max-w-2xl bg-card border-border">
-              <DialogHeader>
-                <DialogTitle className="font-serif text-xl">{tPort("proofModalTitle")}</DialogTitle>
-                <DialogDescription className="text-xs text-muted-foreground">
-                  {tPort("proofModalDescription")}
-                </DialogDescription>
-              </DialogHeader>
-              <div className="relative aspect-[4/3] w-full rounded-xl overflow-hidden bg-muted mt-2">
-                <Image
-                  src="/logo-bg.jpg"
-                  alt={tCat("studioImageAlt")}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            </DialogContent>
-          </Dialog>
-
-          {/* Gallery Card 4 */}
-          <Dialog>
-            <DialogTrigger asChild>
-              <Card className="group border-border bg-card p-3 rounded-3xl shadow-xs hover:shadow-lg transition-all cursor-pointer">
-                <div className="relative aspect-[4/5] w-full rounded-2xl overflow-hidden bg-muted mb-3">
-                  <Image
-                    src="/logo-bg.jpg"
-                    alt={tCat("cohortImageAlt")}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute bottom-3 left-3 bg-card/90 backdrop-blur-md px-2.5 py-1 rounded-lg border border-border text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
-                    {tPort("cameraMetaStamp")}
-                  </div>
-                  <div className="absolute top-3 right-3 size-8 rounded-full bg-card/90 backdrop-blur-md flex items-center justify-center text-foreground opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Sparkles className="size-4 text-primary" />
-                  </div>
-                </div>
-                <CardContent className="p-2 flex flex-col gap-1.5">
-                  <div className="flex items-center justify-between">
-                    <h3 className="font-serif text-base font-semibold text-foreground group-hover:text-primary transition-colors">
-                      {tCat("cohortTitle")}
-                    </h3>
-                    <Badge variant="secondary" className="text-[10px]">
-                      {tCat("cohortBadge")}
-                    </Badge>
-                  </div>
-                  <p className="text-xs text-muted-foreground leading-relaxed">
-                    {tCat("cohortDesc")}
-                  </p>
-                </CardContent>
-              </Card>
-            </DialogTrigger>
-            <DialogContent className="max-w-2xl bg-card border-border">
-              <DialogHeader>
-                <DialogTitle className="font-serif text-xl">{tPort("proofModalTitle")}</DialogTitle>
-                <DialogDescription className="text-xs text-muted-foreground">
-                  {tPort("proofModalDescription")}
-                </DialogDescription>
-              </DialogHeader>
-              <div className="relative aspect-[4/3] w-full rounded-xl overflow-hidden bg-muted mt-2">
-                <Image
-                  src="/logo-bg.jpg"
-                  alt={tCat("cohortImageAlt")}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            </DialogContent>
-          </Dialog>
+              </DialogContent>
+            </Dialog>
+          ))}
         </div>
 
         {/* CTA Banner */}
