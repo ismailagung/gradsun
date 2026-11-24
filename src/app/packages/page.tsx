@@ -3,11 +3,14 @@ import {
   ArrowRight,
   Calendar as CalendarIcon,
   Check,
+  ChevronLeft,
+  ChevronRight,
   Clock,
   GraduationCap,
   MessageCircle,
   Sparkles,
   Sun,
+  User,
   Users,
 } from "lucide-react";
 import Image from "next/image";
@@ -241,14 +244,29 @@ export default async function PackagesBookingPage() {
                 </h2>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-card border border-border rounded-2xl p-6 shadow-xs">
-                {/* Left: Schedule Details */}
-                <div className="flex flex-col gap-4">
-                  <div className="flex items-center gap-2 text-foreground font-serif">
-                    <CalendarIcon className="size-4 text-primary" />
-                    <span className="font-semibold text-sm">{tPkg("monthHeader")}</span>
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 bg-card border border-border rounded-2xl p-6 shadow-xs">
+                {/* Left (5 cols): Interactive Calendar Month & Year */}
+                <div className="lg:col-span-5 flex flex-col gap-4">
+                  {/* Month & Year Navigation */}
+                  <div className="flex items-center justify-between pb-2 border-b border-border/60">
+                    <div className="flex items-center gap-2">
+                      <CalendarIcon className="size-4 text-primary" />
+                      <span className="font-serif font-bold text-sm text-foreground">
+                        {tPkg("monthYearSelector")}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Button variant="ghost" size="icon" className="size-7 rounded-lg">
+                        <ChevronLeft className="size-4" />
+                      </Button>
+                      <Button variant="ghost" size="icon" className="size-7 rounded-lg">
+                        <ChevronRight className="size-4" />
+                      </Button>
+                    </div>
                   </div>
-                  <div className="grid grid-cols-7 gap-1.5 text-center text-xs">
+
+                  {/* Day of Week Headers */}
+                  <div className="grid grid-cols-7 gap-1 text-center text-xs">
                     <span className="font-semibold text-muted-foreground py-1">
                       {tPkg("dayMo")}
                     </span>
@@ -267,66 +285,251 @@ export default async function PackagesBookingPage() {
                     <span className="font-semibold text-primary py-1">{tPkg("daySa")}</span>
                     <span className="font-semibold text-primary py-1">{tPkg("daySu")}</span>
 
-                    <span className="py-1.5 rounded-lg text-muted-foreground/40">{"12"}</span>
-                    <span className="py-1.5 rounded-lg text-muted-foreground/40">{"13"}</span>
-                    <span className="py-1.5 rounded-lg text-muted-foreground/40">{"14"}</span>
-                    <span className="py-1.5 rounded-lg text-muted-foreground/40">{"15"}</span>
-                    <span className="py-1.5 rounded-lg text-foreground hover:bg-secondary">
+                    {/* Week 1 (May 2025 starts Thursday) */}
+                    <span className="py-2 text-[11px] text-muted-foreground/30">{"28"}</span>
+                    <span className="py-2 text-[11px] text-muted-foreground/30">{"29"}</span>
+                    <span className="py-2 text-[11px] text-muted-foreground/30">{"30"}</span>
+                    <span className="py-2 text-[11px] rounded-lg hover:bg-secondary cursor-pointer">
+                      {"1"}
+                    </span>
+                    <span className="py-2 text-[11px] rounded-lg hover:bg-secondary cursor-pointer">
+                      {"2"}
+                    </span>
+                    <span className="py-2 text-[11px] rounded-lg hover:bg-secondary cursor-pointer">
+                      {"3"}
+                    </span>
+                    <span className="py-2 text-[11px] rounded-lg hover:bg-secondary cursor-pointer">
+                      {"4"}
+                    </span>
+
+                    {/* Week 2 */}
+                    <span className="py-2 text-[11px] rounded-lg hover:bg-secondary cursor-pointer">
+                      {"5"}
+                    </span>
+                    <span className="py-2 text-[11px] rounded-lg hover:bg-secondary cursor-pointer">
+                      {"6"}
+                    </span>
+                    <span className="py-2 text-[11px] rounded-lg hover:bg-secondary cursor-pointer">
+                      {"7"}
+                    </span>
+                    <span className="py-2 text-[11px] rounded-lg hover:bg-secondary cursor-pointer">
+                      {"8"}
+                    </span>
+                    <span className="py-2 text-[11px] rounded-lg hover:bg-secondary cursor-pointer">
+                      {"9"}
+                    </span>
+                    <span className="py-2 text-[11px] rounded-lg hover:bg-secondary cursor-pointer relative">
+                      {"10"}
+                      <span className="absolute bottom-0.5 left-1/2 -translate-x-1/2 size-1 rounded-full bg-primary/60" />
+                    </span>
+                    <span className="py-2 text-[11px] rounded-lg hover:bg-secondary cursor-pointer">
+                      {"11"}
+                    </span>
+
+                    {/* Week 3 */}
+                    <span className="py-2 text-[11px] rounded-lg hover:bg-secondary cursor-pointer">
+                      {"12"}
+                    </span>
+                    <span className="py-2 text-[11px] rounded-lg hover:bg-secondary cursor-pointer">
+                      {"13"}
+                    </span>
+                    <span className="py-2 text-[11px] rounded-lg hover:bg-secondary cursor-pointer">
+                      {"14"}
+                    </span>
+                    <span className="py-2 text-[11px] rounded-lg hover:bg-secondary cursor-pointer">
+                      {"15"}
+                    </span>
+                    <span className="py-2 text-[11px] rounded-lg hover:bg-secondary cursor-pointer">
                       {"16"}
                     </span>
-                    <span className="py-1.5 rounded-lg bg-primary text-primary-foreground font-bold shadow-xs">
+                    {/* Selected Day: 17 May */}
+                    <span className="py-2 text-[11px] font-bold rounded-lg bg-primary text-primary-foreground shadow-xs cursor-pointer">
                       {"17"}
                     </span>
-                    <span className="py-1.5 rounded-lg text-foreground hover:bg-secondary">
+                    <span className="py-2 text-[11px] rounded-lg hover:bg-secondary cursor-pointer">
                       {"18"}
                     </span>
+
+                    {/* Week 4 */}
+                    <span className="py-2 text-[11px] rounded-lg hover:bg-secondary cursor-pointer">
+                      {"19"}
+                    </span>
+                    <span className="py-2 text-[11px] rounded-lg hover:bg-secondary cursor-pointer">
+                      {"20"}
+                    </span>
+                    <span className="py-2 text-[11px] rounded-lg hover:bg-secondary cursor-pointer">
+                      {"21"}
+                    </span>
+                    <span className="py-2 text-[11px] rounded-lg hover:bg-secondary cursor-pointer">
+                      {"22"}
+                    </span>
+                    <span className="py-2 text-[11px] rounded-lg hover:bg-secondary cursor-pointer">
+                      {"23"}
+                    </span>
+                    <span className="py-2 text-[11px] rounded-lg hover:bg-secondary cursor-pointer relative">
+                      {"24"}
+                      <span className="absolute bottom-0.5 left-1/2 -translate-x-1/2 size-1 rounded-full bg-primary/60" />
+                    </span>
+                    <span className="py-2 text-[11px] rounded-lg hover:bg-secondary cursor-pointer">
+                      {"25"}
+                    </span>
+
+                    {/* Week 5 */}
+                    <span className="py-2 text-[11px] rounded-lg hover:bg-secondary cursor-pointer">
+                      {"26"}
+                    </span>
+                    <span className="py-2 text-[11px] rounded-lg hover:bg-secondary cursor-pointer">
+                      {"27"}
+                    </span>
+                    <span className="py-2 text-[11px] rounded-lg hover:bg-secondary cursor-pointer">
+                      {"28"}
+                    </span>
+                    <span className="py-2 text-[11px] rounded-lg hover:bg-secondary cursor-pointer">
+                      {"29"}
+                    </span>
+                    <span className="py-2 text-[11px] rounded-lg hover:bg-secondary cursor-pointer">
+                      {"30"}
+                    </span>
+                    <span className="py-2 text-[11px] rounded-lg hover:bg-secondary cursor-pointer">
+                      {"31"}
+                    </span>
+                    <span className="py-2 text-[11px] text-muted-foreground/30">{"1"}</span>
                   </div>
                 </div>
 
-                {/* Right: Available Slot Pills */}
-                <div className="flex flex-col gap-3">
-                  <span className="text-xs font-semibold text-foreground uppercase tracking-wider font-serif">
-                    {tPkg("slotsTitle")}
-                  </span>
-                  <div className="grid grid-cols-2 gap-2">
-                    <div className="p-2.5 rounded-xl border border-border bg-secondary/30 flex flex-col gap-1 cursor-pointer hover:border-primary">
-                      <div className="flex items-center justify-between">
-                        <span className="font-mono text-xs font-semibold">{"06:30"}</span>
-                        <Sun className="size-3 text-muted-foreground" />
-                      </div>
-                      <span className="text-[10px] text-muted-foreground">
-                        {tPkg("morningSlotBadge")}
+                {/* Right (7 cols): Selected Date Schedule Details & Slots */}
+                <div className="lg:col-span-7 flex flex-col gap-5 border-t lg:border-t-0 lg:border-l border-border pt-4 lg:pt-0 lg:pl-6">
+                  {/* Selected Date Header */}
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-border/60">
+                    <div className="flex flex-col">
+                      <span className="font-serif font-bold text-sm text-foreground">
+                        {tPkg("selectedDateTitle")}
+                      </span>
+                      <span className="text-xs text-primary font-medium">
+                        {tPkg("selectedDateSubtitle")}
                       </span>
                     </div>
+                    <Badge
+                      variant="secondary"
+                      className="self-start sm:self-auto text-[10px] flex items-center gap-1.5"
+                    >
+                      <span>{tPkg("morningSlotBadge")}</span>
+                      <span className="size-1 rounded-full bg-muted-foreground/60" />
+                      <span>{tPkg("goldenHourSlotBadge")}</span>
+                    </Badge>
+                  </div>
 
-                    <div className="p-2.5 rounded-xl border border-border bg-secondary/30 flex flex-col gap-1 cursor-pointer hover:border-primary">
-                      <div className="flex items-center justify-between">
-                        <span className="font-mono text-xs font-semibold">{"08:00"}</span>
-                        <Sun className="size-3 text-muted-foreground" />
-                      </div>
-                      <span className="text-[10px] text-muted-foreground">
-                        {tPkg("morningSlotBadge")}
+                  {/* Section A: Booked Sessions on This Date */}
+                  <div className="flex flex-col gap-2.5">
+                    <div className="flex items-center gap-1.5 text-muted-foreground">
+                      <Clock className="size-3.5 text-primary" />
+                      <span className="text-xs font-semibold uppercase tracking-wider font-serif text-foreground">
+                        {tPkg("bookedSlotsTitle")}
                       </span>
                     </div>
-
-                    <div className="p-2.5 rounded-xl border border-border bg-secondary/30 flex flex-col gap-1 cursor-pointer hover:border-primary">
-                      <div className="flex items-center justify-between">
-                        <span className="font-mono text-xs font-semibold">{"15:30"}</span>
-                        <Clock className="size-3 text-primary" />
+                    <div className="flex flex-col gap-2">
+                      {/* Booked Client 1 */}
+                      <div className="p-3 rounded-xl border border-border/80 bg-secondary/30 flex items-center justify-between gap-3">
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          <div className="size-7 rounded-full bg-secondary flex items-center justify-center shrink-0 text-muted-foreground">
+                            <User className="size-3.5" />
+                          </div>
+                          <div className="flex flex-col min-w-0">
+                            <span className="text-xs font-semibold text-foreground truncate">
+                              {tPkg("bookedClient1")}
+                            </span>
+                          </div>
+                        </div>
+                        <Badge
+                          variant="outline"
+                          className="text-[10px] shrink-0 border-border bg-card"
+                        >
+                          {tPkg("bookedBadge")}
+                        </Badge>
                       </div>
-                      <span className="text-[10px] text-primary">
-                        {tPkg("goldenHourSlotBadge")}
-                      </span>
+
+                      {/* Booked Client 2 */}
+                      <div className="p-3 rounded-xl border border-border/80 bg-secondary/30 flex items-center justify-between gap-3">
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          <div className="size-7 rounded-full bg-secondary flex items-center justify-center shrink-0 text-muted-foreground">
+                            <User className="size-3.5" />
+                          </div>
+                          <div className="flex flex-col min-w-0">
+                            <span className="text-xs font-semibold text-foreground truncate">
+                              {tPkg("bookedClient2")}
+                            </span>
+                          </div>
+                        </div>
+                        <Badge
+                          variant="outline"
+                          className="text-[10px] shrink-0 border-border bg-card"
+                        >
+                          {tPkg("bookedBadge")}
+                        </Badge>
+                      </div>
                     </div>
+                  </div>
 
-                    <div className="p-2.5 rounded-xl border border-primary bg-primary/10 flex flex-col gap-1 cursor-pointer shadow-xs">
-                      <div className="flex items-center justify-between">
-                        <span className="font-mono text-xs font-bold text-primary">{"16:30"}</span>
-                        <Sparkles className="size-3 text-primary" />
+                  {/* Section B: Available Slots to Reserve */}
+                  <div className="flex flex-col gap-2.5">
+                    <span className="text-xs font-semibold uppercase tracking-wider font-serif text-foreground">
+                      {tPkg("availableSlotsTitle")}
+                    </span>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                      {/* Slot 1: Available */}
+                      <div className="p-3 rounded-xl border border-border bg-card hover:border-primary/50 transition-all flex flex-col justify-between gap-2 cursor-pointer shadow-xs">
+                        <div className="flex items-center justify-between">
+                          <span className="font-mono text-xs font-bold text-foreground">
+                            {tPkg("slot1Time")}
+                          </span>
+                          <Sun className="size-3 text-muted-foreground" />
+                        </div>
+                        <span className="text-[10px] text-muted-foreground">
+                          {tPkg("slot1Name")}
+                        </span>
+                        <div className="pt-2 border-t border-border flex items-center justify-between">
+                          <Badge variant="secondary" className="text-[9px] px-1.5 py-0 font-normal">
+                            {tPkg("availableBadge")}
+                          </Badge>
+                        </div>
                       </div>
-                      <span className="text-[10px] font-semibold text-primary">
-                        {tPkg("goldenHourSlotBadge")}
-                      </span>
+
+                      {/* Slot 2: Available */}
+                      <div className="p-3 rounded-xl border border-border bg-card hover:border-primary/50 transition-all flex flex-col justify-between gap-2 cursor-pointer shadow-xs">
+                        <div className="flex items-center justify-between">
+                          <span className="font-mono text-xs font-bold text-foreground">
+                            {tPkg("slot2Time")}
+                          </span>
+                          <Sun className="size-3 text-primary" />
+                        </div>
+                        <span className="text-[10px] text-muted-foreground">
+                          {tPkg("slot2Name")}
+                        </span>
+                        <div className="pt-2 border-t border-border flex items-center justify-between">
+                          <Badge variant="secondary" className="text-[9px] px-1.5 py-0 font-normal">
+                            {tPkg("availableBadge")}
+                          </Badge>
+                        </div>
+                      </div>
+
+                      {/* Slot 3: Selected */}
+                      <div className="p-3 rounded-xl border-2 border-primary bg-primary/10 transition-all flex flex-col justify-between gap-2 cursor-pointer shadow-xs">
+                        <div className="flex items-center justify-between">
+                          <span className="font-mono text-xs font-bold text-primary">
+                            {tPkg("slot3Time")}
+                          </span>
+                          <Sparkles className="size-3 text-primary" />
+                        </div>
+                        <span className="text-[10px] font-semibold text-primary">
+                          {tPkg("slot3Name")}
+                        </span>
+                        <div className="pt-2 border-t border-primary/20 flex items-center justify-between">
+                          <Badge className="text-[9px] px-1.5 py-0 bg-primary text-primary-foreground font-semibold">
+                            {tPkg("selectedBadge")}
+                          </Badge>
+                          <Check className="size-3 text-primary" />
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
