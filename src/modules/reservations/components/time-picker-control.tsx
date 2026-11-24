@@ -152,7 +152,7 @@ export function TimePickerControl({
 
           {/* Floating 3-Column Time Picker (ONLY opens when clicked!) */}
           {isOpen && (
-            <div className="absolute z-50 bottom-full mb-2 left-0 w-72 rounded-2xl border border-border bg-card/95 backdrop-blur-md p-3 shadow-xl animate-in fade-in zoom-in-95">
+            <div className="absolute z-50 top-full mt-2 left-0 w-72 rounded-2xl border border-border bg-card/95 backdrop-blur-md p-3 shadow-xl animate-in fade-in zoom-in-95">
               <div className="flex items-center justify-between pb-2 mb-2 border-b border-border/60">
                 <span className="text-[11px] font-semibold text-foreground font-serif">
                   {labels.sessionStartTimeLabel}

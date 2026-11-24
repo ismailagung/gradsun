@@ -435,8 +435,28 @@ export default async function PackagesBookingPage() {
                     </Badge>
                   </div>
 
-                  {/* Section A: Booked Sessions on This Date */}
-                  <div className="flex flex-col gap-2.5">
+                  {/* Section A: Time Picker (Free-to-choose Start Time as requested) */}
+                  <div className="flex flex-col gap-3">
+                    <div className="flex flex-col">
+                      <span className="text-xs font-semibold uppercase tracking-wider font-serif text-foreground">
+                        {tPkg("timePickerTitle")}
+                      </span>
+                      <span className="text-[11px] text-muted-foreground">
+                        {tPkg("timePickerSubtitle")}
+                      </span>
+                    </div>
+
+                    <TimePickerControl
+                      initialHour="04"
+                      initialMinute="30"
+                      initialPeriod="PM"
+                      initialHasSelected={false}
+                      labels={timePickerLabels}
+                    />
+                  </div>
+
+                  {/* Section B: Booked Sessions on This Date */}
+                  <div className="flex flex-col gap-2.5 pt-3 border-t border-border/60">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-1.5 text-muted-foreground">
                         <Clock className="size-3.5 text-primary" />
@@ -495,26 +515,6 @@ export default async function PackagesBookingPage() {
                         </Badge>
                       </div>
                     </div>
-                  </div>
-
-                  {/* Section B: Time Picker (Free-to-choose Start Time as requested) */}
-                  <div className="flex flex-col gap-3 pt-3 border-t border-border/60">
-                    <div className="flex flex-col">
-                      <span className="text-xs font-semibold uppercase tracking-wider font-serif text-foreground">
-                        {tPkg("timePickerTitle")}
-                      </span>
-                      <span className="text-[11px] text-muted-foreground">
-                        {tPkg("timePickerSubtitle")}
-                      </span>
-                    </div>
-
-                    <TimePickerControl
-                      initialHour="04"
-                      initialMinute="30"
-                      initialPeriod="PM"
-                      initialHasSelected={false}
-                      labels={timePickerLabels}
-                    />
                   </div>
                 </div>
               </div>
