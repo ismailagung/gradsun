@@ -6,7 +6,6 @@ import {
   GraduationCap,
   Heart,
   MessageCircle,
-  ShieldCheck,
   Sparkles,
   Sun,
   Users,
@@ -95,32 +94,14 @@ export default async function PackagesBookingPage() {
       {/* Main Reservation Flow */}
       <main className="flex-1 py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
         {/* Page Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-10 border-b border-border">
+        <div className="pb-10 border-b border-border">
           <div className="flex flex-col gap-2 max-w-2xl">
-            <Badge
-              variant="secondary"
-              className="gap-2 px-3 py-1 text-xs font-normal border border-border self-start"
-            >
-              <Sparkles className="size-3.5 text-primary" />
-              <span>{tPkg("headerBadge")}</span>
-            </Badge>
             <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-foreground tracking-tight">
               {tPkg("headerTitle")}
             </h1>
             <p className="text-sm sm:text-base text-muted-foreground mt-1">
               {tPkg("headerSubtitle")}
             </p>
-          </div>
-
-          <div className="flex items-center gap-3 rounded-xl border border-border bg-card p-3 shadow-xs self-start md:self-auto">
-            <div className="size-9 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-              <ShieldCheck className="size-5" />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-xs font-semibold text-foreground font-serif">
-                {tPkg("weatherGuarantee")}
-              </span>
-            </div>
           </div>
         </div>
 
