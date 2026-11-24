@@ -447,9 +447,8 @@ export default async function PackagesBookingPage() {
                     </div>
 
                     <TimePickerControl
-                      initialHour="04"
+                      initialHour="16"
                       initialMinute="30"
-                      initialPeriod="PM"
                       initialHasSelected={false}
                       labels={timePickerLabels}
                     />

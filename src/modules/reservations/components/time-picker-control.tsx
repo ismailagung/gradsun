@@ -10,7 +10,7 @@ export interface TimePickerControlLabels {
   sessionStartTimeLabel: string;
   hour: string;
   minute: string;
-  period: string;
+  period?: string;
   bufferTitle: string;
   bufferDesc: string;
   statusAvailable: string;
@@ -26,19 +26,43 @@ export interface TimePickerControlLabels {
 interface TimePickerControlProps {
   initialHour?: string;
   initialMinute?: string;
-  initialPeriod?: "AM" | "PM";
   initialHasSelected?: boolean;
   labels: TimePickerControlLabels;
 }
 
-const HOURS = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+// 24-hour format: 00 to 23
+const HOURS_24 = [
+  "00",
+  "01",
+  "02",
+  "03",
+  "04",
+  "05",
+  "06",
+  "07",
+  "08",
+  "09",
+  "10",
+  "11",
+  "12",
+  "13",
+  "14",
+  "15",
+  "16",
+  "17",
+  "18",
+  "19",
+  "20",
+  "21",
+  "22",
+  "23",
+];
+
 const MINUTES = ["00", "05", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55"];
-const PERIODS: ("AM" | "PM")[] = ["AM", "PM"];
 
 export function TimePickerControl({
-  initialHour = "04",
+  initialHour = "16",
   initialMinute = "30",
-  initialPeriod = "PM",
   initialHasSelected = false,
   labels,
 }: TimePickerControlProps) {
@@ -46,7 +70,6 @@ export function TimePickerControl({
   const [hasSelected, setHasSelected] = useState(initialHasSelected);
   const [selectedHour, setSelectedHour] = useState(initialHour);
   const [selectedMinute, setSelectedMinute] = useState(initialMinute);
-  const [selectedPeriod, setSelectedPeriod] = useState<"AM" | "PM">(initialPeriod);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Close popover when clicking outside
@@ -65,19 +88,14 @@ export function TimePickerControl({
     };
   }, [isOpen]);
 
-  // Studio hours: 08:00 AM - 06:00 PM
+  // Studio hours: 08:00 - 18:00 WIB
   // Booked sessions:
-  // - Adinda: 08:30 AM - 10:00 AM (510 - 600 min)
-  // - Rayhan: 01:30 PM - 02:30 PM (810 - 870 min)
-  const isTimeConflict = (hr: string, min: string, period: "AM" | "PM") => {
+  // - Adinda: 08:30 - 10:00 (510 - 600 min)
+  // - Rayhan: 13:30 - 14:30 (810 - 870 min)
+  const isTimeConflict = (hr: string, min: string) => {
     const hourNum = Number.parseInt(hr, 10);
     const minNum = Number.parseInt(min, 10);
-
-    let hour24 = hourNum;
-    if (period === "AM" && hourNum === 12) hour24 = 0;
-    if (period === "PM" && hourNum !== 12) hour24 = hourNum + 12;
-
-    const totalMinutes = hour24 * 60 + minNum;
+    const totalMinutes = hourNum * 60 + minNum;
 
     // Check outside operating hours (08:00 to 18:00)
     if (totalMinutes < 8 * 60 || totalMinutes > 18 * 60) return true;
@@ -91,27 +109,20 @@ export function TimePickerControl({
     return false;
   };
 
-  const isHourConflict = (hr: string, period: "AM" | "PM") => {
+  const isHourConflict = (hr: string) => {
     const hourNum = Number.parseInt(hr, 10);
-    let hour24 = hourNum;
-    if (period === "AM" && hourNum === 12) hour24 = 0;
-    if (period === "PM" && hourNum !== 12) hour24 = hourNum + 12;
 
-    if (hour24 < 8 || hour24 > 18) return true;
-    if (period === "AM" && (hr === "09" || hr === "08")) return true;
-    if (period === "PM" && (hr === "01" || hr === "02")) return true;
+    // Outside studio hours
+    if (hourNum < 8 || hourNum > 18) return true;
+
+    // Overlapping booked hours (08:30-10:00 & 13:30-14:30)
+    if (hourNum === 8 || hourNum === 9 || hourNum === 13 || hourNum === 14) return true;
 
     return false;
   };
 
-  const currentConflict = isTimeConflict(selectedHour, selectedMinute, selectedPeriod);
-
-  // 24h notation
-  const hourNum = Number.parseInt(selectedHour, 10);
-  let hour24 = hourNum;
-  if (selectedPeriod === "AM" && hourNum === 12) hour24 = 0;
-  if (selectedPeriod === "PM" && hourNum !== 12) hour24 = hourNum + 12;
-  const time24Formatted = `${String(hour24).padStart(2, "0")}:${selectedMinute} WIB`;
+  const currentConflict = isTimeConflict(selectedHour, selectedMinute);
+  const formattedTime = `${selectedHour}:${selectedMinute} WIB`;
 
   return (
     <div ref={containerRef} className="flex flex-col gap-4">
@@ -143,16 +154,14 @@ export function TimePickerControl({
                 hasSelected ? "text-foreground" : "text-muted-foreground",
               )}
             >
-              {hasSelected
-                ? `${selectedHour}:${selectedMinute} ${selectedPeriod} (${time24Formatted})`
-                : "-- : --"}
+              {hasSelected ? formattedTime : "-- : --"}
             </span>
             <Clock className="size-4 text-muted-foreground shrink-0" />
           </Button>
 
-          {/* Floating 3-Column Time Picker (ONLY opens when clicked!) */}
+          {/* Floating 2-Column 24-Hour Time Picker (ONLY opens when clicked!) */}
           {isOpen && (
-            <div className="absolute z-50 top-full mt-2 left-0 w-72 rounded-2xl border border-border bg-card/95 backdrop-blur-md p-3 shadow-xl animate-in fade-in zoom-in-95">
+            <div className="absolute z-50 top-full mt-2 left-0 w-64 rounded-2xl border border-border bg-card/95 backdrop-blur-md p-3 shadow-xl animate-in fade-in zoom-in-95">
               <div className="flex items-center justify-between pb-2 mb-2 border-b border-border/60">
                 <span className="text-[11px] font-semibold text-foreground font-serif">
                   {labels.sessionStartTimeLabel}
@@ -168,16 +177,17 @@ export function TimePickerControl({
                 </Button>
               </div>
 
-              <div className="grid grid-cols-3 gap-1.5">
-                {/* Column 1: Hour */}
+              {/* 2 Columns: Hour (00-23) & Minute (00-55) */}
+              <div className="grid grid-cols-2 gap-2">
+                {/* Column 1: Hour (00-23) */}
                 <div className="flex flex-col">
                   <span className="text-[10px] font-semibold text-center text-muted-foreground uppercase tracking-wider pb-1.5 border-b border-border/50">
                     {labels.hour}
                   </span>
                   <div className="flex flex-col gap-1 max-h-48 overflow-y-auto py-1 pr-1">
-                    {HOURS.map((hr) => {
+                    {HOURS_24.map((hr) => {
                       const isSelected = selectedHour === hr;
-                      const isBlocked = isHourConflict(hr, selectedPeriod);
+                      const isBlocked = isHourConflict(hr);
 
                       return (
                         <Button
@@ -206,8 +216,8 @@ export function TimePickerControl({
                   </div>
                 </div>
 
-                {/* Column 2: Minute */}
-                <div className="flex flex-col border-l border-r border-border/50 px-1">
+                {/* Column 2: Minute (00-55) */}
+                <div className="flex flex-col border-l border-border/50 pl-2">
                   <span className="text-[10px] font-semibold text-center text-muted-foreground uppercase tracking-wider pb-1.5 border-b border-border/50">
                     {labels.minute}
                   </span>
@@ -233,39 +243,6 @@ export function TimePickerControl({
                           )}
                         >
                           {min}
-                        </Button>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                {/* Column 3: AM / PM */}
-                <div className="flex flex-col">
-                  <span className="text-[10px] font-semibold text-center text-muted-foreground uppercase tracking-wider pb-1.5 border-b border-border/50">
-                    {labels.period}
-                  </span>
-                  <div className="flex flex-col gap-1 py-1">
-                    {PERIODS.map((p) => {
-                      const isSelected = selectedPeriod === p;
-
-                      return (
-                        <Button
-                          key={p}
-                          type="button"
-                          variant={isSelected ? "default" : "ghost"}
-                          size="sm"
-                          onClick={() => {
-                            setSelectedPeriod(p);
-                            setHasSelected(true);
-                          }}
-                          className={cn(
-                            "h-8 w-full font-mono text-xs font-semibold justify-center transition-colors",
-                            isSelected &&
-                              "bg-primary text-primary-foreground font-bold shadow-xs hover:bg-primary/90",
-                            !isSelected && "hover:bg-secondary text-foreground",
-                          )}
-                        >
-                          {p}
                         </Button>
                       );
                     })}
@@ -334,7 +311,7 @@ export function TimePickerControl({
                   </Badge>
                 </div>
                 <p className="text-[11px] leading-relaxed text-emerald-900/80 dark:text-emerald-200/80 font-medium">
-                  {`${selectedHour}:${selectedMinute} ${selectedPeriod} (${time24Formatted}) • `}
+                  {`${formattedTime} • `}
                   {labels.statusDetail}
                 </p>
                 <div className="pt-2 border-t border-emerald-500/20 flex items-center gap-1.5 text-[10px] text-emerald-700 dark:text-emerald-400">
