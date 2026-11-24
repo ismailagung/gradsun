@@ -86,13 +86,6 @@ export default async function GalleryPage() {
         {/* Page Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 border-b border-border">
           <div className="flex flex-col gap-2 max-w-2xl">
-            <Badge
-              variant="secondary"
-              className="gap-2 px-3 py-1 text-xs font-normal border border-border self-start"
-            >
-              <Camera className="size-3.5 text-primary" />
-              <span>{tPort("headerBadge")}</span>
-            </Badge>
             <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-foreground tracking-tight">
               {tPort("headerTitle")}
             </h1>
