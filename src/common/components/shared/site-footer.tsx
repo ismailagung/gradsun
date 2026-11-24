@@ -58,9 +58,6 @@ export function SiteFooter() {
             <Link href="/track-order" className="hover:text-foreground transition-colors">
               {tNav("trackOrder")}
             </Link>
-            <Link href="/admin" className="hover:text-primary transition-colors font-medium">
-              {tNav("admin")}
-            </Link>
           </div>
         </div>
 
@@ -109,10 +106,10 @@ export function SiteFooter() {
       <div className="mx-auto max-w-7xl pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
         <p>{tFoot("copyright")}</p>
         <div className="flex items-center gap-4">
-          <Link href="/packages" className="hover:text-foreground transition-colors">
+          <Link href="/terms" className="hover:text-foreground transition-colors">
             {tFoot("terms")}
           </Link>
-          <Link href="/admin" className="hover:text-primary transition-colors">
+          <Link href="/login" className="hover:text-primary transition-colors">
             {tFoot("staffPortal")}
           </Link>
         </div>

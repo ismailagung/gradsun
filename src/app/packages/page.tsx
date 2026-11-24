@@ -183,14 +183,6 @@ export default async function PackagesBookingPage() {
             <Button variant="ghost" size="default" asChild className="rounded-full px-4 text-xs">
               <Link href="/track-order">{tNav("trackOrder")}</Link>
             </Button>
-            <Button
-              variant="ghost"
-              size="default"
-              asChild
-              className="rounded-full px-4 text-xs text-primary font-medium"
-            >
-              <Link href="/admin">{tNav("admin")}</Link>
-            </Button>
           </nav>
 
           <div className="flex items-center gap-2">
