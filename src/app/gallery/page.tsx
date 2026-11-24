@@ -1,4 +1,4 @@
-import { ArrowRight, Filter, Sparkles } from "lucide-react";
+import { Filter, Sparkles } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
@@ -232,22 +232,6 @@ export default async function GalleryPage() {
               </DialogContent>
             </Dialog>
           ))}
-        </div>
-
-        {/* CTA Banner */}
-        <div className="mt-16 p-8 rounded-3xl border border-border bg-secondary/40 flex flex-col sm:flex-row items-center justify-between gap-6">
-          <div className="flex flex-col gap-1">
-            <h3 className="font-serif text-xl font-semibold text-foreground">
-              {tPort("headerTitle")}
-            </h3>
-            <p className="text-xs text-muted-foreground">{tPort("headerSubtitle")}</p>
-          </div>
-          <Button size="lg" asChild className="gap-2 rounded-xl text-sm shrink-0">
-            <Link href="/packages">
-              <span>{tNav("bookSession")}</span>
-              <ArrowRight className="size-4" />
-            </Link>
-          </Button>
         </div>
       </main>
     </div>
