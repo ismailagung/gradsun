@@ -7,6 +7,7 @@ import {
   ChevronRight,
   Clock,
   GraduationCap,
+  Lock,
   MessageCircle,
   Sparkles,
   Sun,
@@ -73,6 +74,72 @@ export default async function PackagesBookingPage() {
       feats: [tPkgSummary("pkg4Feat1"), tPkgSummary("pkg4Feat2"), tPkgSummary("pkg4Feat3")],
       icon: Users,
       selected: false,
+    },
+  ];
+
+  const scheduleSlots = [
+    {
+      time: "08:00 - 08:30",
+      status: "available" as const,
+      bookedBy: "",
+      light: tPkg("slotMorningLight"),
+      icon: Sun,
+    },
+    {
+      time: "08:30 - 10:00",
+      status: "booked" as const,
+      bookedBy: tPkg("slotBlockedAdinda"),
+      light: tPkg("slotBlockedAdinda"),
+      icon: Lock,
+    },
+    {
+      time: "10:00 - 11:30",
+      status: "available" as const,
+      bookedBy: "",
+      light: tPkg("slotMiddayLight"),
+      icon: Sun,
+    },
+    {
+      time: "11:30 - 12:30",
+      status: "available" as const,
+      bookedBy: "",
+      light: tPkg("slotMiddayLight"),
+      icon: Sun,
+    },
+    {
+      time: "12:30 - 13:30",
+      status: "available" as const,
+      bookedBy: "",
+      light: tPkg("slotMiddayLight"),
+      icon: Sun,
+    },
+    {
+      time: "13:30 - 14:30",
+      status: "booked" as const,
+      bookedBy: tPkg("slotBlockedRayhan"),
+      light: tPkg("slotBlockedRayhan"),
+      icon: Lock,
+    },
+    {
+      time: "14:30 - 15:30",
+      status: "available" as const,
+      bookedBy: "",
+      light: tPkg("slotAfternoonLight"),
+      icon: Sun,
+    },
+    {
+      time: "15:30 - 16:30",
+      status: "available" as const,
+      bookedBy: "",
+      light: tPkg("slotEarlyGoldenHour"),
+      icon: Sun,
+    },
+    {
+      time: "16:30 - 17:30",
+      status: "selected" as const,
+      bookedBy: "",
+      light: tPkg("slotPrimeSunset"),
+      icon: Sparkles,
     },
   ];
 
@@ -413,30 +480,37 @@ export default async function PackagesBookingPage() {
                       variant="secondary"
                       className="self-start sm:self-auto text-[10px] flex items-center gap-1.5"
                     >
-                      <span>{tPkg("morningSlotBadge")}</span>
-                      <span className="size-1 rounded-full bg-muted-foreground/60" />
-                      <span>{tPkg("goldenHourSlotBadge")}</span>
+                      <Clock className="size-3 text-primary" />
+                      <span>{tPkg("operatingHoursBadge")}</span>
                     </Badge>
                   </div>
 
                   {/* Section A: Booked Sessions on This Date */}
                   <div className="flex flex-col gap-2.5">
-                    <div className="flex items-center gap-1.5 text-muted-foreground">
-                      <Clock className="size-3.5 text-primary" />
-                      <span className="text-xs font-semibold uppercase tracking-wider font-serif text-foreground">
-                        {tPkg("bookedSlotsTitle")}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-1.5 text-muted-foreground">
+                        <Clock className="size-3.5 text-primary" />
+                        <span className="text-xs font-semibold uppercase tracking-wider font-serif text-foreground">
+                          {tPkg("bookedSlotsTitle")}
+                        </span>
+                      </div>
+                      <span className="text-[11px] text-muted-foreground font-medium">
+                        {tPkg("bookedSlotsCount")}
                       </span>
                     </div>
-                    <div className="flex flex-col gap-2">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                       {/* Booked Client 1 */}
                       <div className="p-3 rounded-xl border border-border/80 bg-secondary/30 flex items-center justify-between gap-3">
                         <div className="flex items-center gap-2.5 min-w-0">
-                          <div className="size-7 rounded-full bg-secondary flex items-center justify-center shrink-0 text-muted-foreground">
-                            <User className="size-3.5" />
+                          <div className="size-8 rounded-full bg-secondary flex items-center justify-center shrink-0 text-muted-foreground">
+                            <User className="size-4" />
                           </div>
                           <div className="flex flex-col min-w-0">
                             <span className="text-xs font-semibold text-foreground truncate">
-                              {tPkg("bookedClient1")}
+                              {tPkg("bookedClient1Name")}
+                            </span>
+                            <span className="text-[11px] font-mono text-muted-foreground">
+                              {tPkg("bookedClient1Time")}
                             </span>
                           </div>
                         </div>
@@ -451,12 +525,15 @@ export default async function PackagesBookingPage() {
                       {/* Booked Client 2 */}
                       <div className="p-3 rounded-xl border border-border/80 bg-secondary/30 flex items-center justify-between gap-3">
                         <div className="flex items-center gap-2.5 min-w-0">
-                          <div className="size-7 rounded-full bg-secondary flex items-center justify-center shrink-0 text-muted-foreground">
-                            <User className="size-3.5" />
+                          <div className="size-8 rounded-full bg-secondary flex items-center justify-center shrink-0 text-muted-foreground">
+                            <User className="size-4" />
                           </div>
                           <div className="flex flex-col min-w-0">
                             <span className="text-xs font-semibold text-foreground truncate">
-                              {tPkg("bookedClient2")}
+                              {tPkg("bookedClient2Name")}
+                            </span>
+                            <span className="text-[11px] font-mono text-muted-foreground">
+                              {tPkg("bookedClient2Time")}
                             </span>
                           </div>
                         </div>
@@ -470,66 +547,136 @@ export default async function PackagesBookingPage() {
                     </div>
                   </div>
 
-                  {/* Section B: Available Slots to Reserve */}
-                  <div className="flex flex-col gap-2.5">
-                    <span className="text-xs font-semibold uppercase tracking-wider font-serif text-foreground">
-                      {tPkg("availableSlotsTitle")}
-                    </span>
+                  {/* Section B: Available Slots to Reserve (Free-to-choose across operating hours) */}
+                  <div className="flex flex-col gap-2.5 pt-2 border-t border-border/60">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                      <div className="flex flex-col">
+                        <span className="text-xs font-semibold uppercase tracking-wider font-serif text-foreground">
+                          {tPkg("availableSlotsTitle")}
+                        </span>
+                        <span className="text-[11px] text-muted-foreground">
+                          {tPkg("availableSlotsDescription")}
+                        </span>
+                      </div>
+
+                      {/* Legend */}
+                      <div className="flex items-center gap-2.5 text-[10px] text-muted-foreground shrink-0">
+                        <div className="flex items-center gap-1">
+                          <span className="size-2 rounded-full bg-border border border-muted-foreground/30" />
+                          <span>{tPkg("legendAvailable")}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <span className="size-2 rounded-full bg-primary" />
+                          <span>{tPkg("legendSelected")}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <span className="size-2 rounded-full bg-muted-foreground/40" />
+                          <span>{tPkg("legendBooked")}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Time Slots Grid */}
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-                      {/* Slot 1: Available */}
-                      <div className="p-3 rounded-xl border border-border bg-card hover:border-primary/50 transition-all flex flex-col justify-between gap-2 cursor-pointer shadow-xs">
-                        <div className="flex items-center justify-between">
-                          <span className="font-mono text-xs font-bold text-foreground">
-                            {tPkg("slot1Time")}
-                          </span>
-                          <Sun className="size-3 text-muted-foreground" />
-                        </div>
-                        <span className="text-[10px] text-muted-foreground">
-                          {tPkg("slot1Name")}
-                        </span>
-                        <div className="pt-2 border-t border-border flex items-center justify-between">
-                          <Badge variant="secondary" className="text-[9px] px-1.5 py-0 font-normal">
-                            {tPkg("availableBadge")}
-                          </Badge>
-                        </div>
-                      </div>
+                      {scheduleSlots.map((slot) => {
+                        const Icon = slot.icon;
+                        if (slot.status === "selected") {
+                          return (
+                            <div
+                              key={slot.time}
+                              className="p-3 rounded-xl border-2 border-primary bg-primary/10 transition-all flex flex-col justify-between gap-2 cursor-pointer shadow-xs"
+                            >
+                              <div className="flex items-center justify-between">
+                                <span className="font-mono text-xs font-bold text-primary">
+                                  {slot.time}
+                                </span>
+                                <Icon className="size-3 text-primary" />
+                              </div>
+                              <span className="text-[10px] font-semibold text-primary truncate">
+                                {slot.light}
+                              </span>
+                              <div className="pt-2 border-t border-primary/20 flex items-center justify-between">
+                                <Badge className="text-[9px] px-1.5 py-0 bg-primary text-primary-foreground font-semibold">
+                                  {tPkg("selectedBadge")}
+                                </Badge>
+                                <Check className="size-3 text-primary" />
+                              </div>
+                            </div>
+                          );
+                        }
 
-                      {/* Slot 2: Available */}
-                      <div className="p-3 rounded-xl border border-border bg-card hover:border-primary/50 transition-all flex flex-col justify-between gap-2 cursor-pointer shadow-xs">
-                        <div className="flex items-center justify-between">
-                          <span className="font-mono text-xs font-bold text-foreground">
-                            {tPkg("slot2Time")}
-                          </span>
-                          <Sun className="size-3 text-primary" />
-                        </div>
-                        <span className="text-[10px] text-muted-foreground">
-                          {tPkg("slot2Name")}
-                        </span>
-                        <div className="pt-2 border-t border-border flex items-center justify-between">
-                          <Badge variant="secondary" className="text-[9px] px-1.5 py-0 font-normal">
-                            {tPkg("availableBadge")}
-                          </Badge>
-                        </div>
-                      </div>
+                        if (slot.status === "booked") {
+                          return (
+                            <div
+                              key={slot.time}
+                              className="p-3 rounded-xl border border-dashed border-border/80 bg-muted/40 opacity-70 cursor-not-allowed select-none flex flex-col justify-between gap-2"
+                            >
+                              <div className="flex items-center justify-between">
+                                <span className="font-mono text-xs font-medium text-muted-foreground line-through">
+                                  {slot.time}
+                                </span>
+                                <Icon className="size-3 text-muted-foreground shrink-0" />
+                              </div>
+                              <span className="text-[10px] text-muted-foreground truncate">
+                                {slot.bookedBy}
+                              </span>
+                              <div className="pt-2 border-t border-border/50 flex items-center justify-between">
+                                <Badge
+                                  variant="outline"
+                                  className="text-[9px] px-1.5 py-0 text-muted-foreground border-border/80 bg-background/50"
+                                >
+                                  {tPkg("blockedBadge")}
+                                </Badge>
+                              </div>
+                            </div>
+                          );
+                        }
 
-                      {/* Slot 3: Selected */}
-                      <div className="p-3 rounded-xl border-2 border-primary bg-primary/10 transition-all flex flex-col justify-between gap-2 cursor-pointer shadow-xs">
-                        <div className="flex items-center justify-between">
-                          <span className="font-mono text-xs font-bold text-primary">
-                            {tPkg("slot3Time")}
-                          </span>
-                          <Sparkles className="size-3 text-primary" />
+                        return (
+                          <div
+                            key={slot.time}
+                            className="p-3 rounded-xl border border-border bg-card hover:border-primary/50 hover:bg-secondary/20 transition-all flex flex-col justify-between gap-2 cursor-pointer shadow-xs group"
+                          >
+                            <div className="flex items-center justify-between">
+                              <span className="font-mono text-xs font-bold text-foreground">
+                                {slot.time}
+                              </span>
+                              <Icon className="size-3 text-muted-foreground group-hover:text-primary transition-colors" />
+                            </div>
+                            <span className="text-[10px] text-muted-foreground truncate">
+                              {slot.light}
+                            </span>
+                            <div className="pt-2 border-t border-border/60 flex items-center justify-between">
+                              <Badge
+                                variant="secondary"
+                                className="text-[9px] px-1.5 py-0 font-normal"
+                              >
+                                {tPkg("availableBadge")}
+                              </Badge>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    {/* Selected Slot Summary Banner */}
+                    <div className="p-3 rounded-xl border border-primary/30 bg-primary/5 flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="size-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                          <Sparkles className="size-4" />
                         </div>
-                        <span className="text-[10px] font-semibold text-primary">
-                          {tPkg("slot3Name")}
-                        </span>
-                        <div className="pt-2 border-t border-primary/20 flex items-center justify-between">
-                          <Badge className="text-[9px] px-1.5 py-0 bg-primary text-primary-foreground font-semibold">
-                            {tPkg("selectedBadge")}
-                          </Badge>
-                          <Check className="size-3 text-primary" />
+                        <div className="flex flex-col min-w-0">
+                          <span className="text-xs font-semibold text-foreground truncate">
+                            {tPkg("selectedSessionBannerTitle")}
+                          </span>
+                          <span className="text-[11px] text-muted-foreground truncate">
+                            {tPkg("selectedSessionBannerDetail")}
+                          </span>
                         </div>
                       </div>
+                      <Badge className="text-[10px] bg-primary text-primary-foreground shrink-0">
+                        {tPkg("selectedBadge")}
+                      </Badge>
                     </div>
                   </div>
                 </div>
