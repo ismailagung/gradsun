@@ -1,10 +1,10 @@
+import { cn } from "cn";
 import {
   ArrowRight,
   Calendar as CalendarIcon,
   Check,
   Clock,
   GraduationCap,
-  Heart,
   MessageCircle,
   Sparkles,
   Sun,
@@ -28,6 +28,50 @@ import {
 export default async function PackagesBookingPage() {
   const tNav = await getTranslations("nav");
   const tPkg = await getTranslations("packagesPage");
+  const tPkgSummary = await getTranslations("packagesSummary");
+
+  const packageTiers = [
+    {
+      id: "pkg-single-1",
+      title: tPkgSummary("pkg1Title"),
+      price: tPkgSummary("pkg1Price"),
+      duration: tPkgSummary("pkg1Duration"),
+      scope: tPkgSummary("pkg1Scope"),
+      feats: [tPkgSummary("pkg1Feat1"), tPkgSummary("pkg1Feat2"), tPkgSummary("pkg1Feat3")],
+      icon: GraduationCap,
+      selected: true,
+    },
+    {
+      id: "pkg-single-2",
+      title: tPkgSummary("pkg2Title"),
+      price: tPkgSummary("pkg2Price"),
+      duration: tPkgSummary("pkg2Duration"),
+      scope: tPkgSummary("pkg2Scope"),
+      feats: [tPkgSummary("pkg2Feat1"), tPkgSummary("pkg2Feat2"), tPkgSummary("pkg2Feat3")],
+      icon: Sparkles,
+      selected: false,
+    },
+    {
+      id: "pkg-group-1",
+      title: tPkgSummary("pkg3Title"),
+      price: tPkgSummary("pkg3Price"),
+      duration: tPkgSummary("pkg3Duration"),
+      scope: tPkgSummary("pkg3Scope"),
+      feats: [tPkgSummary("pkg3Feat1"), tPkgSummary("pkg3Feat2"), tPkgSummary("pkg3Feat3")],
+      icon: Users,
+      selected: false,
+    },
+    {
+      id: "pkg-group-2",
+      title: tPkgSummary("pkg4Title"),
+      price: tPkgSummary("pkg4Price"),
+      duration: tPkgSummary("pkg4Duration"),
+      scope: tPkgSummary("pkg4Scope"),
+      feats: [tPkgSummary("pkg4Feat1"), tPkgSummary("pkg4Feat2"), tPkgSummary("pkg4Feat3")],
+      icon: Users,
+      selected: false,
+    },
+  ];
 
   return (
     <div className="flex flex-col flex-1 bg-background text-foreground">
@@ -120,94 +164,69 @@ export default async function PackagesBookingPage() {
                 </h2>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {/* Package 1 */}
-                <Card className="border-border bg-card p-4 rounded-2xl shadow-xs cursor-pointer hover:border-primary transition-all">
-                  <CardContent className="p-0 flex flex-col justify-between h-full gap-4">
-                    <div className="flex flex-col gap-1.5">
-                      <div className="flex items-center justify-between">
-                        <GraduationCap className="size-5 text-primary" />
-                        <Badge variant="outline" className="text-[10px] border-border font-mono">
-                          {tPkg("pkgSoloDuration")}
-                        </Badge>
-                      </div>
-                      <h3 className="font-serif text-base font-semibold text-foreground mt-1">
-                        {tPkg("pkgSoloTitle")}
-                      </h3>
-                      <p className="text-xs text-muted-foreground leading-relaxed">
-                        {tPkg("pkgSoloDesc")}
-                      </p>
-                    </div>
-                    <div className="pt-3 border-t border-border flex items-center justify-between">
-                      <span className="text-xs text-muted-foreground">{tPkg("pkgSoloQuota")}</span>
-                      <span className="font-serif text-sm font-semibold text-primary">
-                        {tPkg("pkgSoloPrice")}
-                      </span>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* Package 2 (Selected) */}
-                <Card className="border-primary bg-primary/5 p-4 rounded-2xl shadow-xs cursor-pointer relative">
-                  <div className="absolute top-3 right-3 size-5 rounded-full bg-primary text-primary-foreground flex items-center justify-center">
-                    <Check className="size-3" />
-                  </div>
-                  <CardContent className="p-0 flex flex-col justify-between h-full gap-4">
-                    <div className="flex flex-col gap-1.5">
-                      <div className="flex items-center justify-between pr-6">
-                        <Heart className="size-5 text-primary" />
-                        <Badge
-                          variant="outline"
-                          className="text-[10px] border-primary/30 font-mono"
-                        >
-                          {tPkg("pkgBestiesDuration")}
-                        </Badge>
-                      </div>
-                      <h3 className="font-serif text-base font-semibold text-foreground mt-1">
-                        {tPkg("pkgBestiesTitle")}
-                      </h3>
-                      <p className="text-xs text-muted-foreground leading-relaxed">
-                        {tPkg("pkgBestiesDesc")}
-                      </p>
-                    </div>
-                    <div className="pt-3 border-t border-primary/20 flex items-center justify-between">
-                      <span className="text-xs text-muted-foreground">
-                        {tPkg("pkgBestiesQuota")}
-                      </span>
-                      <span className="font-serif text-sm font-semibold text-primary">
-                        {tPkg("pkgBestiesPrice")}
-                      </span>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* Package 3 */}
-                <Card className="border-border bg-card p-4 rounded-2xl shadow-xs cursor-pointer hover:border-primary transition-all">
-                  <CardContent className="p-0 flex flex-col justify-between h-full gap-4">
-                    <div className="flex flex-col gap-1.5">
-                      <div className="flex items-center justify-between">
-                        <Users className="size-5 text-primary" />
-                        <Badge variant="outline" className="text-[10px] border-border font-mono">
-                          {tPkg("pkgCohortDuration")}
-                        </Badge>
-                      </div>
-                      <h3 className="font-serif text-base font-semibold text-foreground mt-1">
-                        {tPkg("pkgCohortTitle")}
-                      </h3>
-                      <p className="text-xs text-muted-foreground leading-relaxed">
-                        {tPkg("pkgCohortDesc")}
-                      </p>
-                    </div>
-                    <div className="pt-3 border-t border-border flex items-center justify-between">
-                      <span className="text-xs text-muted-foreground">
-                        {tPkg("pkgCohortQuota")}
-                      </span>
-                      <span className="font-serif text-sm font-semibold text-primary">
-                        {tPkg("pkgCohortPrice")}
-                      </span>
-                    </div>
-                  </CardContent>
-                </Card>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {packageTiers.map((pkg) => {
+                  const Icon = pkg.icon;
+                  return (
+                    <Card
+                      key={pkg.id}
+                      className={cn(
+                        "relative p-4 rounded-2xl shadow-xs cursor-pointer transition-all flex flex-col justify-between",
+                        pkg.selected
+                          ? "border-primary bg-primary/5 ring-1 ring-primary/40"
+                          : "border-border bg-card hover:border-primary/50",
+                      )}
+                    >
+                      {pkg.selected && (
+                        <div className="absolute top-4 right-4 size-5 rounded-full bg-primary text-primary-foreground flex items-center justify-center">
+                          <Check className="size-3" />
+                        </div>
+                      )}
+                      <CardContent className="p-0 flex flex-col justify-between h-full gap-4">
+                        <div className="flex flex-col gap-2">
+                          <div className="flex items-center justify-between pr-7">
+                            <div className="size-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+                              <Icon className="size-4" />
+                            </div>
+                            <Badge
+                              variant="outline"
+                              className={cn(
+                                "text-[10px] font-medium border-border",
+                                pkg.selected && "border-primary/40 text-primary",
+                              )}
+                            >
+                              {pkg.duration}
+                            </Badge>
+                          </div>
+                          <div>
+                            <h3 className="font-serif text-base font-bold text-foreground">
+                              {pkg.title}
+                            </h3>
+                            <p className="text-xs font-medium text-foreground/80 mt-0.5">
+                              {pkg.scope}
+                            </p>
+                          </div>
+                          <ul className="space-y-1.5 pt-2 text-xs text-muted-foreground border-t border-border/50">
+                            {pkg.feats.map((feat) => (
+                              <li key={feat} className="flex items-start gap-2">
+                                <Check className="size-3.5 text-primary shrink-0 mt-0.5" />
+                                <span>{feat}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                        <div className="pt-3 border-t border-border flex items-center justify-between">
+                          <span className="text-xs text-muted-foreground">
+                            {tPkgSummary("viewDetails")}
+                          </span>
+                          <span className="font-serif text-sm font-bold text-primary">
+                            {pkg.price}
+                          </span>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
               </div>
             </section>
 
