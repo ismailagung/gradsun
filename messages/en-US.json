@@ -212,6 +212,7 @@
     "bookedClient2Time": "13:30 – 14:30 WIB",
     "availableSlotsTitle": "Select Reservation Time",
     "availableSlotsDescription": "Free to choose any open slot across studio hours (booked times are blocked)",
+    "sessionStartTimeLabel": "Session Start Time",
     "timePickerTitle": "Select Start Time",
     "timePickerSubtitle": "Free to choose any operating time",
     "timePickerHour": "Hour",

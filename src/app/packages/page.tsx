@@ -77,6 +77,7 @@ export default async function PackagesBookingPage() {
   ];
 
   const timePickerLabels = {
+    sessionStartTimeLabel: tPkg("sessionStartTimeLabel"),
     hour: tPkg("timePickerHour"),
     minute: tPkg("timePickerMinute"),
     period: tPkg("timePickerPeriod"),
@@ -498,28 +499,20 @@ export default async function PackagesBookingPage() {
 
                   {/* Section B: Time Picker (Free-to-choose Start Time as requested) */}
                   <div className="flex flex-col gap-3 pt-3 border-t border-border/60">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
-                      <div className="flex flex-col">
-                        <span className="text-xs font-semibold uppercase tracking-wider font-serif text-foreground">
-                          {tPkg("timePickerTitle")}
-                        </span>
-                        <span className="text-[11px] text-muted-foreground">
-                          {tPkg("timePickerSubtitle")}
-                        </span>
-                      </div>
-                      <Badge
-                        variant="outline"
-                        className="self-start sm:self-auto text-[10px] border-border text-muted-foreground"
-                      >
-                        {tPkg("selectedBadge")}
-                        {": 04:30 PM (16:30 WIB)"}
-                      </Badge>
+                    <div className="flex flex-col">
+                      <span className="text-xs font-semibold uppercase tracking-wider font-serif text-foreground">
+                        {tPkg("timePickerTitle")}
+                      </span>
+                      <span className="text-[11px] text-muted-foreground">
+                        {tPkg("timePickerSubtitle")}
+                      </span>
                     </div>
 
                     <TimePickerControl
                       initialHour="04"
                       initialMinute="30"
                       initialPeriod="PM"
+                      initialHasSelected={false}
                       labels={timePickerLabels}
                     />
                   </div>

@@ -212,6 +212,7 @@
     "bookedClient2Time": "13:30 – 14:30 WIB",
     "availableSlotsTitle": "Pilih Waktu Reservasi",
     "availableSlotsDescription": "Bebas memilih slot kosong selama jam operasional (jam terpesan otomatis diblokir)",
+    "sessionStartTimeLabel": "Jam Mulai Sesi",
     "timePickerTitle": "Pilih Jam Pemotretan",
     "timePickerSubtitle": "Bebas pilih jam selama operasional",
     "timePickerHour": "Jam",
