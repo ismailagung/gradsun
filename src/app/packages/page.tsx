@@ -1,13 +1,11 @@
 import { cn } from "cn";
 import {
-  ArrowRight,
   Calendar as CalendarIcon,
   Check,
   ChevronLeft,
   ChevronRight,
   Clock,
   GraduationCap,
-  MessageCircle,
   Sparkles,
   User,
   Users,
@@ -19,13 +17,7 @@ import { Badge } from "@/common/components/ui/badge";
 import { Button } from "@/common/components/ui/button";
 import { Card, CardContent } from "@/common/components/ui/card";
 import { Input } from "@/common/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/common/components/ui/select";
+import { BookingConfirmationDialog } from "@/modules/reservations/components/booking-confirmation-dialog";
 import { TimePickerControl } from "@/modules/reservations/components/time-picker-control";
 
 export default async function PackagesBookingPage() {
@@ -80,7 +72,6 @@ export default async function PackagesBookingPage() {
     sessionStartTimeLabel: tPkg("sessionStartTimeLabel"),
     hour: tPkg("timePickerHour"),
     minute: tPkg("timePickerMinute"),
-    period: tPkg("timePickerPeriod"),
     bufferTitle: tPkg("bufferNoticeTitle"),
     bufferDesc: tPkg("bufferNoticeDesc"),
     statusAvailable: tPkg("timeStatusAvailable"),
@@ -91,6 +82,26 @@ export default async function PackagesBookingPage() {
     bookedBadge: tPkg("bookedBadge"),
     availableBadge: tPkg("availableBadge"),
     placeholder: tPkg("timePlaceholder"),
+  };
+
+  const confirmationDialogLabels = {
+    bookNowCta: tPkg("bookNowCta"),
+    orderSentTitle: tPkg("orderSentTitle"),
+    orderSentSubtitle: tPkg("orderSentSubtitle"),
+    orderSentDesc: tPkg("orderSentDesc"),
+    orderRecapPackage: tPkg("orderRecapPackage"),
+    orderRecapSchedule: tPkg("orderRecapSchedule"),
+    orderRecapClient: tPkg("orderRecapClient"),
+    preliminaryInvoiceTitle: tPkg("preliminaryInvoiceTitle"),
+    preliminaryInvoiceDesc: tPkg("preliminaryInvoiceDesc"),
+    downloadInvoiceCta: tPkg("downloadInvoiceCta"),
+    finishCta: tPkg("finishCta"),
+    packageName: tPkgSummary("pkg1Title"),
+    packagePrice: tPkg("summaryPkgPrice"),
+    dpPrice: tPkg("summaryDpPrice"),
+    scheduleText: tPkg("summarySlotBadge"),
+    clientName: "Najmi Al-Azhar",
+    clientContact: "081298765432 • najmi@example.com",
   };
 
   return (
@@ -519,7 +530,7 @@ export default async function PackagesBookingPage() {
               </div>
             </section>
 
-            {/* STEP 3: CLIENT DETAILS & ADDONS */}
+            {/* STEP 3: CLIENT DETAILS */}
             <section className="flex flex-col gap-4 pt-4 border-t border-border">
               <div className="flex items-center gap-2">
                 <span className="size-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-bold font-serif">
@@ -530,22 +541,32 @@ export default async function PackagesBookingPage() {
                 </h2>
               </div>
 
-              <div className="bg-card border border-border rounded-2xl p-6 shadow-xs flex flex-col gap-6">
+              <div className="bg-card border border-border rounded-2xl p-6 shadow-xs flex flex-col gap-5">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Full Name */}
                   <div className="flex flex-col gap-1.5">
-                    <label htmlFor="fullName" className="text-xs font-medium text-foreground">
-                      {tPkg("fullNameLabel")}
+                    <label
+                      htmlFor="fullName"
+                      className="text-xs font-medium text-foreground flex items-center gap-1"
+                    >
+                      <span>{tPkg("fullNameLabel")}</span>
+                      <span className="text-destructive font-bold text-sm leading-none">{"*"}</span>
                     </label>
                     <Input
                       id="fullName"
                       placeholder={tPkg("fullNamePlaceholder")}
-                      defaultValue="Adinda Prameswari"
+                      defaultValue="Najmi Al-Azhar"
                     />
                   </div>
 
+                  {/* WhatsApp Phone Number */}
                   <div className="flex flex-col gap-1.5">
-                    <label htmlFor="phone" className="text-xs font-medium text-foreground">
-                      {tPkg("phoneLabel")}
+                    <label
+                      htmlFor="phone"
+                      className="text-xs font-medium text-foreground flex items-center gap-1"
+                    >
+                      <span>{tPkg("phoneLabel")}</span>
+                      <span className="text-destructive font-bold text-sm leading-none">{"*"}</span>
                     </label>
                     <Input
                       id="phone"
@@ -554,80 +575,44 @@ export default async function PackagesBookingPage() {
                     />
                   </div>
 
+                  {/* Instagram Handle */}
                   <div className="flex flex-col gap-1.5">
-                    <label htmlFor="instagram" className="text-xs font-medium text-foreground">
-                      {tPkg("instagramLabel")}
+                    <label
+                      htmlFor="instagram"
+                      className="text-xs font-medium text-foreground flex items-center gap-1"
+                    >
+                      <span>{tPkg("instagramLabel")}</span>
+                      <span className="text-destructive font-bold text-sm leading-none">{"*"}</span>
                     </label>
                     <Input
                       id="instagram"
                       placeholder={tPkg("instagramPlaceholder")}
-                      defaultValue="@adindaprm"
+                      defaultValue="@gradsun.studio"
                     />
                   </div>
 
+                  {/* Active Email Address */}
                   <div className="flex flex-col gap-1.5">
-                    <span className="text-xs font-medium text-foreground">
-                      {tPkg("campusLabel")}
-                    </span>
-                    <Select defaultValue="ui">
-                      <SelectTrigger>
-                        <SelectValue placeholder={tPkg("campusPlaceholder")} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="ui">{tPkg("campusUI")}</SelectItem>
-                        <SelectItem value="itb">{tPkg("campusITB")}</SelectItem>
-                        <SelectItem value="ugm">{tPkg("campusUGM")}</SelectItem>
-                        <SelectItem value="unpad">{tPkg("campusUNPAD")}</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <label
+                      htmlFor="email"
+                      className="text-xs font-medium text-foreground flex items-center gap-1"
+                    >
+                      <span>{tPkg("emailLabel")}</span>
+                      <span className="text-destructive font-bold text-sm leading-none">{"*"}</span>
+                    </label>
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder={tPkg("emailPlaceholder")}
+                      defaultValue="najmi@example.com"
+                    />
                   </div>
                 </div>
 
-                {/* Add-on Enhancement Checklist */}
-                <div className="flex flex-col gap-3 pt-4 border-t border-border">
-                  <span className="text-xs font-semibold text-foreground uppercase tracking-wider font-serif">
-                    {tPkg("addonsTitle")}
-                  </span>
-
-                  <div className="flex flex-col gap-2">
-                    <div className="p-3 rounded-xl border border-border bg-secondary/30 flex items-center justify-between cursor-pointer">
-                      <div className="flex items-center gap-3">
-                        <div className="size-4 rounded-md border border-primary bg-primary text-primary-foreground flex items-center justify-center">
-                          <Check className="size-3" />
-                        </div>
-                        <span className="text-xs text-foreground font-medium">
-                          {tPkg("addonPhotobookTitle")}
-                        </span>
-                      </div>
-                      <span className="text-xs font-semibold text-primary">
-                        {tPkg("addonPhotobookPrice")}
-                      </span>
-                    </div>
-
-                    <div className="p-3 rounded-xl border border-border bg-secondary/30 flex items-center justify-between cursor-pointer">
-                      <div className="flex items-center gap-3">
-                        <div className="size-4 rounded-md border border-border bg-card" />
-                        <span className="text-xs text-foreground font-medium">
-                          {tPkg("addonFastTitle")}
-                        </span>
-                      </div>
-                      <span className="text-xs font-semibold text-muted-foreground">
-                        {tPkg("addonFastPrice")}
-                      </span>
-                    </div>
-
-                    <div className="p-3 rounded-xl border border-border bg-secondary/30 flex items-center justify-between cursor-pointer">
-                      <div className="flex items-center gap-3">
-                        <div className="size-4 rounded-md border border-border bg-card" />
-                        <span className="text-xs text-foreground font-medium">
-                          {tPkg("addonPrintsTitle")}
-                        </span>
-                      </div>
-                      <span className="text-xs font-semibold text-muted-foreground">
-                        {tPkg("addonPrintsPrice")}
-                      </span>
-                    </div>
-                  </div>
+                {/* Tracking & Data Notice */}
+                <div className="p-3.5 rounded-xl border border-border bg-secondary/30 flex items-center gap-2.5 text-xs text-muted-foreground">
+                  <Clock className="size-4 text-primary shrink-0" />
+                  <p className="text-[11px] leading-relaxed">{tPkg("trackingNotice")}</p>
                 </div>
               </div>
             </section>
@@ -652,12 +637,6 @@ export default async function PackagesBookingPage() {
                   </span>
                   <span className="text-foreground font-mono">{tPkg("summaryPkgPrice")}</span>
                 </div>
-                <div className="flex justify-between text-muted-foreground">
-                  <span>
-                    {tPkg("addonsSubtotalLabel")} {tPkg("summaryAddonName")}
-                  </span>
-                  <span className="text-foreground font-mono">{tPkg("summaryAddonPrice")}</span>
-                </div>
                 <div className="pt-2 border-t border-border flex justify-between font-serif text-sm font-semibold text-foreground">
                   <span>{tPkg("totalLabel")}</span>
                   <span className="text-primary font-mono text-base">
@@ -679,22 +658,8 @@ export default async function PackagesBookingPage() {
                 </p>
               </div>
 
-              {/* Payment Details */}
-              <div className="flex flex-col gap-1 text-xs bg-secondary/50 p-3 rounded-xl border border-border">
-                <span className="font-semibold text-foreground font-serif">
-                  {tPkg("paymentDetailsTitle")}
-                </span>
-                <span className="font-mono text-muted-foreground">{tPkg("bcaAccount")}</span>
-              </div>
-
-              {/* WhatsApp Dispatch Button */}
-              <Button size="lg" asChild className="gap-2 rounded-xl text-sm shadow-md w-full">
-                <Link href="https://wa.me/6281234567890">
-                  <MessageCircle className="size-4" />
-                  <span>{tPkg("dispatchCta")}</span>
-                  <ArrowRight className="size-4" />
-                </Link>
-              </Button>
+              {/* Book Now Button Triggering Modal Dialog */}
+              <BookingConfirmationDialog labels={confirmationDialogLabels} />
             </Card>
           </div>
         </div>
