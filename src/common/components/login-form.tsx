@@ -1,26 +1,22 @@
 "use client";
 
 import { cn } from "cn";
-import { ArrowLeft, Sparkles } from "lucide-react";
+import { ArrowLeft, Lightbulb, LightbulbOff, Sparkles } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import type * as React from "react";
+import * as React from "react";
 import { Button } from "@/common/components/ui/button";
 import { Card, CardContent } from "@/common/components/ui/card";
-import {
-  Field,
-  FieldDescription,
-  FieldGroup,
-  FieldLabel,
-  FieldSeparator,
-} from "@/common/components/ui/field";
+import { Field, FieldGroup, FieldLabel } from "@/common/components/ui/field";
 import { Input } from "@/common/components/ui/input";
 
 export function LoginForm({ className, ...props }: React.ComponentProps<"div">) {
   const router = useRouter();
   const tAuth = useTranslations("auth");
   const tBrand = useTranslations("nav");
+  const [showPassword, setShowPassword] = React.useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,9 +33,14 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
           >
             <FieldGroup>
               <div className="flex flex-col items-center gap-2 text-center">
-                <div className="flex size-9 items-center justify-center rounded-md bg-primary text-primary-foreground font-serif text-base font-semibold">
-                  {"G"}
-                </div>
+                <Image
+                  src="/gradsun-no-bg.png"
+                  alt={tBrand("logoAlt")}
+                  width={44}
+                  height={44}
+                  priority
+                  className="size-11 object-contain"
+                />
                 <h1 className="text-2xl font-serif font-bold tracking-tight">
                   {tAuth("welcomeBack")}
                 </h1>
@@ -69,13 +70,29 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
                     {tAuth("forgotPassword")}
                   </Link>
                 </div>
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder={tAuth("passwordPlaceholder")}
-                  required
-                  className="h-9 text-xs font-mono"
-                />
+                <div className="relative">
+                  <Input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder={tAuth("passwordPlaceholder")}
+                    required
+                    className="h-9 pr-9 text-xs font-mono"
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon-xs"
+                    onClick={() => setShowPassword(!showPassword)}
+                    aria-label={showPassword ? tAuth("hidePassword") : tAuth("showPassword")}
+                    className="absolute right-1.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                  >
+                    {showPassword ? (
+                      <Lightbulb className="size-3.5 text-amber-500 fill-amber-500/20" />
+                    ) : (
+                      <LightbulbOff className="size-3.5" />
+                    )}
+                  </Button>
+                </div>
               </Field>
 
               <Field>
@@ -85,40 +102,34 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
                 </Button>
               </Field>
 
-              <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card text-xs">
-                {tAuth("orDivider")}
-              </FieldSeparator>
-
               <Field>
                 <Button variant="outline" size="sm" asChild className="w-full h-8 text-xs">
                   <Link href="/">
                     <ArrowLeft className="size-3 mr-1.5" />
-                    <span>{tAuth("backToStorefront")}</span>
+                    <span>{tAuth("backToHome")}</span>
                   </Link>
                 </Button>
               </Field>
             </FieldGroup>
-
-            <FieldDescription className="text-center text-[11px] text-muted-foreground leading-normal">
-              <span>{tAuth("termsNoticePre")} </span>
-              <Link href="/terms" className="underline underline-offset-2 hover:text-foreground">
-                {tAuth("termsOfService")}
-              </Link>
-              <span> {tAuth("and")} </span>
-              <Link href="/terms" className="underline underline-offset-2 hover:text-foreground">
-                {tAuth("privacyPolicy")}
-              </Link>
-              <span>{"."}</span>
-            </FieldDescription>
           </form>
 
           {/* Right Visual Panel matching login-04 */}
-          <div className="relative hidden flex-col justify-between bg-card border-l border-border p-8 md:flex">
-            <div className="absolute inset-0 bg-radial from-primary/10 via-transparent to-transparent pointer-events-none" />
+          <div className="relative hidden flex-col justify-between bg-card border-l border-border p-8 md:flex overflow-hidden">
+            {/* Subtle soft-blurred Gradsun logo emblem background */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
+              <div className="relative size-72 sm:size-80 opacity-15 dark:opacity-20 blur-[2px]">
+                <Image
+                  src="/gradsun-no-bg.png"
+                  alt={tBrand("logoAlt")}
+                  fill
+                  className="object-contain"
+                  priority
+                />
+              </div>
+            </div>
 
-            <div className="flex items-center justify-between text-xs text-muted-foreground">
+            <div className="relative z-10 flex items-center justify-between text-xs text-muted-foreground">
               <span className="font-serif font-medium text-foreground">{tBrand("brand")}</span>
-              <span className="font-mono text-[10px] uppercase tracking-wider">{"EST. 2025"}</span>
             </div>
 
             <div className="relative z-10 space-y-4 my-auto py-12">
@@ -130,8 +141,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
               </p>
             </div>
 
-            <div className="flex items-center justify-between text-[11px] text-muted-foreground border-t border-border/60 pt-4">
-              <span>{"Depok • Bandung • Yogyakarta"}</span>
+            <div className="relative z-10 flex items-center justify-end text-[11px] text-muted-foreground border-t border-border/60 pt-4">
               <span className="font-mono">{"v0.4.0"}</span>
             </div>
           </div>
