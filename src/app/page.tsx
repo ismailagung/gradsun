@@ -586,7 +586,11 @@ export default async function HomePage() {
                 {tMani("subtitle")}
               </p>
               <div className="flex flex-wrap items-center gap-4 pt-4">
-                <Button size="lg" asChild className="gap-2 rounded-xl text-sm shadow-md">
+                <Button
+                  size="lg"
+                  asChild
+                  className="gap-2 rounded-xl text-sm shadow-md bg-background text-foreground hover:bg-background/90 font-medium"
+                >
                   <Link href="/packages">
                     <span>{tMani("primaryCta")}</span>
                     <ArrowRight className="size-4" />
@@ -596,7 +600,7 @@ export default async function HomePage() {
                   variant="outline"
                   size="lg"
                   asChild
-                  className="gap-2 rounded-xl text-sm border-background/20 text-background hover:bg-background/10"
+                  className="gap-2 rounded-xl text-sm border-background/30 bg-transparent text-background hover:bg-background/10 hover:text-background"
                 >
                   <Link href="/packages">
                     <span>{tMani("secondaryCta")}</span>
