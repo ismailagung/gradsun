@@ -4,6 +4,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
 import { JsonLd } from "@/common/components/json-ld";
 import { SiteFooter } from "@/common/components/shared/site-footer";
+import { TooltipProvider } from "@/common/components/ui/tooltip";
 import { env } from "@/env";
 import "./globals.css";
 
@@ -57,9 +58,11 @@ export default async function RootLayout({
     <html lang="en" className={`${plusJakarta.variable} ${playfair.variable}`}>
       <body className="font-sans antialiased bg-background text-foreground min-h-screen flex flex-col">
         <NextIntlClientProvider messages={messages}>
-          <JsonLd />
-          <div className="flex-1 flex flex-col">{children}</div>
-          <SiteFooter />
+          <TooltipProvider>
+            <JsonLd />
+            <div className="flex-1 flex flex-col">{children}</div>
+            <SiteFooter />
+          </TooltipProvider>
         </NextIntlClientProvider>
       </body>
     </html>

@@ -45,7 +45,7 @@
     "primaryCta": "Pesan Sesi Anda",
     "secondaryCta": "Jelajahi Gallery",
     "imageAlt": "Potret editorial wisuda dengan pancaran sinar matahari senja",
-    "badgeTitle": "Standar Kamar Gelap",
+    "badgeTitle": "Besties & Milestones",
     "badgeSubtitle": "Terjaga untuk generasi mendatang"
   },
   "landingPortfolio": {
@@ -467,7 +467,16 @@
     "customers": "Pelanggan",
     "studioStatus": "Status Studio: Musim Aktif",
     "newBookingCta": "Booking Baru",
-    "backToStorefront": "Kembali ke Beranda"
+    "backToStorefront": "Kembali ke Beranda",
+    "sectionOperations": "Operasional Studio",
+    "sectionStorefront": "Navigasi Toko",
+    "staffName": "Staf Studio",
+    "staffEmail": "staff@gradsun.studio",
+    "signOut": "Keluar",
+    "viewStorefront": "Beranda Toko",
+    "viewGallery": "Galeri Publik",
+    "viewPackages": "Paket Pemesanan",
+    "viewTracking": "Pelacakan Pesanan"
   },
   "adminDashboard": {
     "title": "Operasional & Ikhtisar Studio",
@@ -681,5 +690,24 @@
     "notFoundTitle": "Faktur Tidak Ditemukan",
     "notFoundDescription": "Kami tidak dapat menemukan reservasi dengan kode {code}. Silakan periksa kembali tautan Anda atau hubungi layanan kami.",
     "backHome": "Kembali ke Beranda"
+  },
+  "auth": {
+    "loginTitle": "Masuk Admin Studio",
+    "welcomeBack": "Selamat datang kembali",
+    "loginSubtitle": "Masukkan kredensial staf Anda untuk mengakses portal studio.",
+    "emailLabel": "Alamat Email",
+    "emailPlaceholder": "staff@gradsun.studio",
+    "passwordLabel": "Kata Sandi",
+    "passwordPlaceholder": "Masukkan kata sandi Anda",
+    "forgotPassword": "Lupa kata sandi?",
+    "signInButton": "Masuk ke Studio",
+    "orDivider": "Atau lanjutkan dengan",
+    "backToStorefront": "Kembali ke Beranda",
+    "termsNoticePre": "Dengan masuk, Anda menyetujui",
+    "termsOfService": "Syarat & Ketentuan",
+    "and": "dan",
+    "privacyPolicy": "Kebijakan Privasi",
+    "editorialQuote": "Mengabadikan setiap momen wisuda dengan keanggunan arsip dan sentuhan sinematik.",
+    "editorialStudio": "Gradsun Studio • Fotografi Wisuda Fakultas & Kampus"
   }
 }

@@ -45,7 +45,7 @@
     "primaryCta": "Book Your Session",
     "secondaryCta": "Explore Gallery",
     "imageAlt": "Editorial graduation portrait bathed in soft golden hour sunlight",
-    "badgeTitle": "Master Darkroom Grade",
+    "badgeTitle": "Besties & Milestones",
     "badgeSubtitle": "Preserved for generations"
   },
   "landingPortfolio": {
@@ -467,7 +467,16 @@
     "customers": "Customers",
     "studioStatus": "Studio Status: In-Season",
     "newBookingCta": "New Booking",
-    "backToStorefront": "Back to Storefront"
+    "backToStorefront": "Back to Storefront",
+    "sectionOperations": "Studio Operations",
+    "sectionStorefront": "Storefront Navigation",
+    "staffName": "Studio Staff",
+    "staffEmail": "staff@gradsun.studio",
+    "signOut": "Sign Out",
+    "viewStorefront": "Storefront Home",
+    "viewGallery": "Public Gallery",
+    "viewPackages": "Booking Packages",
+    "viewTracking": "Order Tracking"
   },
   "adminDashboard": {
     "title": "Studio Overview & Operations",
@@ -681,5 +690,24 @@
     "notFoundTitle": "Invoice Not Found",
     "notFoundDescription": "We could not locate any reservation with code {code}. Please verify your link or contact our concierge.",
     "backHome": "Back to Home"
+  },
+  "auth": {
+    "loginTitle": "Studio Admin Sign In",
+    "welcomeBack": "Welcome back",
+    "loginSubtitle": "Enter your staff credentials to access the studio portal.",
+    "emailLabel": "Email Address",
+    "emailPlaceholder": "staff@gradsun.studio",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "forgotPassword": "Forgot password?",
+    "signInButton": "Sign In to Studio",
+    "orDivider": "Or continue with",
+    "backToStorefront": "Return to Storefront",
+    "termsNoticePre": "By signing in, you agree to our",
+    "termsOfService": "Terms & Conditions",
+    "and": "and",
+    "privacyPolicy": "Privacy Policy",
+    "editorialQuote": "Preserving every milestone with archival elegance and cinematic grace.",
+    "editorialStudio": "Gradsun Studio • Faculty & Campus Graduation Photography"
   }
 }
