@@ -7,19 +7,30 @@ import { GetContentSettingsUseCase } from "@/modules/content/use-cases/get-conte
 import { UpdateContentSettingsUseCase } from "@/modules/content/use-cases/update-content-settings.use-case";
 
 describe("Content Management System (TDD)", () => {
-  it("returns default content settings covering hero, showcase, and testimonials", async () => {
+  it("returns default content settings covering all 4 public portal pages", async () => {
     const repo: IContentRepository = new ContentRepository();
     const getUseCase = new GetContentSettingsUseCase(repo);
     const settings = await getUseCase.execute();
 
-    expect(settings.hero.titleHighlight).toBe("Preserved in Amber");
-    expect(settings.hero.badge).toBe("Commencement Season 2025");
-    expect(settings.portfolioShowcase.length).toBeGreaterThanOrEqual(4);
-    expect(settings.testimonials.length).toBeGreaterThanOrEqual(3);
-    expect(settings.manifesto.primaryCta).toBe("Check Open Dates");
+    // Home Page CMS
+    expect(settings.home.hero.titleHighlight).toBe("Preserved in Amber");
+    expect(settings.home.hero.badge).toBe("Commencement Season 2025");
+    expect(settings.home.manifesto.primaryCta).toBe("Check Open Dates");
+
+    // Gallery Page CMS
+    expect(settings.gallery.title).toBe("The Gradsun Gallery");
+    expect(settings.gallery.subtitle).toBeDefined();
+
+    // Packages Page CMS
+    expect(settings.packages.seasonTag).toBe("Commencement Season 2025");
+    expect(settings.packages.vowTitle).toBe("100% Golden Weather Vow");
+
+    // Track Order Page CMS
+    expect(settings.trackOrder.title).toBe("Track Your Milestone Folio");
+    expect(settings.trackOrder.searchPlaceholder).toBeDefined();
   });
 
-  it("updates hero section and persists settings in repository", async () => {
+  it("updates Home page hero and persists settings in repository", async () => {
     const repo: IContentRepository = new ContentRepository();
     const getUseCase = new GetContentSettingsUseCase(repo);
     const updateUseCase = new UpdateContentSettingsUseCase(repo);
@@ -27,21 +38,24 @@ describe("Content Management System (TDD)", () => {
     const initial = await getUseCase.execute();
     const updated = await updateUseCase.execute({
       ...initial,
-      hero: {
-        ...initial.hero,
-        badge: "Special Season 2026",
-        titleHighlight: "Timeless Sunlight",
+      home: {
+        ...initial.home,
+        hero: {
+          ...initial.home.hero,
+          badge: "Special Season 2026",
+          titleHighlight: "Timeless Sunlight",
+        },
       },
     });
 
-    expect(updated.hero.badge).toBe("Special Season 2026");
-    expect(updated.hero.titleHighlight).toBe("Timeless Sunlight");
+    expect(updated.home.hero.badge).toBe("Special Season 2026");
+    expect(updated.home.hero.titleHighlight).toBe("Timeless Sunlight");
 
     const reFetched = await getUseCase.execute();
-    expect(reFetched.hero.badge).toBe("Special Season 2026");
+    expect(reFetched.home.hero.badge).toBe("Special Season 2026");
   });
 
-  it("updates testimonials and portfolio items cleanly", async () => {
+  it("updates Gallery, Packages, and Track Order settings cleanly", async () => {
     const repo: IContentRepository = new ContentRepository();
     const updateUseCase = new UpdateContentSettingsUseCase(repo);
     const getUseCase = new GetContentSettingsUseCase(repo);
@@ -49,19 +63,22 @@ describe("Content Management System (TDD)", () => {
     const current = await getUseCase.execute();
     const updated = await updateUseCase.execute({
       ...current,
-      testimonials: [
-        {
-          id: "testi-custom-1",
-          author: "David Miller",
-          role: "Universitas Indonesia",
-          year: "Verified Graduate",
-          quote: "The photo session was extraordinary and super aesthetic!",
-          initials: "DM",
-        },
-      ],
+      gallery: {
+        ...current.gallery,
+        title: "Exclusive Graduation Archives",
+      },
+      packages: {
+        ...current.packages,
+        vowTitle: "Flexible Weather Assurance Guarantee",
+      },
+      trackOrder: {
+        ...current.trackOrder,
+        title: "Check Your Delivery Status",
+      },
     });
 
-    expect(updated.testimonials).toHaveLength(1);
-    expect(updated.testimonials[0]?.author).toBe("David Miller");
+    expect(updated.gallery.title).toBe("Exclusive Graduation Archives");
+    expect(updated.packages.vowTitle).toBe("Flexible Weather Assurance Guarantee");
+    expect(updated.trackOrder.title).toBe("Check Your Delivery Status");
   });
 });

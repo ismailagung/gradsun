@@ -7,7 +7,7 @@ import {
   Images,
   Layers,
   LayoutDashboard,
-  MessageSquareQuote,
+  Search,
   Sparkles,
   Users,
 } from "lucide-react";
@@ -45,12 +45,9 @@ export function getAdminNavGroups(tNav: (key: string) => string): AdminNavGroup[
       labelKey: "sectionContent",
       items: [
         { title: tNav("contentHome"), url: "/admin/content", icon: FileText },
-        { title: tNav("contentShowcase"), url: "/admin/content/showcase", icon: Sparkles },
-        {
-          title: tNav("contentTestimonials"),
-          url: "/admin/content/testimonials",
-          icon: MessageSquareQuote,
-        },
+        { title: tNav("contentGallery"), url: "/admin/content/gallery", icon: Images },
+        { title: tNav("contentPackages"), url: "/admin/content/packages", icon: Sparkles },
+        { title: tNav("contentTrackOrder"), url: "/admin/content/track-order", icon: Search },
       ],
     },
   ];
