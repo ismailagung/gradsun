@@ -25,7 +25,7 @@ describe("Admin App Sidebar Navigation Structure (TDD)", () => {
     ]);
   });
 
-  it("contains all public portal client-side management pages inside Content Management", () => {
+  it("contains all 4 public portal client-side management pages inside Content Management", () => {
     const groups = getAdminNavGroups((key: string) => key);
     const contentGroup = groups[1];
     expect(contentGroup).toBeDefined();
@@ -33,8 +33,9 @@ describe("Admin App Sidebar Navigation Structure (TDD)", () => {
     const urls = contentGroup?.items.map((i) => i.url);
     expect(urls).toEqual([
       "/admin/content",
-      "/admin/content/showcase",
-      "/admin/content/testimonials",
+      "/admin/content/gallery",
+      "/admin/content/packages",
+      "/admin/content/track-order",
     ]);
   });
 });
