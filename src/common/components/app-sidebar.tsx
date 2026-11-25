@@ -1,9 +1,19 @@
 "use client";
 
-import { Building2, CalendarCheck, Images, Layers, LayoutDashboard, Users } from "lucide-react";
+import {
+  Building2,
+  CalendarCheck,
+  FileText,
+  Images,
+  Layers,
+  LayoutDashboard,
+  MessageSquareQuote,
+  Sparkles,
+  Users,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 import type * as React from "react";
-import { NavMain } from "@/common/components/nav-main";
+import { type AdminNavGroup, NavMain } from "@/common/components/nav-main";
 import { NavUser } from "@/common/components/nav-user";
 import { TeamSwitcher } from "@/common/components/team-switcher";
 import {
@@ -16,17 +26,39 @@ import {
   SidebarRail,
 } from "@/common/components/ui/sidebar";
 
+export function getAdminNavGroups(tNav: (key: string) => string): AdminNavGroup[] {
+  return [
+    {
+      label: tNav("sectionOperations"),
+      labelKey: "sectionOperations",
+      items: [
+        { title: tNav("dashboard"), url: "/admin", icon: LayoutDashboard },
+        { title: tNav("bookings"), url: "/admin/bookings", icon: CalendarCheck },
+        { title: tNav("packages"), url: "/admin/packages", icon: Layers },
+        { title: tNav("studios"), url: "/admin/studios", icon: Building2 },
+        { title: tNav("galleries"), url: "/admin/galleries", icon: Images },
+        { title: tNav("customers"), url: "/admin/customers", icon: Users },
+      ],
+    },
+    {
+      label: tNav("sectionContent"),
+      labelKey: "sectionContent",
+      items: [
+        { title: tNav("contentHome"), url: "/admin/content", icon: FileText },
+        { title: tNav("contentShowcase"), url: "/admin/content/showcase", icon: Sparkles },
+        {
+          title: tNav("contentTestimonials"),
+          url: "/admin/content/testimonials",
+          icon: MessageSquareQuote,
+        },
+      ],
+    },
+  ];
+}
+
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const tNav = useTranslations("adminNav");
-
-  const navItems = [
-    { title: tNav("dashboard"), url: "/admin", icon: LayoutDashboard },
-    { title: tNav("bookings"), url: "/admin/bookings", icon: CalendarCheck },
-    { title: tNav("packages"), url: "/admin/packages", icon: Layers },
-    { title: tNav("studios"), url: "/admin/studios", icon: Building2 },
-    { title: tNav("galleries"), url: "/admin/galleries", icon: Images },
-    { title: tNav("customers"), url: "/admin/customers", icon: Users },
-  ];
+  const navGroups = getAdminNavGroups(tNav);
 
   const user = {
     name: tNav("staffName"),
@@ -39,7 +71,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <TeamSwitcher />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={navItems} />
+        <NavMain groups={navGroups} />
         <SidebarGroup className="mt-auto group-data-[collapsible=icon]:hidden">
           <SidebarGroupContent>
             <div className="flex items-center gap-2 rounded-md bg-muted/50 p-2.5 text-xs">
