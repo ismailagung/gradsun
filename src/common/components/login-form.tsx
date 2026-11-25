@@ -3,6 +3,7 @@
 import { cn } from "cn";
 import { ArrowLeft, Sparkles } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import type * as React from "react";
 import { Button } from "@/common/components/ui/button";
@@ -17,14 +18,23 @@ import {
 import { Input } from "@/common/components/ui/input";
 
 export function LoginForm({ className, ...props }: React.ComponentProps<"div">) {
+  const router = useRouter();
   const tAuth = useTranslations("auth");
   const tBrand = useTranslations("nav");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    router.push("/admin");
+  };
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="overflow-hidden p-0 shadow-lg border-border">
         <CardContent className="grid p-0 md:grid-cols-2">
-          <form className="p-6 md:p-8 flex flex-col justify-between space-y-6">
+          <form
+            onSubmit={handleSubmit}
+            className="p-6 md:p-8 flex flex-col justify-between space-y-6"
+          >
             <FieldGroup>
               <div className="flex flex-col items-center gap-2 text-center">
                 <div className="flex size-9 items-center justify-center rounded-md bg-primary text-primary-foreground font-serif text-base font-semibold">
