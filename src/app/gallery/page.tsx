@@ -78,58 +78,6 @@ export default async function GalleryPage() {
 
   return (
     <div className="flex flex-col flex-1 bg-background text-foreground">
-      {/* Navigation Header */}
-      <header className="sticky top-0 z-50 w-full border-b border-border bg-background/90 backdrop-blur-md">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="relative size-9 overflow-hidden rounded-full border border-border bg-card p-0.5 shadow-xs">
-              <Image
-                src="/gradsun-no-bg.png"
-                alt={tNav("logoAlt")}
-                width={36}
-                height={36}
-                className="object-contain"
-                priority
-              />
-            </div>
-            <div className="flex flex-col">
-              <span className="font-serif text-lg leading-none font-semibold tracking-tight text-foreground group-hover:text-primary transition-colors">
-                {tNav("brand")}
-              </span>
-              <span className="text-[10px] tracking-widest uppercase text-muted-foreground mt-0.5">
-                {tNav("tagline")}
-              </span>
-            </div>
-          </Link>
-
-          <nav className="hidden md:flex items-center gap-1 rounded-full border border-border bg-secondary/50 p-1">
-            <Button variant="ghost" size="default" asChild className="rounded-full px-4 text-xs">
-              <Link href="/">{tNav("home")}</Link>
-            </Button>
-            <Button
-              variant="ghost"
-              size="default"
-              asChild
-              className="rounded-full px-4 text-xs text-primary font-medium"
-            >
-              <Link href="/gallery">{tNav("portfolio")}</Link>
-            </Button>
-            <Button variant="ghost" size="default" asChild className="rounded-full px-4 text-xs">
-              <Link href="/packages">{tNav("packages")}</Link>
-            </Button>
-            <Button variant="ghost" size="default" asChild className="rounded-full px-4 text-xs">
-              <Link href="/track-order">{tNav("trackOrder")}</Link>
-            </Button>
-          </nav>
-
-          <div className="flex items-center gap-2">
-            <Button size="default" asChild className="rounded-full shadow-xs">
-              <Link href="/packages">{tNav("bookSession")}</Link>
-            </Button>
-          </div>
-        </div>
-      </header>
-
       {/* Main Gallery Content */}
       <main className="flex-1 py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
         {/* Page Header */}
