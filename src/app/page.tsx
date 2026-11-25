@@ -7,7 +7,6 @@ import { Button } from "@/common/components/ui/button";
 import { Card, CardContent } from "@/common/components/ui/card";
 
 export default async function HomePage() {
-  const tNav = await getTranslations("nav");
   const tHero = await getTranslations("hero");
   const tPortfolio = await getTranslations("landingPortfolio");
   const tPkg = await getTranslations("packagesSummary");
@@ -16,54 +15,7 @@ export default async function HomePage() {
 
   return (
     <div className="flex flex-col flex-1 bg-background text-foreground">
-      {/* 1. STICKY TOPBAR */}
-      <header className="sticky top-0 z-50 w-full border-b border-border bg-background/90 backdrop-blur-md">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="relative size-9 overflow-hidden rounded-full border border-border bg-card p-0.5 shadow-xs">
-              <Image
-                src="/gradsun-no-bg.png"
-                alt={tNav("logoAlt")}
-                width={36}
-                height={36}
-                className="object-contain"
-                priority
-              />
-            </div>
-            <div className="flex flex-col">
-              <span className="font-serif text-lg leading-none font-semibold tracking-tight text-foreground group-hover:text-primary transition-colors">
-                {tNav("brand")}
-              </span>
-              <span className="text-[10px] tracking-widest uppercase text-muted-foreground mt-0.5">
-                {tNav("tagline")}
-              </span>
-            </div>
-          </Link>
-
-          <nav className="hidden md:flex items-center gap-1 rounded-full border border-border bg-secondary/50 p-1">
-            <Button variant="ghost" size="default" asChild className="rounded-full px-4 text-xs">
-              <Link href="/">{tNav("home")}</Link>
-            </Button>
-            <Button variant="ghost" size="default" asChild className="rounded-full px-4 text-xs">
-              <Link href="/gallery">{tNav("portfolio")}</Link>
-            </Button>
-            <Button variant="ghost" size="default" asChild className="rounded-full px-4 text-xs">
-              <Link href="/packages">{tNav("packages")}</Link>
-            </Button>
-            <Button variant="ghost" size="default" asChild className="rounded-full px-4 text-xs">
-              <Link href="/track-order">{tNav("trackOrder")}</Link>
-            </Button>
-          </nav>
-
-          <div className="flex items-center gap-2">
-            <Button size="default" asChild className="rounded-full shadow-xs">
-              <Link href="/packages">{tNav("bookSession")}</Link>
-            </Button>
-          </div>
-        </div>
-      </header>
-
-      {/* 2. MAIN CONTENT BODY */}
+      {/* MAIN CONTENT BODY */}
       <main className="flex-1 flex flex-col">
         {/* HERO SECTION */}
         <section className="relative px-4 sm:px-6 lg:px-8 pt-10 pb-16 lg:py-20 overflow-hidden bg-background">

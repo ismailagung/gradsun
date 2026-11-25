@@ -4,6 +4,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
 import { JsonLd } from "@/common/components/json-ld";
 import { SiteFooter } from "@/common/components/shared/site-footer";
+import { SiteHeader } from "@/common/components/shared/site-header";
 import { TooltipProvider } from "@/common/components/ui/tooltip";
 import { env } from "@/env";
 import "./globals.css";
@@ -60,6 +61,7 @@ export default async function RootLayout({
         <NextIntlClientProvider messages={messages}>
           <TooltipProvider>
             <JsonLd />
+            <SiteHeader />
             <div className="flex-1 flex flex-col">{children}</div>
             <SiteFooter />
           </TooltipProvider>
