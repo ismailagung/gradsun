@@ -125,7 +125,7 @@ export default async function HomePage() {
                 </div>
 
                 {/* Floating Polaroid Offset Card */}
-                <div className="absolute -bottom-6 -left-6 sm:-left-8 w-44 sm:w-52 p-2.5 rounded-2xl bg-card border-2 border-border shadow-2xl rotate-[-3deg] transition-transform duration-300 hover:rotate-0">
+                <div className="absolute -bottom-6 -left-6 sm:-left-8 w-44 sm:w-52 p-2.5 rounded-2xl bg-white border-2 border-border shadow-2xl rotate-[-3deg] transition-transform duration-300 hover:rotate-0">
                   <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden bg-muted border border-border/40">
                     <Image
                       src="/logo-bg.jpg"
@@ -138,7 +138,7 @@ export default async function HomePage() {
                     <span className="text-[11px] font-medium text-muted-foreground italic">
                       {tHero("badgeTitle")}
                     </span>
-                    <Heart className="size-3 text-primary stroke-[1.5]" />
+                    <Heart className="size-3 text-muted-foreground stroke-[1.5]" />
                   </div>
                 </div>
               </div>
