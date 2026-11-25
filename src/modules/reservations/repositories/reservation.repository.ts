@@ -1,4 +1,4 @@
-import type { Reservation, ReservationAddon } from "@prisma/client";
+import type { Package, Reservation, ReservationAddon, StudioRoom } from "@prisma/client";
 import { prisma } from "@/infrastructure/prisma/client";
 
 export interface ReservationPackageInfo {
@@ -23,6 +23,8 @@ export interface BlackoutDateInfo {
 
 export interface ReservationWithRelations extends Reservation {
   addons: ReservationAddon[];
+  package?: Package;
+  studioRoom?: StudioRoom | null;
 }
 
 export interface CreateReservationData {
@@ -213,7 +215,11 @@ export class ReservationRepository implements IReservationRepository {
   async findAll(): Promise<ReservationWithRelations[]> {
     return prisma.reservation.findMany({
       orderBy: { createdAt: "desc" },
-      include: { addons: true },
+      include: {
+        addons: true,
+        package: true,
+        studioRoom: true,
+      },
     });
   }
 }
