@@ -22,19 +22,14 @@ export function SiteHeader() {
           <Image
             src="/gradsun-no-bg.png"
             alt={tNav("logoAlt")}
-            width={36}
-            height={36}
+            width={44}
+            height={44}
             priority
-            className="size-9 object-contain"
+            className="size-11 object-contain"
           />
-          <div className="flex flex-col">
-            <span className="font-serif text-lg font-semibold tracking-tight text-foreground leading-tight group-hover:text-primary/80 transition-colors">
-              {tNav("brand")}
-            </span>
-            <span className="text-[10px] tracking-widest uppercase text-muted-foreground mt-0.5">
-              {tNav("tagline")}
-            </span>
-          </div>
+          <span className="font-serif text-xl sm:text-2xl font-bold tracking-tight text-foreground group-hover:text-primary/80 transition-colors">
+            {tNav("brand")}
+          </span>
         </Link>
 
         <MainNav />
