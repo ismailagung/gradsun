@@ -138,7 +138,7 @@ export default async function HomePage() {
                     <span className="text-[11px] font-medium text-muted-foreground italic">
                       {tHero("badgeTitle")}
                     </span>
-                    <Heart className="size-3 text-primary fill-primary" />
+                    <Heart className="size-3 text-primary stroke-[1.5]" />
                   </div>
                 </div>
               </div>
