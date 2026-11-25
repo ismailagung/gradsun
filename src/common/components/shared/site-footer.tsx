@@ -21,15 +21,13 @@ export function SiteFooter() {
         {/* Col 1: Brand & Owner */}
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-3">
-            <div className="relative size-8 overflow-hidden rounded-full border border-border bg-card p-0.5">
-              <Image
-                src="/gradsun-no-bg.png"
-                alt={tNav("logoAlt")}
-                width={32}
-                height={32}
-                className="object-contain"
-              />
-            </div>
+            <Image
+              src="/gradsun-no-bg.png"
+              alt={tNav("logoAlt")}
+              width={32}
+              height={32}
+              className="size-8 object-contain"
+            />
             <span className="font-serif text-lg font-semibold tracking-tight text-foreground">
               {tNav("brand")}
             </span>
