@@ -30,6 +30,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     if (pathname.startsWith("/admin/studios")) return tNav("studios");
     if (pathname.startsWith("/admin/galleries")) return tNav("galleries");
     if (pathname.startsWith("/admin/customers")) return tNav("customers");
+    if (pathname === "/admin/content") return tNav("contentHome");
+    if (pathname.startsWith("/admin/content/showcase")) return tNav("contentShowcase");
+    if (pathname.startsWith("/admin/content/testimonials")) return tNav("contentTestimonials");
     return tNav("dashboard");
   };
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { ChevronsUpDown, ExternalLink, Images, Layers, Search } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import {
@@ -31,8 +32,15 @@ export function TeamSwitcher() {
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground font-serif text-sm font-semibold">
-                {"G"}
+              <div className="flex aspect-square size-8 items-center justify-center shrink-0">
+                <Image
+                  src="/gradsun-no-bg.png"
+                  alt={tBrand("brand")}
+                  width={32}
+                  height={32}
+                  className="size-7 object-contain"
+                  priority
+                />
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-serif font-medium">{tBrand("brand")}</span>
