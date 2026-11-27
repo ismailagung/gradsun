@@ -6,6 +6,7 @@ import {
   Eye,
   Heart,
   Laptop,
+  Loader2,
   RotateCcw,
   Save,
   Smartphone,
@@ -26,6 +27,7 @@ import {
 } from "@/common/components/ui/card";
 import { Input } from "@/common/components/ui/input";
 import { Label } from "@/common/components/ui/label";
+import { updateHomeContentAction } from "../actions/update-home-content.action";
 import type { HomeCms } from "../schemas/content-settings.schema";
 
 interface CmsHomeEditorProps {
@@ -38,6 +40,8 @@ export function CmsHomeEditor({ initialContent }: CmsHomeEditorProps) {
   const [content, setContent] = useState<HomeCms>(initialContent);
   const [device, setDevice] = useState<"desktop" | "mobile">("desktop");
   const [isSaved, setIsSaved] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const isMobile = device === "mobile";
 
@@ -50,6 +54,7 @@ export function CmsHomeEditor({ initialContent }: CmsHomeEditorProps) {
       },
     }));
     setIsSaved(false);
+    setErrorMessage(null);
   };
 
   const handleManifestoChange = (field: keyof HomeCms["manifesto"], value: string) => {
@@ -61,16 +66,31 @@ export function CmsHomeEditor({ initialContent }: CmsHomeEditorProps) {
       },
     }));
     setIsSaved(false);
+    setErrorMessage(null);
   };
 
-  const handleSave = () => {
-    setIsSaved(true);
-    setTimeout(() => setIsSaved(false), 3000);
+  const handleSave = async () => {
+    setIsSaving(true);
+    setErrorMessage(null);
+    try {
+      const res = await updateHomeContentAction(content);
+      if (res?.data) {
+        setIsSaved(true);
+        setTimeout(() => setIsSaved(false), 3000);
+      } else if (res?.serverError) {
+        setErrorMessage(res.serverError);
+      }
+    } catch {
+      setErrorMessage(tCms("saveError"));
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const handleReset = () => {
     setContent(initialContent);
     setIsSaved(false);
+    setErrorMessage(null);
   };
 
   return (
@@ -85,6 +105,15 @@ export function CmsHomeEditor({ initialContent }: CmsHomeEditorProps) {
         </div>
 
         <div className="flex items-center gap-2">
+          {errorMessage && (
+            <Badge
+              variant="outline"
+              className="border-destructive/50 bg-destructive/10 text-destructive font-mono text-xs"
+            >
+              <span>{errorMessage}</span>
+            </Badge>
+          )}
+
           {isSaved && (
             <Badge
               variant="outline"
@@ -95,14 +124,29 @@ export function CmsHomeEditor({ initialContent }: CmsHomeEditorProps) {
             </Badge>
           )}
 
-          <Button variant="outline" size="sm" className="h-8 gap-1.5 text-xs" onClick={handleReset}>
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-8 gap-1.5 text-xs"
+            onClick={handleReset}
+            disabled={isSaving}
+          >
             <RotateCcw className="size-3.5" />
             <span>{tCms("btnReset")}</span>
           </Button>
 
-          <Button size="sm" className="h-8 gap-1.5 text-xs" onClick={handleSave}>
-            <Save className="size-3.5" />
-            <span>{tCms("btnSave")}</span>
+          <Button
+            size="sm"
+            className="h-8 gap-1.5 text-xs"
+            onClick={handleSave}
+            disabled={isSaving}
+          >
+            {isSaving ? (
+              <Loader2 className="size-3.5 animate-spin" />
+            ) : (
+              <Save className="size-3.5" />
+            )}
+            <span>{isSaving ? tCms("btnSaving") : tCms("btnSave")}</span>
           </Button>
         </div>
       </div>
@@ -203,6 +247,29 @@ export function CmsHomeEditor({ initialContent }: CmsHomeEditorProps) {
                   value={content.hero.badgeTitle}
                   onChange={(e) => handleHeroChange("badgeTitle", e.target.value)}
                 />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <div className="space-y-1.5">
+                  <Label className="text-xs font-medium text-foreground">
+                    {tCms("labelHeroImage")}
+                  </Label>
+                  <Input
+                    className="h-8 text-xs font-mono"
+                    value={content.hero.heroImageUrl}
+                    onChange={(e) => handleHeroChange("heroImageUrl", e.target.value)}
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label className="text-xs font-medium text-foreground">
+                    {tCms("labelPolaroidImage")}
+                  </Label>
+                  <Input
+                    className="h-8 text-xs font-mono"
+                    value={content.hero.polaroidImageUrl}
+                    onChange={(e) => handleHeroChange("polaroidImageUrl", e.target.value)}
+                  />
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -361,7 +428,7 @@ export function CmsHomeEditor({ initialContent }: CmsHomeEditorProps) {
                 <div className="relative pt-2">
                   <div className="relative rounded-t-3xl rounded-b-xl overflow-hidden border bg-card aspect-[16/9] w-full">
                     <Image
-                      src="/logo-bg.jpg"
+                      src={content.hero.heroImageUrl || "/logo-bg.jpg"}
                       alt={content.hero.titleHighlight}
                       fill
                       className="object-cover"
@@ -369,11 +436,21 @@ export function CmsHomeEditor({ initialContent }: CmsHomeEditorProps) {
                     <div className="absolute inset-0 bg-gradient-to-t from-foreground/50 via-transparent to-transparent pointer-events-none" />
                   </div>
 
-                  <div className="absolute bottom-2 left-2 p-1.5 rounded-lg bg-card border shadow-md flex items-center justify-between gap-2">
-                    <span className="text-[10px] font-medium text-muted-foreground italic">
-                      {content.hero.badgeTitle}
-                    </span>
-                    <Heart className="size-2.5 text-primary" />
+                  <div className="absolute bottom-2 left-2 p-1.5 rounded-lg bg-card border shadow-md flex items-center gap-2">
+                    <div className="relative size-7 rounded overflow-hidden bg-muted border shrink-0">
+                      <Image
+                        src={content.hero.polaroidImageUrl || "/logo-bg.jpg"}
+                        alt={content.hero.badgeTitle}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-[10px] font-medium text-muted-foreground italic">
+                        {content.hero.badgeTitle}
+                      </span>
+                      <Heart className="size-2.5 text-primary" />
+                    </div>
                   </div>
                 </div>
               </div>

@@ -17,6 +17,8 @@ const DEFAULT_CONTENT_SETTINGS: ContentSettings = {
       primaryCta: "Reserve Your Session",
       secondaryCta: "Explore Gallery",
       badgeTitle: "Class of 2025",
+      heroImageUrl: "/logo-bg.jpg",
+      polaroidImageUrl: "/logo-bg.jpg",
     },
     manifesto: {
       title: "Ready to Capture Your Graduation Milestone?",
