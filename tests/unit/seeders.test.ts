@@ -9,26 +9,36 @@ import { STUDIO_ROOMS, seedStudios } from "@/infrastructure/prisma/seeders/studi
 describe("Database Seeders (Idempotent & Realistic Synthetic Data)", () => {
   describe("Packages & Addons Seeder", () => {
     it("defines correct master catalog pricing, edit quotas, and add-ons", () => {
-      expect(COMMENCEMENT_PACKAGES).toHaveLength(3);
+      expect(COMMENCEMENT_PACKAGES).toHaveLength(4);
 
-      const solo = COMMENCEMENT_PACKAGES.find((p) => p.slug === "solo-commencement");
-      expect(solo).toBeDefined();
-      expect(solo?.basePrice).toBe(1500000);
-      expect(solo?.editQuota).toBe(5);
-      expect(solo?.durationMinutes).toBe(45);
-      expect(solo?.addons).toEqual([]);
+      const pkg1 = COMMENCEMENT_PACKAGES.find((p) => p.slug === "single-package-1");
+      expect(pkg1).toBeDefined();
+      expect(pkg1?.basePrice).toBe(450000);
+      expect(pkg1?.editQuota).toBe(25);
+      expect(pkg1?.durationMinutes).toBe(60);
+      expect(pkg1?.downPaymentPercent).toBe(50);
+      expect(pkg1?.addons).toEqual([]);
 
-      const besties = COMMENCEMENT_PACKAGES.find((p) => p.slug === "besties-and-duo");
-      expect(besties).toBeDefined();
-      expect(besties?.basePrice).toBe(1950000);
-      expect(besties?.editQuota).toBe(10);
-      expect(besties?.durationMinutes).toBe(60);
+      const pkg2 = COMMENCEMENT_PACKAGES.find((p) => p.slug === "single-package-2");
+      expect(pkg2).toBeDefined();
+      expect(pkg2?.basePrice).toBe(550000);
+      expect(pkg2?.editQuota).toBe(35);
+      expect(pkg2?.durationMinutes).toBe(90);
+      expect(pkg2?.downPaymentPercent).toBe(50);
 
-      const cohort = COMMENCEMENT_PACKAGES.find((p) => p.slug === "sunset-cohort");
-      expect(cohort).toBeDefined();
-      expect(cohort?.basePrice).toBe(2850000);
-      expect(cohort?.editQuota).toBe(20);
-      expect(cohort?.durationMinutes).toBe(90);
+      const pkg3 = COMMENCEMENT_PACKAGES.find((p) => p.slug === "group-package-1");
+      expect(pkg3).toBeDefined();
+      expect(pkg3?.basePrice).toBe(750000);
+      expect(pkg3?.editQuota).toBe(40);
+      expect(pkg3?.durationMinutes).toBe(60);
+      expect(pkg3?.downPaymentPercent).toBe(50);
+
+      const pkg4 = COMMENCEMENT_PACKAGES.find((p) => p.slug === "group-package-2");
+      expect(pkg4).toBeDefined();
+      expect(pkg4?.basePrice).toBe(950000);
+      expect(pkg4?.editQuota).toBe(60);
+      expect(pkg4?.durationMinutes).toBe(120);
+      expect(pkg4?.downPaymentPercent).toBe(50);
     });
 
     it("seeds packages idempotently using upsert", async () => {
@@ -56,12 +66,12 @@ describe("Database Seeders (Idempotent & Realistic Synthetic Data)", () => {
 
       const result = await seedPackages(mockPrisma);
 
-      expect(result).toHaveLength(3);
-      expect(mockUpsert).toHaveBeenCalledTimes(3);
+      expect(result).toHaveLength(4);
+      expect(mockUpsert).toHaveBeenCalledTimes(4);
     });
 
     it("handles packages without add-ons cleanly during seed run", async () => {
-      const mockUpsert = vi.fn().mockResolvedValue({ id: "pkg-id", slug: "solo-commencement" });
+      const mockUpsert = vi.fn().mockResolvedValue({ id: "pkg-id", slug: "single-package-1" });
       const mockFindFirstAddon = vi.fn();
       const mockCreateAddon = vi.fn();
       const mockUpdateAddon = vi.fn();
