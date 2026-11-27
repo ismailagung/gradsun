@@ -13,6 +13,12 @@ export const homeHeroSchema = z.object({
   polaroidImageUrl: z.string().min(1),
 });
 
+export const homeSectionIntroSchema = z.object({
+  tag: z.string().min(1),
+  title: z.string().min(1),
+  subtitle: z.string().min(1),
+});
+
 export const homeManifestoSchema = z.object({
   title: z.string().min(1),
   subtitle: z.string().min(1),
@@ -22,6 +28,9 @@ export const homeManifestoSchema = z.object({
 
 export const homeCmsSchema = z.object({
   hero: homeHeroSchema,
+  gallerySection: homeSectionIntroSchema,
+  packagesSection: homeSectionIntroSchema,
+  testimonialsSection: homeSectionIntroSchema,
   manifesto: homeManifestoSchema,
 });
 

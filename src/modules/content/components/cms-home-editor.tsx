@@ -7,10 +7,12 @@ import {
   Heart,
   Laptop,
   Loader2,
+  Quote,
   RotateCcw,
   Save,
   Smartphone,
   Sparkles,
+  Star,
   Sun,
 } from "lucide-react";
 import Image from "next/image";
@@ -50,6 +52,22 @@ export function CmsHomeEditor({ initialContent }: CmsHomeEditorProps) {
       ...prev,
       hero: {
         ...prev.hero,
+        [field]: value,
+      },
+    }));
+    setIsSaved(false);
+    setErrorMessage(null);
+  };
+
+  const handleSectionChange = (
+    section: "gallerySection" | "packagesSection" | "testimonialsSection",
+    field: "tag" | "title" | "subtitle",
+    value: string,
+  ) => {
+    setContent((prev) => ({
+      ...prev,
+      [section]: {
+        ...prev[section],
         [field]: value,
       },
     }));
@@ -151,17 +169,17 @@ export function CmsHomeEditor({ initialContent }: CmsHomeEditorProps) {
         </div>
       </div>
 
-      {/* Main Split Grid: Editor (Left) & Live Preview (Right) */}
+      {/* Main Split Grid: Editor (Left 5 cols) & Live Preview (Right 7 cols) */}
       <div className="grid gap-6 lg:grid-cols-12 items-start">
         {/* Left Column: Form Controls */}
         <div className="lg:col-span-5 space-y-4">
-          {/* HERO SETTINGS */}
+          {/* 1. HERO SECTION & MEDIA */}
           <Card className="bg-card shadow-xs">
-            <CardHeader>
-              <CardTitle className="text-base font-semibold">{tCms("homeTitle")}</CardTitle>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-semibold">{tCms("sectionHero")}</CardTitle>
               <CardDescription className="text-xs">{tCms("homeDesc")}</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-3.5">
               <div className="space-y-1.5">
                 <Label className="text-xs font-medium text-foreground">{tCms("labelBadge")}</Label>
                 <Input
@@ -274,17 +292,157 @@ export function CmsHomeEditor({ initialContent }: CmsHomeEditorProps) {
             </CardContent>
           </Card>
 
-          {/* MANIFESTO SECTION */}
+          {/* 2. RECENT GALLERY SECTION COPY */}
           <Card className="bg-card shadow-xs">
-            <CardHeader>
-              <CardTitle className="text-base font-semibold">
-                {tCms("labelManifestoTitle")}
-              </CardTitle>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-semibold">{tCms("sectionGallery")}</CardTitle>
+              <CardDescription className="text-xs">
+                {tCms("noticeGalleryPlaceholder")}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3.5">
+              <div className="space-y-1.5">
+                <Label className="text-xs font-medium text-foreground">
+                  {tCms("labelSectionTag")}
+                </Label>
+                <Input
+                  className="h-8 text-xs"
+                  value={content.gallerySection.tag}
+                  onChange={(e) => handleSectionChange("gallerySection", "tag", e.target.value)}
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <Label className="text-xs font-medium text-foreground">
+                  {tCms("labelSectionTitle")}
+                </Label>
+                <Input
+                  className="h-8 text-xs"
+                  value={content.gallerySection.title}
+                  onChange={(e) => handleSectionChange("gallerySection", "title", e.target.value)}
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <Label className="text-xs font-medium text-foreground">
+                  {tCms("labelSectionSubtitle")}
+                </Label>
+                <Input
+                  className="h-8 text-xs"
+                  value={content.gallerySection.subtitle}
+                  onChange={(e) =>
+                    handleSectionChange("gallerySection", "subtitle", e.target.value)
+                  }
+                />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* 3. CURATED PACKAGES SECTION COPY */}
+          <Card className="bg-card shadow-xs">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-semibold">{tCms("sectionPackages")}</CardTitle>
+              <CardDescription className="text-xs">
+                {tCms("noticePackagesPlaceholder")}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3.5">
+              <div className="space-y-1.5">
+                <Label className="text-xs font-medium text-foreground">
+                  {tCms("labelSectionTag")}
+                </Label>
+                <Input
+                  className="h-8 text-xs"
+                  value={content.packagesSection.tag}
+                  onChange={(e) => handleSectionChange("packagesSection", "tag", e.target.value)}
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <Label className="text-xs font-medium text-foreground">
+                  {tCms("labelSectionTitle")}
+                </Label>
+                <Input
+                  className="h-8 text-xs"
+                  value={content.packagesSection.title}
+                  onChange={(e) => handleSectionChange("packagesSection", "title", e.target.value)}
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <Label className="text-xs font-medium text-foreground">
+                  {tCms("labelSectionSubtitle")}
+                </Label>
+                <Input
+                  className="h-8 text-xs"
+                  value={content.packagesSection.subtitle}
+                  onChange={(e) =>
+                    handleSectionChange("packagesSection", "subtitle", e.target.value)
+                  }
+                />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* 4. TESTIMONIALS SECTION COPY */}
+          <Card className="bg-card shadow-xs">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-semibold">{tCms("sectionTestimonials")}</CardTitle>
+              <CardDescription className="text-xs">
+                {tCms("noticeTestimonialsPlaceholder")}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3.5">
+              <div className="space-y-1.5">
+                <Label className="text-xs font-medium text-foreground">
+                  {tCms("labelSectionTag")}
+                </Label>
+                <Input
+                  className="h-8 text-xs"
+                  value={content.testimonialsSection.tag}
+                  onChange={(e) =>
+                    handleSectionChange("testimonialsSection", "tag", e.target.value)
+                  }
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <Label className="text-xs font-medium text-foreground">
+                  {tCms("labelSectionTitle")}
+                </Label>
+                <Input
+                  className="h-8 text-xs"
+                  value={content.testimonialsSection.title}
+                  onChange={(e) =>
+                    handleSectionChange("testimonialsSection", "title", e.target.value)
+                  }
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <Label className="text-xs font-medium text-foreground">
+                  {tCms("labelSectionSubtitle")}
+                </Label>
+                <Input
+                  className="h-8 text-xs"
+                  value={content.testimonialsSection.subtitle}
+                  onChange={(e) =>
+                    handleSectionChange("testimonialsSection", "subtitle", e.target.value)
+                  }
+                />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* 5. MANIFESTO BANNER COPY */}
+          <Card className="bg-card shadow-xs">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-semibold">{tCms("sectionManifesto")}</CardTitle>
               <CardDescription className="text-xs">
                 {tCms("labelManifestoSubtitle")}
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-3.5">
               <div className="space-y-1.5">
                 <Label className="text-xs font-medium text-foreground">
                   {tCms("labelManifestoTitle")}
@@ -333,7 +491,7 @@ export function CmsHomeEditor({ initialContent }: CmsHomeEditorProps) {
           </Card>
         </div>
 
-        {/* Right Column: Live Preview */}
+        {/* Right Column: Full 1-Page Live Preview */}
         <div className="lg:col-span-7 sticky top-6 space-y-3">
           <div className="flex items-center justify-between p-2 rounded-xl border bg-card shadow-xs">
             <div className="flex items-center gap-1.5">
@@ -390,9 +548,9 @@ export function CmsHomeEditor({ initialContent }: CmsHomeEditorProps) {
               <div className="size-2" />
             </div>
 
-            {/* Live Body Scrollable Container */}
-            <div className="max-h-[640px] overflow-y-auto divide-y divide-border/60">
-              {/* Mini Storefront Navigation Bar */}
+            {/* Live Body Scrollable Container (FULL 1-PAGE HOMEPAGE) */}
+            <div className="max-h-[700px] overflow-y-auto divide-y divide-border/60">
+              {/* 0. MINI STOREFRONT NAVIGATION BAR */}
               <div className="px-4 py-2.5 flex items-center justify-between bg-background/95 backdrop-blur-xs sticky top-0 z-20 border-b border-border/40">
                 <div className="flex items-center gap-1.5">
                   <Sun className="size-4 text-primary fill-primary" />
@@ -414,7 +572,7 @@ export function CmsHomeEditor({ initialContent }: CmsHomeEditorProps) {
                 </Button>
               </div>
 
-              {/* HERO SECTION LIVE PREVIEW */}
+              {/* 1. HERO SECTION LIVE PREVIEW */}
               <div className="p-4 sm:p-6 space-y-6">
                 <div
                   className={`grid gap-6 items-center ${
@@ -499,15 +657,312 @@ export function CmsHomeEditor({ initialContent }: CmsHomeEditorProps) {
                 </div>
               </div>
 
-              {/* CURATED MILESTONES DIVIDER TEASER */}
-              <div className="px-4 py-3 bg-secondary/10 flex items-center justify-between text-[10px] text-muted-foreground">
-                <span className="font-semibold uppercase tracking-wider text-primary">
-                  {tCms("previewSectionTag")}
-                </span>
-                <span className="italic">{tCms("previewSubBrand")}</span>
+              {/* 2. RECENT GALLERY SHOWCASE (Dynamic Section Header + 4 Placeholder Cards) */}
+              <div className="p-4 sm:p-6 space-y-4 bg-secondary/15">
+                <div className="flex flex-col gap-1">
+                  <span className="text-[10px] font-semibold uppercase tracking-wider text-primary">
+                    {content.gallerySection.tag}
+                  </span>
+                  <h2 className="font-serif text-base sm:text-lg font-bold tracking-tight text-foreground">
+                    {content.gallerySection.title}
+                  </h2>
+                  <p className="text-xs text-muted-foreground">{content.gallerySection.subtitle}</p>
+                </div>
+
+                <div
+                  className={`grid gap-3 ${
+                    isMobile ? "grid-cols-2" : "grid-cols-2 sm:grid-cols-4"
+                  }`}
+                >
+                  <Card className="border bg-card p-1.5 rounded-xl shadow-2xs">
+                    <div className="relative aspect-[4/5] rounded-lg overflow-hidden bg-muted mb-1.5">
+                      <Image
+                        src="/logo-bg.jpg"
+                        alt={tCms("sampleGal1Title")}
+                        fill
+                        unoptimized
+                        className="object-cover"
+                      />
+                    </div>
+                    <div className="p-1">
+                      <h4 className="font-serif text-[11px] font-bold truncate">
+                        {tCms("sampleGal1Title")}
+                      </h4>
+                      <p className="text-[9px] text-muted-foreground">{tCms("sampleGalDesc")}</p>
+                    </div>
+                  </Card>
+
+                  <Card className="border bg-card p-1.5 rounded-xl shadow-2xs">
+                    <div className="relative aspect-[4/5] rounded-lg overflow-hidden bg-muted mb-1.5">
+                      <Image
+                        src="/logo-bg.jpg"
+                        alt={tCms("sampleGal2Title")}
+                        fill
+                        unoptimized
+                        className="object-cover"
+                      />
+                    </div>
+                    <div className="p-1">
+                      <h4 className="font-serif text-[11px] font-bold truncate">
+                        {tCms("sampleGal2Title")}
+                      </h4>
+                      <p className="text-[9px] text-muted-foreground">{tCms("sampleGalDesc")}</p>
+                    </div>
+                  </Card>
+
+                  <Card className="border bg-card p-1.5 rounded-xl shadow-2xs">
+                    <div className="relative aspect-[4/5] rounded-lg overflow-hidden bg-muted mb-1.5">
+                      <Image
+                        src="/logo-bg.jpg"
+                        alt={tCms("sampleGal3Title")}
+                        fill
+                        unoptimized
+                        className="object-cover"
+                      />
+                    </div>
+                    <div className="p-1">
+                      <h4 className="font-serif text-[11px] font-bold truncate">
+                        {tCms("sampleGal3Title")}
+                      </h4>
+                      <p className="text-[9px] text-muted-foreground">{tCms("sampleGalDesc")}</p>
+                    </div>
+                  </Card>
+
+                  <Card className="border bg-card p-1.5 rounded-xl shadow-2xs">
+                    <div className="relative aspect-[4/5] rounded-lg overflow-hidden bg-muted mb-1.5">
+                      <Image
+                        src="/logo-bg.jpg"
+                        alt={tCms("sampleGal4Title")}
+                        fill
+                        unoptimized
+                        className="object-cover"
+                      />
+                    </div>
+                    <div className="p-1">
+                      <h4 className="font-serif text-[11px] font-bold truncate">
+                        {tCms("sampleGal4Title")}
+                      </h4>
+                      <p className="text-[9px] text-muted-foreground">{tCms("sampleGalDesc")}</p>
+                    </div>
+                  </Card>
+                </div>
               </div>
 
-              {/* MANIFESTO BANNER LIVE PREVIEW (Authentic Dark Theme) */}
+              {/* 3. CURATED PACKAGES SECTION (Dynamic Section Header + 4 Placeholder Arched Cards) */}
+              <div className="p-4 sm:p-6 space-y-4">
+                <div className="flex flex-col gap-1">
+                  <span className="text-[10px] font-semibold uppercase tracking-wider text-primary">
+                    {content.packagesSection.tag}
+                  </span>
+                  <h2 className="font-serif text-base sm:text-lg font-bold tracking-tight text-foreground">
+                    {content.packagesSection.title}
+                  </h2>
+                  <p className="text-xs text-muted-foreground">
+                    {content.packagesSection.subtitle}
+                  </p>
+                </div>
+
+                <div
+                  className={`grid gap-3 ${
+                    isMobile ? "grid-cols-2" : "grid-cols-2 sm:grid-cols-4"
+                  }`}
+                >
+                  <Card className="rounded-t-[3rem] rounded-b-xl border bg-card p-2 shadow-2xs flex flex-col justify-between">
+                    <div className="relative aspect-[3/4] rounded-t-[2.7rem] rounded-b-lg overflow-hidden bg-muted mb-2">
+                      <Image
+                        src="/logo-bg.jpg"
+                        alt={tCms("samplePkg1Title")}
+                        fill
+                        unoptimized
+                        className="object-cover"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <div className="flex items-center justify-between">
+                        <span className="font-serif text-xs font-bold truncate">
+                          {tCms("samplePkg1Title")}
+                        </span>
+                        <Badge
+                          variant="outline"
+                          className="text-[9px] px-1 py-0 border-primary/40 text-primary"
+                        >
+                          {tCms("samplePkg1Price")}
+                        </Badge>
+                      </div>
+                      <span className="text-[9px] text-muted-foreground block">
+                        {tCms("samplePkgDuration")}
+                      </span>
+                    </div>
+                  </Card>
+
+                  <Card className="rounded-t-[3rem] rounded-b-xl border bg-card p-2 shadow-2xs flex flex-col justify-between">
+                    <div className="relative aspect-[3/4] rounded-t-[2.7rem] rounded-b-lg overflow-hidden bg-muted mb-2">
+                      <Image
+                        src="/logo-bg.jpg"
+                        alt={tCms("samplePkg2Title")}
+                        fill
+                        unoptimized
+                        className="object-cover"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <div className="flex items-center justify-between">
+                        <span className="font-serif text-xs font-bold truncate">
+                          {tCms("samplePkg2Title")}
+                        </span>
+                        <Badge
+                          variant="outline"
+                          className="text-[9px] px-1 py-0 border-primary/40 text-primary"
+                        >
+                          {tCms("samplePkg2Price")}
+                        </Badge>
+                      </div>
+                      <span className="text-[9px] text-muted-foreground block">
+                        {tCms("samplePkgDuration")}
+                      </span>
+                    </div>
+                  </Card>
+
+                  <Card className="rounded-t-[3rem] rounded-b-xl border bg-card p-2 shadow-2xs flex flex-col justify-between">
+                    <div className="relative aspect-[3/4] rounded-t-[2.7rem] rounded-b-lg overflow-hidden bg-muted mb-2">
+                      <Image
+                        src="/logo-bg.jpg"
+                        alt={tCms("samplePkg3Title")}
+                        fill
+                        unoptimized
+                        className="object-cover"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <div className="flex items-center justify-between">
+                        <span className="font-serif text-xs font-bold truncate">
+                          {tCms("samplePkg3Title")}
+                        </span>
+                        <Badge
+                          variant="outline"
+                          className="text-[9px] px-1 py-0 border-primary/40 text-primary"
+                        >
+                          {tCms("samplePkg3Price")}
+                        </Badge>
+                      </div>
+                      <span className="text-[9px] text-muted-foreground block">
+                        {tCms("samplePkgDuration")}
+                      </span>
+                    </div>
+                  </Card>
+
+                  <Card className="rounded-t-[3rem] rounded-b-xl border bg-card p-2 shadow-2xs flex flex-col justify-between">
+                    <div className="relative aspect-[3/4] rounded-t-[2.7rem] rounded-b-lg overflow-hidden bg-muted mb-2">
+                      <Image
+                        src="/logo-bg.jpg"
+                        alt={tCms("samplePkg4Title")}
+                        fill
+                        unoptimized
+                        className="object-cover"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <div className="flex items-center justify-between">
+                        <span className="font-serif text-xs font-bold truncate">
+                          {tCms("samplePkg4Title")}
+                        </span>
+                        <Badge
+                          variant="outline"
+                          className="text-[9px] px-1 py-0 border-primary/40 text-primary"
+                        >
+                          {tCms("samplePkg4Price")}
+                        </Badge>
+                      </div>
+                      <span className="text-[9px] text-muted-foreground block">
+                        {tCms("samplePkgDuration")}
+                      </span>
+                    </div>
+                  </Card>
+                </div>
+              </div>
+
+              {/* 4. WALL OF LOVE / TESTIMONIALS (Dynamic Section Header + 3 Placeholder Reviews) */}
+              <div className="p-4 sm:p-6 space-y-4 bg-secondary/15">
+                <div className="flex flex-col gap-1">
+                  <span className="text-[10px] font-semibold uppercase tracking-wider text-primary">
+                    {content.testimonialsSection.tag}
+                  </span>
+                  <h2 className="font-serif text-base sm:text-lg font-bold tracking-tight text-foreground">
+                    {content.testimonialsSection.title}
+                  </h2>
+                  <p className="text-xs text-muted-foreground">
+                    {content.testimonialsSection.subtitle}
+                  </p>
+                </div>
+
+                <div
+                  className={`grid gap-3 ${
+                    isMobile ? "grid-cols-1" : "grid-cols-1 sm:grid-cols-3"
+                  }`}
+                >
+                  <Card className="border bg-card p-3 rounded-xl shadow-2xs space-y-2 relative">
+                    <Quote className="size-5 text-primary/20 absolute top-2 right-2" />
+                    <div className="flex items-center gap-0.5 text-primary">
+                      <Star className="size-3 fill-primary" />
+                      <Star className="size-3 fill-primary" />
+                      <Star className="size-3 fill-primary" />
+                      <Star className="size-3 fill-primary" />
+                      <Star className="size-3 fill-primary" />
+                    </div>
+                    <p className="text-[10px] text-foreground/90 italic leading-relaxed">
+                      {`"${tCms("sampleTesti1Quote")}"`}
+                    </p>
+                    <div className="pt-1.5 border-t border-border flex items-center justify-between text-[10px]">
+                      <span className="font-serif font-semibold">{tCms("sampleTesti1Author")}</span>
+                      <Badge variant="secondary" className="text-[9px] py-0 px-1">
+                        {tCms("sampleYear")}
+                      </Badge>
+                    </div>
+                  </Card>
+
+                  <Card className="border bg-card p-3 rounded-xl shadow-2xs space-y-2 relative">
+                    <Quote className="size-5 text-primary/20 absolute top-2 right-2" />
+                    <div className="flex items-center gap-0.5 text-primary">
+                      <Star className="size-3 fill-primary" />
+                      <Star className="size-3 fill-primary" />
+                      <Star className="size-3 fill-primary" />
+                      <Star className="size-3 fill-primary" />
+                      <Star className="size-3 fill-primary" />
+                    </div>
+                    <p className="text-[10px] text-foreground/90 italic leading-relaxed">
+                      {`"${tCms("sampleTesti2Quote")}"`}
+                    </p>
+                    <div className="pt-1.5 border-t border-border flex items-center justify-between text-[10px]">
+                      <span className="font-serif font-semibold">{tCms("sampleTesti2Author")}</span>
+                      <Badge variant="secondary" className="text-[9px] py-0 px-1">
+                        {tCms("sampleYear")}
+                      </Badge>
+                    </div>
+                  </Card>
+
+                  <Card className="border bg-card p-3 rounded-xl shadow-2xs space-y-2 relative">
+                    <Quote className="size-5 text-primary/20 absolute top-2 right-2" />
+                    <div className="flex items-center gap-0.5 text-primary">
+                      <Star className="size-3 fill-primary" />
+                      <Star className="size-3 fill-primary" />
+                      <Star className="size-3 fill-primary" />
+                      <Star className="size-3 fill-primary" />
+                      <Star className="size-3 fill-primary" />
+                    </div>
+                    <p className="text-[10px] text-foreground/90 italic leading-relaxed">
+                      {`"${tCms("sampleTesti3Quote")}"`}
+                    </p>
+                    <div className="pt-1.5 border-t border-border flex items-center justify-between text-[10px]">
+                      <span className="font-serif font-semibold">{tCms("sampleTesti3Author")}</span>
+                      <Badge variant="secondary" className="text-[9px] py-0 px-1">
+                        {tCms("sampleYear")}
+                      </Badge>
+                    </div>
+                  </Card>
+                </div>
+              </div>
+
+              {/* 5. MANIFESTO BANNER LIVE PREVIEW (Authentic Dark Theme) */}
               <div className="p-4 sm:p-6">
                 <div className="relative rounded-2xl overflow-hidden border border-border bg-foreground text-background p-5 sm:p-7 shadow-xl">
                   <div className="relative z-10 space-y-3">
@@ -535,6 +990,11 @@ export function CmsHomeEditor({ initialContent }: CmsHomeEditorProps) {
                     </div>
                   </div>
                 </div>
+              </div>
+
+              {/* 6. STOREFRONT FOOTER PREVIEW */}
+              <div className="px-4 py-3 bg-muted/40 text-center text-[10px] text-muted-foreground">
+                <span>{tCms("previewFooter")}</span>
               </div>
             </div>
           </div>

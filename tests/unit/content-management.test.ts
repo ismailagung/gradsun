@@ -18,6 +18,9 @@ describe("Content Management System (TDD)", () => {
     expect(settings.home.hero.badge).toBe("Commencement Season 2025");
     expect(settings.home.hero.heroImageUrl).toBe("/logo-bg.jpg");
     expect(settings.home.hero.polaroidImageUrl).toBe("/logo-bg.jpg");
+    expect(settings.home.gallerySection.title).toBe("Milestones Captured in Light");
+    expect(settings.home.packagesSection.title).toBe("Reserve Your Golden Hour Chapter");
+    expect(settings.home.testimonialsSection.title).toBe("Words of Joy From Graduates");
     expect(settings.home.manifesto.primaryCta).toBe("Check Open Dates");
 
     // Gallery Page CMS
@@ -109,6 +112,21 @@ describe("Content Management System (TDD)", () => {
         heroImageUrl: "/images/hero-tdd.jpg",
         polaroidImageUrl: "/images/polaroid-tdd.jpg",
       },
+      gallerySection: {
+        tag: "TDD Gallery Tag",
+        title: "TDD Gallery Title",
+        subtitle: "TDD Gallery Subtitle",
+      },
+      packagesSection: {
+        tag: "TDD Packages Tag",
+        title: "TDD Packages Title",
+        subtitle: "TDD Packages Subtitle",
+      },
+      testimonialsSection: {
+        tag: "TDD Testimonials Tag",
+        title: "TDD Testimonials Title",
+        subtitle: "TDD Testimonials Subtitle",
+      },
       manifesto: {
         title: "TDD Manifesto Title",
         subtitle: "TDD Manifesto Subtitle",
@@ -119,10 +137,16 @@ describe("Content Management System (TDD)", () => {
 
     expect(updated.hero.badge).toBe("TDD Commencement 2026");
     expect(updated.hero.heroImageUrl).toBe("/images/hero-tdd.jpg");
+    expect(updated.gallerySection.title).toBe("TDD Gallery Title");
+    expect(updated.packagesSection.title).toBe("TDD Packages Title");
+    expect(updated.testimonialsSection.title).toBe("TDD Testimonials Title");
 
     const settings = await getUseCase.execute();
     expect(settings.home.hero.badge).toBe("TDD Commencement 2026");
     expect(settings.home.hero.heroImageUrl).toBe("/images/hero-tdd.jpg");
+    expect(settings.home.gallerySection.title).toBe("TDD Gallery Title");
+    expect(settings.home.packagesSection.title).toBe("TDD Packages Title");
+    expect(settings.home.testimonialsSection.title).toBe("TDD Testimonials Title");
     expect(settings.gallery.title).toBe(beforeUpdate.gallery.title);
   });
 
