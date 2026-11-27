@@ -11,6 +11,7 @@ import {
   RotateCcw,
   Save,
   Smartphone,
+  Sparkles,
   Trash2,
 } from "lucide-react";
 import Image from "next/image";
@@ -273,6 +274,17 @@ export function CmsPackagesEditor({ initialContent, availablePackages }: CmsPack
     return availablePackages.find((p) => p.id === pkgId || p.slug === pkgId);
   };
 
+  const getFeaturePlaceholder = (index: number) => {
+    if (index === 0) return tCms("placeholderFeature1");
+    if (index === 1) return tCms("placeholderFeature2");
+    if (index === 2) return tCms("placeholderFeature3");
+    return tCms("placeholderFeature");
+  };
+
+  const selectedPkgDetails = availablePackages.find(
+    (p) => p.id === cardPackageId || p.slug === cardPackageId,
+  );
+
   return (
     <div className="space-y-6">
       {/* CMS Header Bar */}
@@ -428,11 +440,16 @@ export function CmsPackagesEditor({ initialContent, availablePackages }: CmsPack
                     return (
                       <div
                         key={card.id}
-                        className="flex items-center justify-between gap-3 p-2.5 border rounded-lg bg-card hover:bg-muted/30 transition-colors"
+                        className="flex items-center justify-between gap-3 p-3 border rounded-xl bg-card hover:bg-muted/20 transition-colors shadow-2xs"
                       >
                         <div className="flex items-center gap-3 min-w-0">
+                          {/* Card order badge */}
+                          <span className="text-[11px] font-mono font-medium text-muted-foreground w-5 text-center shrink-0">
+                            {tCms("cardOrderNumber", { order: index + 1 })}
+                          </span>
+
                           {/* Arched Thumbnail Preview */}
-                          <div className="relative w-10 h-14 rounded-t-lg rounded-b-sm overflow-hidden bg-muted border shrink-0">
+                          <div className="relative w-10 h-14 rounded-t-xl rounded-b-xs overflow-hidden bg-muted border shrink-0">
                             <Image
                               src={card.thumbnailUrl}
                               alt={linkedPkg?.title || card.packageId}
@@ -488,7 +505,7 @@ export function CmsPackagesEditor({ initialContent, availablePackages }: CmsPack
                           <Button
                             variant="outline"
                             size="sm"
-                            className="h-7 text-xs px-2"
+                            className="h-7 text-xs px-2 gap-1"
                             onClick={() => openEditCardDialog(card)}
                           >
                             <span>{tCms("btnEditCard")}</span>
@@ -496,7 +513,7 @@ export function CmsPackagesEditor({ initialContent, availablePackages }: CmsPack
                           <Button
                             variant="ghost"
                             size="sm"
-                            className="h-7 w-7 p-0 text-destructive hover:text-destructive"
+                            className="h-7 w-7 p-0 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
                             onClick={() => openDeleteCardDialog(card)}
                             aria-label={tCms("btnDeleteCard")}
                           >
@@ -655,17 +672,24 @@ export function CmsPackagesEditor({ initialContent, availablePackages }: CmsPack
 
       {/* Add / Edit Presentation Card Dialog */}
       <Dialog open={isCardDialogOpen} onOpenChange={setIsCardDialogOpen}>
-        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="font-serif">
-              {editingCardId ? tCms("dialogEditCardTitle") : tCms("dialogAddCardTitle")}
-            </DialogTitle>
-            <DialogDescription className="text-xs font-sans">
-              {tCms("dialogCardDesc")}
-            </DialogDescription>
+        <DialogContent className="sm:max-w-xl max-h-[85vh] overflow-x-hidden overflow-y-auto">
+          <DialogHeader className="pb-3 border-b">
+            <div className="flex items-center gap-2.5">
+              <div className="size-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                <Sparkles className="size-4" />
+              </div>
+              <div className="min-w-0">
+                <DialogTitle className="font-serif text-lg font-semibold text-foreground">
+                  {editingCardId ? tCms("dialogEditCardTitle") : tCms("dialogAddCardTitle")}
+                </DialogTitle>
+                <DialogDescription className="text-xs font-sans text-muted-foreground mt-0.5">
+                  {tCms("dialogCardDesc")}
+                </DialogDescription>
+              </div>
+            </div>
           </DialogHeader>
 
-          <div className="space-y-4 py-2">
+          <div className="space-y-4 py-3">
             {/* Select Master Package */}
             <div className="space-y-1.5">
               <Label className="text-xs font-medium">{tCms("labelSelectPackage")}</Label>
@@ -681,6 +705,29 @@ export function CmsPackagesEditor({ initialContent, availablePackages }: CmsPack
                   ))}
                 </SelectContent>
               </Select>
+
+              {selectedPkgDetails ? (
+                <div className="flex items-center gap-1.5 pt-1 flex-wrap">
+                  <Badge
+                    variant="outline"
+                    className="text-[10px] py-0 px-2 font-normal text-muted-foreground border-border bg-muted/40"
+                  >
+                    {`${selectedPkgDetails.durationMinutes} ${tPackages("minutesSuffix")}`}
+                  </Badge>
+                  <Badge
+                    variant="outline"
+                    className="text-[10px] py-0 px-2 font-normal text-muted-foreground border-border bg-muted/40"
+                  >
+                    {`${selectedPkgDetails.editQuota} ${tPackages("photosSuffix")}`}
+                  </Badge>
+                  <Badge
+                    variant="outline"
+                    className="text-[10px] py-0 px-2 font-normal text-muted-foreground border-border bg-muted/40"
+                  >
+                    {tCms("dpPill", { percent: selectedPkgDetails.downPaymentPercent })}
+                  </Badge>
+                </div>
+              ) : null}
             </div>
 
             {/* Arched Thumbnail Photo via ImageUploaderField */}
@@ -689,6 +736,7 @@ export function CmsPackagesEditor({ initialContent, availablePackages }: CmsPack
               value={cardThumbnailUrl}
               onChange={setCardThumbnailUrl}
               folder="packages"
+              aspectRatio="arch"
             />
 
             {/* Marketing Ribbon Badge */}
@@ -703,12 +751,37 @@ export function CmsPackagesEditor({ initialContent, availablePackages }: CmsPack
                 placeholder={tCms("placeholderCardBadge")}
                 className="h-8 text-xs font-sans"
               />
+              <div className="flex items-center gap-1.5 flex-wrap pt-0.5">
+                <span className="text-[10px] text-muted-foreground">
+                  {tCms("labelQuickSuggestions")}
+                </span>
+                {[
+                  tCms("tagMostPopular"),
+                  tCms("tagBestValue"),
+                  tCms("tagClassicSolo"),
+                  tCms("tagLimitedEdition"),
+                ].map((suggestion) => (
+                  <Button
+                    key={suggestion}
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="h-5 text-[10px] px-2 py-0 rounded-full border-border bg-muted/30 text-muted-foreground hover:text-foreground hover:bg-muted"
+                    onClick={() => setCardBadge(suggestion)}
+                  >
+                    {suggestion}
+                  </Button>
+                ))}
+              </div>
             </div>
 
             {/* Custom Features Bullets */}
             <div className="space-y-2 pt-2 border-t">
               <div className="flex items-center justify-between">
-                <Label className="text-xs font-medium">{tCms("labelCardFeatures")}</Label>
+                <div>
+                  <Label className="text-xs font-medium">{tCms("labelCardFeatures")}</Label>
+                  <p className="text-[11px] text-muted-foreground">{tCms("hintCardFeatures")}</p>
+                </div>
                 <Button
                   type="button"
                   variant="outline"
@@ -721,21 +794,24 @@ export function CmsPackagesEditor({ initialContent, availablePackages }: CmsPack
                 </Button>
               </div>
 
-              <div className="space-y-1.5">
+              <div className="space-y-1.5 max-h-48 overflow-y-auto pr-1">
                 {cardFeatures.map((feat, idx) => (
                   // biome-ignore lint/suspicious/noArrayIndexKey: form inputs
                   <div key={idx} className="flex items-center gap-2">
+                    <span className="text-[11px] font-mono text-muted-foreground w-4 text-right">
+                      {tCms("bulletNumber", { num: idx + 1 })}
+                    </span>
                     <Input
                       value={feat}
                       onChange={(e) => handleFeatureChange(idx, e.target.value)}
-                      placeholder={tCms("placeholderFeature")}
+                      placeholder={getFeaturePlaceholder(idx)}
                       className="h-8 text-xs font-sans flex-1"
                     />
                     <Button
                       type="button"
                       variant="ghost"
                       size="sm"
-                      className="h-8 w-8 p-0 text-destructive"
+                      className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
                       onClick={() => handleRemoveFeature(idx)}
                       aria-label={tCms("btnRemoveBullet")}
                     >
@@ -747,7 +823,7 @@ export function CmsPackagesEditor({ initialContent, availablePackages }: CmsPack
             </div>
           </div>
 
-          <DialogFooter className="gap-2 sm:gap-0">
+          <DialogFooter className="gap-2 sm:gap-2 pt-3 border-t">
             <Button
               variant="outline"
               size="sm"
@@ -756,8 +832,9 @@ export function CmsPackagesEditor({ initialContent, availablePackages }: CmsPack
             >
               {tPackages("btnCancel")}
             </Button>
-            <Button size="sm" className="h-8 text-xs" onClick={handleSaveCardModal}>
-              {tPackages("btnSave")}
+            <Button size="sm" className="h-8 text-xs gap-1.5" onClick={handleSaveCardModal}>
+              <Check className="size-3.5" />
+              <span>{tPackages("btnSave")}</span>
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -765,7 +842,7 @@ export function CmsPackagesEditor({ initialContent, availablePackages }: CmsPack
 
       {/* Delete Card Confirmation Dialog */}
       <Dialog open={isDeleteCardDialogOpen} onOpenChange={setIsDeleteCardDialogOpen}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="font-serif">{tCms("dialogDeleteCardTitle")}</DialogTitle>
             <DialogDescription className="text-xs font-sans">
@@ -796,7 +873,7 @@ export function CmsPackagesEditor({ initialContent, availablePackages }: CmsPack
 
       {/* Reset Section 1 Confirmation Dialog */}
       <Dialog open={isResetIntroDialogOpen} onOpenChange={setIsResetIntroDialogOpen}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="font-serif">
               {tCms("dialogResetPackagesIntroTitle")}
@@ -823,7 +900,7 @@ export function CmsPackagesEditor({ initialContent, availablePackages }: CmsPack
 
       {/* Reset Section 2 Confirmation Dialog */}
       <Dialog open={isResetCardsDialogOpen} onOpenChange={setIsResetCardsDialogOpen}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="font-serif">
               {tCms("dialogResetPackagesCardsTitle")}
