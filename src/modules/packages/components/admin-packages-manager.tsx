@@ -403,7 +403,7 @@ export function AdminPackagesManager({ initialPackages }: AdminPackagesManagerPr
 
       {/* Create / Edit Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-x-hidden overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="font-serif">
               {editingPackageId ? tPackages("dialogEditTitle") : tPackages("dialogCreateTitle")}
@@ -598,7 +598,7 @@ export function AdminPackagesManager({ initialPackages }: AdminPackagesManagerPr
 
       {/* Delete Confirmation Dialog */}
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="font-serif">{tPackages("dialogDeleteTitle")}</DialogTitle>
             <DialogDescription className="text-xs font-sans">

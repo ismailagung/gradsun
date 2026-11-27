@@ -667,7 +667,20 @@
     "btnMoveUp": "Move Up",
     "btnMoveDown": "Move Down",
     "btnRemoveBullet": "Remove Bullet",
-    "cardHighlightsCount": "{count} highlights"
+    "cardHighlightsCount": "{count} highlights",
+    "labelQuickSuggestions": "Suggestions:",
+    "hintCardFeatures": "Custom selling points displayed as checks on the card.",
+    "cardOrderBadge": "Card #{order}",
+    "tagMostPopular": "Most Popular",
+    "tagBestValue": "Best Value",
+    "tagClassicSolo": "Classic Solo",
+    "tagLimitedEdition": "Limited Edition",
+    "placeholderFeature1": "e.g. All unedited high-resolution photos + 25 edited photos",
+    "placeholderFeature2": "e.g. 1-hour photo session duration",
+    "placeholderFeature3": "e.g. Digital files delivered via Google Drive",
+    "dpPill": "DP {percent}%",
+    "cardOrderNumber": "#{order}",
+    "bulletNumber": "{num}."
   },
   "adminDashboard": {
     "title": "Studio Overview & Operations",

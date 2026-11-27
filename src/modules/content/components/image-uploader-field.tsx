@@ -16,6 +16,7 @@ interface ImageUploaderFieldProps {
   onChange: (url: string) => void;
   folder?: "hero" | "gallery" | "packages" | "manifesto" | "general";
   description?: string;
+  aspectRatio?: "square" | "arch" | "landscape";
 }
 
 export function ImageUploaderField({
@@ -24,6 +25,7 @@ export function ImageUploaderField({
   onChange,
   folder = "hero",
   description,
+  aspectRatio = "square",
 }: ImageUploaderFieldProps) {
   const tCms = useTranslations("adminCms");
   const fileInputRef = React.useRef<HTMLInputElement>(null);
@@ -112,7 +114,15 @@ export function ImageUploaderField({
 
       <div className="flex items-center gap-3">
         {/* Thumbnail Preview */}
-        <div className="relative size-16 shrink-0 rounded-md overflow-hidden border border-border bg-muted flex items-center justify-center">
+        <div
+          className={`relative shrink-0 overflow-hidden border border-border bg-muted flex items-center justify-center ${
+            aspectRatio === "arch"
+              ? "w-16 h-22 rounded-t-2xl rounded-b-sm shadow-2xs"
+              : aspectRatio === "landscape"
+                ? "w-24 h-16 rounded-md shadow-2xs"
+                : "size-16 rounded-md shadow-2xs"
+          }`}
+        >
           {value ? (
             <Image src={value} alt={label} fill unoptimized className="object-cover" />
           ) : (
@@ -121,7 +131,7 @@ export function ImageUploaderField({
         </div>
 
         {/* Controls */}
-        <div className="flex-1 space-y-1.5">
+        <div className="flex-1 space-y-1.5 min-w-0">
           <Input
             ref={fileInputRef}
             type="file"
@@ -130,7 +140,7 @@ export function ImageUploaderField({
             onChange={handleFileSelect}
           />
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <Button
               type="button"
               size="sm"
@@ -161,7 +171,7 @@ export function ImageUploaderField({
               type="button"
               size="sm"
               variant="ghost"
-              className="h-8 text-xs text-muted-foreground"
+              className="h-8 text-xs text-muted-foreground hover:text-foreground"
               onClick={() => setShowDirectUrl(!showDirectUrl)}
             >
               <span>{tCms("labelOrPasteUrl")}</span>

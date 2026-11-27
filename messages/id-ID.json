@@ -667,7 +667,20 @@
     "btnMoveUp": "Pindah ke Atas",
     "btnMoveDown": "Pindah ke Bawah",
     "btnRemoveBullet": "Hapus Poin",
-    "cardHighlightsCount": "{count} keunggulan"
+    "cardHighlightsCount": "{count} keunggulan",
+    "labelQuickSuggestions": "Saran:",
+    "hintCardFeatures": "Poin keunggulan khusus yang tampil dengan centang pada kartu.",
+    "cardOrderBadge": "Kartu #{order}",
+    "tagMostPopular": "Paling Populer",
+    "tagBestValue": "Paling Hemat",
+    "tagClassicSolo": "Pilihan Solo",
+    "tagLimitedEdition": "Edisi Terbatas",
+    "placeholderFeature1": "cth. Semua foto unedited resolusi tinggi + 25 foto edited",
+    "placeholderFeature2": "cth. Durasi pemotretan 1 jam",
+    "placeholderFeature3": "cth. File digital dikirim via Google Drive",
+    "dpPill": "DP {percent}%",
+    "cardOrderNumber": "#{order}",
+    "bulletNumber": "{num}."
   },
   "adminDashboard": {
     "title": "Operasional & Ikhtisar Studio",
