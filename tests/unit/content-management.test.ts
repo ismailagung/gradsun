@@ -114,6 +114,42 @@ describe("Content Management System (TDD)", () => {
     expect(updated.trackOrder.title).toBe("Check Your Delivery Status");
   });
 
+  it("updates Gallery CMS directly using UpdateGalleryContentUseCase", async () => {
+    const { UpdateGalleryContentUseCase } = await import(
+      "@/modules/content/use-cases/update-gallery-content.use-case"
+    );
+    const repo: IContentRepository = new ContentRepository();
+    const useCase = new UpdateGalleryContentUseCase(repo);
+    const getUseCase = new GetContentSettingsUseCase(repo);
+
+    const initial = await getUseCase.execute();
+    expect(initial.gallery.items.length).toBeGreaterThan(0);
+
+    const updatedGallery = await useCase.execute({
+      ...initial.gallery,
+      title: "Updated Gallery Headline",
+      items: [
+        ...initial.gallery.items,
+        {
+          id: "custom-gallery-item",
+          title: "Julian Vance",
+          category: "Solo Graduation",
+          description: "Faculty of Law • Commencement",
+          imageUrl: "/custom-photo.webp",
+          aspectRatio: "portrait",
+          order: 99,
+        },
+      ],
+    });
+
+    expect(updatedGallery.title).toBe("Updated Gallery Headline");
+    expect(updatedGallery.items.some((i) => i.id === "custom-gallery-item")).toBe(true);
+
+    const reFetched = await getUseCase.execute();
+    expect(reFetched.gallery.title).toBe("Updated Gallery Headline");
+    expect(reFetched.gallery.items.some((i) => i.id === "custom-gallery-item")).toBe(true);
+  });
+
   it("updates Home CMS directly using UpdateHomeContentUseCase", async () => {
     const repo: IContentRepository = new ContentRepository();
     const useCase = new UpdateHomeContentUseCase(repo);
