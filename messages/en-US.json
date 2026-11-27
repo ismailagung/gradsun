@@ -462,7 +462,7 @@
     "badgeStaff": "Admin Staff",
     "dashboard": "Dashboard",
     "bookings": "Bookings",
-    "packages": "Packages & Add-ons",
+    "packages": "Master Packages",
     "studios": "Studios & Blackouts",
     "galleries": "Gallery Proofs",
     "customers": "Customers",
@@ -815,7 +815,7 @@
     "noSpecialNotes": "No special notes provided"
   },
   "adminPackages": {
-    "title": "Master Packages & Add-ons",
+    "title": "Master Packages",
     "subtitle": "Configure service tiers, session durations, edit quotas, and pricing.",
     "statusActive": "Active",
     "statusArchived": "Archived",

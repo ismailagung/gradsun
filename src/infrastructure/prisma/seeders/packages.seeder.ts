@@ -30,21 +30,7 @@ export const COMMENCEMENT_PACKAGES: SeedPackageData[] = [
     editQuota: 5,
     downPaymentPercent: 30,
     isActive: true,
-    addons: [
-      {
-        name: "Fine-Art Hardcover Photobook",
-        price: 450000,
-        description:
-          "Exquisite 20x20cm linen-bound hardcover photobook with premium archival luster paper.",
-        maxQuantity: 2,
-      },
-      {
-        name: "Express 24h Proofing",
-        price: 250000,
-        description: "Expedited high-resolution preview gallery delivered within 24 hours.",
-        maxQuantity: 1,
-      },
-    ],
+    addons: [],
   },
   {
     title: "Besties & Duo",
@@ -56,21 +42,7 @@ export const COMMENCEMENT_PACKAGES: SeedPackageData[] = [
     editQuota: 10,
     downPaymentPercent: 30,
     isActive: true,
-    addons: [
-      {
-        name: "Fine-Art Hardcover Photobook",
-        price: 450000,
-        description:
-          "Exquisite 20x20cm linen-bound hardcover photobook with premium archival luster paper.",
-        maxQuantity: 2,
-      },
-      {
-        name: "Express 24h Proofing",
-        price: 250000,
-        description: "Expedited high-resolution preview gallery delivered within 24 hours.",
-        maxQuantity: 1,
-      },
-    ],
+    addons: [],
   },
   {
     title: "Sunset Cohort",
@@ -82,21 +54,7 @@ export const COMMENCEMENT_PACKAGES: SeedPackageData[] = [
     editQuota: 20,
     downPaymentPercent: 30,
     isActive: true,
-    addons: [
-      {
-        name: "Fine-Art Hardcover Photobook",
-        price: 450000,
-        description:
-          "Exquisite 20x20cm linen-bound hardcover photobook with premium archival luster paper.",
-        maxQuantity: 4,
-      },
-      {
-        name: "Express 24h Proofing",
-        price: 250000,
-        description: "Expedited high-resolution preview gallery delivered within 24 hours.",
-        maxQuantity: 1,
-      },
-    ],
+    addons: [],
   },
 ];
 

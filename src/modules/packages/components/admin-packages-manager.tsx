@@ -1,6 +1,6 @@
 "use client";
 
-import { Edit, Layers, Loader2, Plus, Sparkles, Trash2 } from "lucide-react";
+import { Edit, Layers, Loader2, Plus, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Badge } from "@/common/components/ui/badge";
@@ -34,7 +34,6 @@ import { createPackageAction } from "../actions/create-package.action";
 import { deletePackageAction } from "../actions/delete-package.action";
 import { updatePackageAction } from "../actions/update-package.action";
 import type { PackageWithAddons } from "../repositories/package.repository";
-import type { PackageAddonInput } from "../schemas/create-package.schema";
 
 interface AdminPackagesManagerProps {
   initialPackages: PackageWithAddons[];
@@ -58,7 +57,6 @@ export function AdminPackagesManager({ initialPackages }: AdminPackagesManagerPr
   const [editQuota, setEditQuota] = useState(5);
   const [downPaymentPercent, setDownPaymentPercent] = useState(30);
   const [isActive, setIsActive] = useState(true);
-  const [addons, setAddons] = useState<PackageAddonInput[]>([]);
 
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -73,7 +71,6 @@ export function AdminPackagesManager({ initialPackages }: AdminPackagesManagerPr
     setEditQuota(5);
     setDownPaymentPercent(30);
     setIsActive(true);
-    setAddons([]);
     setEditingPackageId(null);
     setErrorMessage(null);
   };
@@ -93,14 +90,6 @@ export function AdminPackagesManager({ initialPackages }: AdminPackagesManagerPr
     setEditQuota(pkg.editQuota);
     setDownPaymentPercent(pkg.downPaymentPercent);
     setIsActive(pkg.isActive);
-    setAddons(
-      pkg.addons.map((a) => ({
-        name: a.name,
-        price: a.price,
-        description: a.description,
-        maxQuantity: a.maxQuantity,
-      })),
-    );
     setErrorMessage(null);
     setIsDialogOpen(true);
   };
@@ -122,38 +111,6 @@ export function AdminPackagesManager({ initialPackages }: AdminPackagesManagerPr
     }
   };
 
-  const handleAddAddon = () => {
-    setAddons((prev) => [
-      ...prev,
-      {
-        name: "",
-        price: 250000,
-        description: "",
-        maxQuantity: 1,
-      },
-    ]);
-  };
-
-  const handleRemoveAddon = (index: number) => {
-    setAddons((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  const handleUpdateAddon = (
-    index: number,
-    field: keyof PackageAddonInput,
-    value: string | number,
-  ) => {
-    setAddons((prev) =>
-      prev.map((addon, i) => {
-        if (i !== index) return addon;
-        return {
-          ...addon,
-          [field]: value,
-        };
-      }),
-    );
-  };
-
   const handleSave = async () => {
     if (!title.trim() || !slug.trim()) {
       return;
@@ -163,8 +120,6 @@ export function AdminPackagesManager({ initialPackages }: AdminPackagesManagerPr
     setErrorMessage(null);
 
     try {
-      const validAddons = addons.filter((a) => a.name.trim().length > 0);
-
       if (editingPackageId) {
         const res = await updatePackageAction({
           id: editingPackageId,
@@ -176,7 +131,7 @@ export function AdminPackagesManager({ initialPackages }: AdminPackagesManagerPr
           editQuota,
           downPaymentPercent,
           isActive,
-          addons: validAddons,
+          addons: [],
         });
 
         if (res?.data) {
@@ -195,7 +150,7 @@ export function AdminPackagesManager({ initialPackages }: AdminPackagesManagerPr
           editQuota,
           downPaymentPercent,
           isActive,
-          addons: validAddons,
+          addons: [],
         });
 
         if (res?.data) {
@@ -358,49 +313,6 @@ export function AdminPackagesManager({ initialPackages }: AdminPackagesManagerPr
         </CardContent>
       </Card>
 
-      {/* Add-ons Overview Card */}
-      <Card className="bg-card shadow-xs">
-        <CardHeader>
-          <div className="flex items-center gap-2">
-            <Sparkles className="size-4 text-primary" />
-            <CardTitle className="font-serif text-lg font-medium">
-              {tPackages("addonsCatalogTitle")}
-            </CardTitle>
-          </div>
-          <CardDescription className="text-xs">
-            {"Add-ons configured directly per package tier."}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>{tPackages("thAddonName")}</TableHead>
-                <TableHead>{tPackages("thName")}</TableHead>
-                <TableHead>{tPackages("thAddonPrice")}</TableHead>
-                <TableHead className="text-right">{tPackages("thAddonMax")}</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {packages.flatMap((pkg) =>
-                pkg.addons.map((addon) => (
-                  <TableRow key={addon.id}>
-                    <TableCell className="font-medium text-foreground">{addon.name}</TableCell>
-                    <TableCell className="text-xs text-muted-foreground">{pkg.title}</TableCell>
-                    <TableCell className="font-mono text-xs font-semibold">
-                      {formatPrice(addon.price)}
-                    </TableCell>
-                    <TableCell className="text-right font-mono text-xs">
-                      {addon.maxQuantity}
-                    </TableCell>
-                  </TableRow>
-                )),
-              )}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
-
       {/* Create / Edit Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-x-hidden overflow-y-auto">
@@ -510,67 +422,6 @@ export function AdminPackagesManager({ initialPackages }: AdminPackagesManagerPr
                   className="h-8 text-xs font-mono"
                 />
               </div>
-            </div>
-
-            {/* Included Add-ons Section */}
-            <div className="space-y-2 pt-2 border-t">
-              <div className="flex items-center justify-between">
-                <Label className="text-xs font-medium">{tPackages("sectionAddons")}</Label>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  className="h-7 text-xs gap-1"
-                  onClick={handleAddAddon}
-                >
-                  <Plus className="size-3" />
-                  <span>{tPackages("btnAddAddonItem")}</span>
-                </Button>
-              </div>
-
-              {addons.length === 0 ? (
-                <p className="text-xs text-muted-foreground py-2">{tPackages("emptyAddons")}</p>
-              ) : (
-                <div className="space-y-2">
-                  {addons.map((addon, index) => (
-                    // biome-ignore lint/suspicious/noArrayIndexKey: form items dynamically added
-                    <div key={index} className="flex items-center gap-2 p-2 border rounded-md">
-                      <Input
-                        value={addon.name}
-                        onChange={(e) => handleUpdateAddon(index, "name", e.target.value)}
-                        placeholder={tPackages("addonNamePlaceholder")}
-                        className="h-8 text-xs flex-1"
-                      />
-                      <Input
-                        type="number"
-                        value={addon.price}
-                        onChange={(e) => handleUpdateAddon(index, "price", Number(e.target.value))}
-                        placeholder={tPackages("addonPricePlaceholder")}
-                        className="h-8 text-xs font-mono w-28"
-                      />
-                      <Input
-                        type="number"
-                        value={addon.maxQuantity}
-                        onChange={(e) =>
-                          handleUpdateAddon(index, "maxQuantity", Number(e.target.value))
-                        }
-                        placeholder={tPackages("addonMaxPlaceholder")}
-                        className="h-8 text-xs font-mono w-16"
-                      />
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        className="h-8 w-8 p-0 text-destructive"
-                        onClick={() => handleRemoveAddon(index)}
-                        aria-label={tPackages("btnDeleteAddon")}
-                      >
-                        <Trash2 className="size-3.5" />
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-              )}
             </div>
           </div>
 
