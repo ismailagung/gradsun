@@ -30,7 +30,7 @@ import {
 import { Input } from "@/common/components/ui/input";
 import { Label } from "@/common/components/ui/label";
 import { updateHomeContentAction } from "../actions/update-home-content.action";
-import type { HomeCms } from "../schemas/content-settings.schema";
+import { DEFAULT_HOME_CONTENT, type HomeCms } from "../schemas/content-settings.schema";
 import { ImageUploaderField } from "./image-uploader-field";
 
 interface CmsHomeEditorProps {
@@ -107,7 +107,7 @@ export function CmsHomeEditor({ initialContent }: CmsHomeEditorProps) {
   };
 
   const handleReset = () => {
-    setContent(initialContent);
+    setContent(JSON.parse(JSON.stringify(DEFAULT_HOME_CONTENT)));
     setIsSaved(false);
     setErrorMessage(null);
   };

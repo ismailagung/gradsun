@@ -1,6 +1,10 @@
 import type { Prisma } from "@prisma/client";
 import { prisma } from "@/infrastructure/prisma/client";
-import { type ContentSettings, contentSettingsSchema } from "../schemas/content-settings.schema";
+import {
+  type ContentSettings,
+  contentSettingsSchema,
+  DEFAULT_HOME_CONTENT,
+} from "../schemas/content-settings.schema";
 
 export interface IContentRepository {
   getContentSettings(): Promise<ContentSettings>;
@@ -10,44 +14,7 @@ export interface IContentRepository {
 export const CONTENT_SETTING_KEY = "content_settings";
 
 export const DEFAULT_CONTENT_SETTINGS: ContentSettings = {
-  home: {
-    hero: {
-      titlePart1: "Graduation Milestones,",
-      titleHighlight: "Preserved in Amber",
-      titlePart2: "Light.",
-      subtitle:
-        "Fine-art academic portraiture celebrating triumph, dedication, and lifelong bonds across Indonesia's prestigious universities.",
-      primaryCta: "Reserve Your Session",
-      secondaryCta: "Explore Gallery",
-      badgeTitle: "Class of 2025",
-      heroImageUrl: "/logo-bg.jpg",
-      polaroidImageUrl: "/logo-bg.jpg",
-    },
-    gallerySection: {
-      tag: "Recent Gallery Showcase",
-      title: "Milestones Captured in Light",
-      subtitle: "A glimpse of recent graduation portraits celebrated across prestigious campuses.",
-    },
-    packagesSection: {
-      tag: "Curated Commemorative Tiers",
-      title: "Reserve Your Golden Hour Chapter",
-      subtitle:
-        "Tailored lighting, tactile memory folios, and seamless coordination for every milestone.",
-    },
-    testimonialsSection: {
-      tag: "Wall of Love",
-      title: "Words of Joy From Graduates",
-      subtitle:
-        "Heartfelt reflections from alumni and families who entrusted us with their milestone day.",
-    },
-    manifesto: {
-      title: "Ready to Capture Your Graduation Milestone?",
-      subtitle:
-        "Reserve your photo session early to commemorate this special milestone together with family and close friends.",
-      primaryCta: "Check Open Dates",
-      secondaryCta: "Packages & Booking",
-    },
-  },
+  home: DEFAULT_HOME_CONTENT,
   gallery: {
     tag: "Fine-Art Archives",
     title: "The Gradsun Gallery",

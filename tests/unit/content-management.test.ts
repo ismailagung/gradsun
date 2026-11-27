@@ -33,13 +33,14 @@ describe("Content Management System (TDD)", () => {
     const settings = await getUseCase.execute();
 
     // Home Page CMS
-    expect(settings.home.hero.titleHighlight).toBe("Preserved in Amber");
-    expect(settings.home.hero.badgeTitle).toBe("Class of 2025");
+    expect(settings.home.hero.titleHighlight).toBe("Milestone");
+    expect(settings.home.hero.titlePart1).toBe("Every");
+    expect(settings.home.hero.badgeTitle).toBe("Besties & Milestones");
     expect(settings.home.hero.heroImageUrl).toBe("/logo-bg.jpg");
     expect(settings.home.hero.polaroidImageUrl).toBe("/logo-bg.jpg");
-    expect(settings.home.gallerySection.title).toBe("Milestones Captured in Light");
-    expect(settings.home.packagesSection.title).toBe("Reserve Your Golden Hour Chapter");
-    expect(settings.home.testimonialsSection.title).toBe("Words of Joy From Graduates");
+    expect(settings.home.gallerySection.title).toBe("Recent Graduation Highlights");
+    expect(settings.home.packagesSection.title).toBe("Graduation Photo Packages");
+    expect(settings.home.testimonialsSection.title).toBe("What Our Clients Say");
     expect(settings.home.manifesto.primaryCta).toBe("Check Open Dates");
 
     // Gallery Page CMS

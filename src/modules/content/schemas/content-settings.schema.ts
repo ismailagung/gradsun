@@ -68,3 +68,43 @@ export type GalleryCms = z.infer<typeof galleryCmsSchema>;
 export type PackagesCms = z.infer<typeof packagesCmsSchema>;
 export type TrackOrderCms = z.infer<typeof trackOrderCmsSchema>;
 export type ContentSettings = z.infer<typeof contentSettingsSchema>;
+
+export const DEFAULT_HOME_CONTENT: HomeCms = {
+  hero: {
+    titlePart1: "Every",
+    titleHighlight: "Milestone",
+    titlePart2: "Deserves to Be Remembered.",
+    subtitle:
+      "Congratulations to all graduates! Hard work, determination, and perseverance have brought you to this point. An extraordinary achievement that marks the beginning of a new journey. Let us celebrate, remember, and immortalize every precious moment with Gradsun Studio.",
+    primaryCta: "Book Your Session",
+    secondaryCta: "Explore Gallery",
+    badgeTitle: "Besties & Milestones",
+    heroImageUrl: "/logo-bg.jpg",
+    polaroidImageUrl: "/logo-bg.jpg",
+  },
+  gallerySection: {
+    tag: "Selected Gallery",
+    title: "Recent Graduation Highlights",
+    subtitle:
+      "A curated gallery of authentic milestones captured by Gradsun Studio, framed for a lifetime.",
+  },
+  packagesSection: {
+    tag: "Curated Package Tiers",
+    title: "Graduation Photo Packages",
+    subtitle:
+      "Choose the perfect package for your commencement milestone, from solo portrait sessions to group celebrations.",
+  },
+  testimonialsSection: {
+    tag: "Client Reviews",
+    title: "What Our Clients Say",
+    subtitle:
+      "Genuine reviews from graduates and families who trusted their milestone celebrations to Gradsun Studio.",
+  },
+  manifesto: {
+    title: "Ready to Capture Your Graduation Milestone?",
+    subtitle:
+      "Reserve your photo session early to commemorate this special milestone together with family and close friends.",
+    primaryCta: "Check Open Dates",
+    secondaryCta: "Packages & Booking",
+  },
+};
