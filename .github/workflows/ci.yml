@@ -14,6 +14,20 @@ jobs:
   ci:
     name: Verification and Build
     runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/postgres?schema=public"
+      DIRECT_URL: "postgresql://postgres:postgres@localhost:5432/postgres?schema=public"
+      BETTER_AUTH_SECRET: "01234567890123456789012345678901"
+      BETTER_AUTH_URL: "http://localhost:3000"
+      CRON_SECRET: "0123456789012345"
+      STORAGE_DRIVER: "s3"
+      S3_ENDPOINT: "https://placeholder.supabase.co/storage/v1/s3"
+      S3_REGION: "ap-southeast-1"
+      S3_BUCKET: "photos"
+      S3_ACCESS_KEY_ID: "dummy-key-id"
+      S3_SECRET_ACCESS_KEY: "dummy-access-key"
+      NEXT_PUBLIC_STORAGE_BASE_URL: "https://placeholder.supabase.co/storage/v1/object/public/photos"
+      NEXT_PUBLIC_APP_URL: "http://localhost:3000"
     steps:
       - name: Checkout code
         uses: actions/checkout@v4

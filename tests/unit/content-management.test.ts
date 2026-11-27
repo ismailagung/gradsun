@@ -1,4 +1,23 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
+
+vi.mock("@/infrastructure/prisma/client", () => ({
+  prisma: {
+    siteSetting: {
+      findUnique: vi.fn(),
+      upsert: vi.fn(),
+    },
+  },
+}));
+
+vi.mock("@/infrastructure/storage/s3-client", () => ({
+  getPublicStorageUrl: vi
+    .fn()
+    .mockImplementation((key: string) => `https://storage.supabase.co/${key}`),
+  s3Client: {
+    send: vi.fn().mockResolvedValue({}),
+  },
+}));
+
 import {
   ContentRepository,
   type IContentRepository,
@@ -14,13 +33,14 @@ describe("Content Management System (TDD)", () => {
     const settings = await getUseCase.execute();
 
     // Home Page CMS
-    expect(settings.home.hero.titleHighlight).toBe("Preserved in Amber");
-    expect(settings.home.hero.badge).toBe("Commencement Season 2025");
+    expect(settings.home.hero.titleHighlight).toBe("Milestone");
+    expect(settings.home.hero.titlePart1).toBe("Every");
+    expect(settings.home.hero.badgeTitle).toBe("Besties & Milestones");
     expect(settings.home.hero.heroImageUrl).toBe("/logo-bg.jpg");
     expect(settings.home.hero.polaroidImageUrl).toBe("/logo-bg.jpg");
-    expect(settings.home.gallerySection.title).toBe("Milestones Captured in Light");
-    expect(settings.home.packagesSection.title).toBe("Reserve Your Golden Hour Chapter");
-    expect(settings.home.testimonialsSection.title).toBe("Words of Joy From Graduates");
+    expect(settings.home.gallerySection.title).toBe("Recent Graduation Highlights");
+    expect(settings.home.packagesSection.title).toBe("Graduation Photo Packages");
+    expect(settings.home.testimonialsSection.title).toBe("What Our Clients Say");
     expect(settings.home.manifesto.primaryCta).toBe("Check Open Dates");
 
     // Gallery Page CMS
@@ -48,21 +68,22 @@ describe("Content Management System (TDD)", () => {
         ...initial.home,
         hero: {
           ...initial.home.hero,
-          badge: "Special Season 2026",
           titleHighlight: "Timeless Sunlight",
+          badgeTitle: "Class of 2026",
           heroImageUrl: "/images/hero-custom.jpg",
           polaroidImageUrl: "/images/polaroid-custom.jpg",
         },
       },
     });
 
-    expect(updated.home.hero.badge).toBe("Special Season 2026");
     expect(updated.home.hero.titleHighlight).toBe("Timeless Sunlight");
+    expect(updated.home.hero.badgeTitle).toBe("Class of 2026");
     expect(updated.home.hero.heroImageUrl).toBe("/images/hero-custom.jpg");
     expect(updated.home.hero.polaroidImageUrl).toBe("/images/polaroid-custom.jpg");
 
     const reFetched = await getUseCase.execute();
-    expect(reFetched.home.hero.badge).toBe("Special Season 2026");
+    expect(reFetched.home.hero.titleHighlight).toBe("Timeless Sunlight");
+    expect(reFetched.home.hero.badgeTitle).toBe("Class of 2026");
     expect(reFetched.home.hero.heroImageUrl).toBe("/images/hero-custom.jpg");
   });
 
@@ -101,7 +122,6 @@ describe("Content Management System (TDD)", () => {
     const beforeUpdate = await getUseCase.execute();
     const updated = await useCase.execute({
       hero: {
-        badge: "TDD Commencement 2026",
         titlePart1: "Unforgettable",
         titleHighlight: "Memories",
         titlePart2: "Forever.",
@@ -135,14 +155,14 @@ describe("Content Management System (TDD)", () => {
       },
     });
 
-    expect(updated.hero.badge).toBe("TDD Commencement 2026");
+    expect(updated.hero.badgeTitle).toBe("Honors Class");
     expect(updated.hero.heroImageUrl).toBe("/images/hero-tdd.jpg");
     expect(updated.gallerySection.title).toBe("TDD Gallery Title");
     expect(updated.packagesSection.title).toBe("TDD Packages Title");
     expect(updated.testimonialsSection.title).toBe("TDD Testimonials Title");
 
     const settings = await getUseCase.execute();
-    expect(settings.home.hero.badge).toBe("TDD Commencement 2026");
+    expect(settings.home.hero.badgeTitle).toBe("Honors Class");
     expect(settings.home.hero.heroImageUrl).toBe("/images/hero-tdd.jpg");
     expect(settings.home.gallerySection.title).toBe("TDD Gallery Title");
     expect(settings.home.packagesSection.title).toBe("TDD Packages Title");
@@ -163,5 +183,31 @@ describe("Content Management System (TDD)", () => {
     expect(editorSource).toContain("rotate-[-3deg]");
     // Verify dark manifesto banner styling in live preview
     expect(editorSource).toContain("bg-foreground text-background");
+  });
+
+  it("validates and uploads CMS asset buffer to Supabase storage key structure", async () => {
+    const { uploadCmsAssetSchema } = await import(
+      "@/modules/content/schemas/upload-cms-asset.schema"
+    );
+    const { UploadCmsAssetUseCase } = await import(
+      "@/modules/content/use-cases/upload-cms-asset.use-case"
+    );
+
+    const valid = uploadCmsAssetSchema.safeParse({
+      folder: "hero",
+      fileName: "commencement-sample.webp",
+      contentType: "image/webp",
+      base64Data: "data:image/webp;base64,UklGRh4AAABXRUJQVlA4TBEAAAAvAAAAAAfQ//73v/+BiOh/AAA=",
+    });
+    expect(valid.success).toBe(true);
+    if (!valid.success) {
+      throw new Error("Validation failed");
+    }
+
+    const useCase = new UploadCmsAssetUseCase();
+    const result = await useCase.execute(valid.data);
+    expect(result.publicUrl).toContain("cms/hero/");
+    expect(result.publicUrl).toContain("commencement-sample.webp");
+    expect(result.key).toMatch(/^cms\/hero\/\d+-commencement-sample\.webp$/);
   });
 });
