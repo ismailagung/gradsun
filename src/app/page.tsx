@@ -1,4 +1,4 @@
-import { ArrowRight, Check, Heart, Quote, Sparkles, Star, Sun } from "lucide-react";
+import { ArrowRight, Check, Heart, Quote, Sparkles, Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
@@ -29,14 +29,6 @@ export default async function HomePage() {
           <div className="mx-auto max-w-7xl grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* Left Column (7 cols) */}
             <div className="lg:col-span-7 flex flex-col items-start gap-6">
-              <Badge
-                variant="secondary"
-                className="gap-2 px-3.5 py-1 text-xs font-normal border border-border"
-              >
-                <Sun className="size-3.5 text-primary animate-pulse" />
-                <span>{homeContent.hero.badge || tHero("badge")}</span>
-              </Badge>
-
               <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl tracking-tight leading-[1.1] text-foreground">
                 <span>{homeContent.hero.titlePart1 || tHero("titlePart1")}</span>{" "}
                 <span className="italic text-primary">

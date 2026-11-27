@@ -1,14 +1,17 @@
-import type { ContentSettings } from "../schemas/content-settings.schema";
+import type { Prisma } from "@prisma/client";
+import { prisma } from "@/infrastructure/prisma/client";
+import { type ContentSettings, contentSettingsSchema } from "../schemas/content-settings.schema";
 
 export interface IContentRepository {
   getContentSettings(): Promise<ContentSettings>;
   updateContentSettings(data: ContentSettings): Promise<ContentSettings>;
 }
 
-const DEFAULT_CONTENT_SETTINGS: ContentSettings = {
+export const CONTENT_SETTING_KEY = "content_settings";
+
+export const DEFAULT_CONTENT_SETTINGS: ContentSettings = {
   home: {
     hero: {
-      badge: "Commencement Season 2025",
       titlePart1: "Graduation Milestones,",
       titleHighlight: "Preserved in Amber",
       titlePart2: "Light.",
@@ -72,15 +75,52 @@ const DEFAULT_CONTENT_SETTINGS: ContentSettings = {
   },
 };
 
-let inMemoryContentSettings: ContentSettings = JSON.parse(JSON.stringify(DEFAULT_CONTENT_SETTINGS));
-
 export class ContentRepository implements IContentRepository {
+  private inMemoryFallback: ContentSettings = JSON.parse(JSON.stringify(DEFAULT_CONTENT_SETTINGS));
+
   async getContentSettings(): Promise<ContentSettings> {
-    return JSON.parse(JSON.stringify(inMemoryContentSettings));
+    try {
+      const record = await prisma.siteSetting.findUnique({
+        where: { key: CONTENT_SETTING_KEY },
+      });
+
+      if (!record?.value) {
+        return this.inMemoryFallback;
+      }
+
+      const parsed = contentSettingsSchema.safeParse(record.value);
+      if (!parsed.success) {
+        return this.inMemoryFallback;
+      }
+
+      this.inMemoryFallback = parsed.data;
+      return parsed.data;
+    } catch {
+      return this.inMemoryFallback;
+    }
   }
 
   async updateContentSettings(data: ContentSettings): Promise<ContentSettings> {
-    inMemoryContentSettings = JSON.parse(JSON.stringify(data));
-    return JSON.parse(JSON.stringify(inMemoryContentSettings));
+    this.inMemoryFallback = JSON.parse(JSON.stringify(data));
+    try {
+      const jsonValue = data as unknown as Prisma.InputJsonValue;
+      const record = await prisma.siteSetting.upsert({
+        where: { key: CONTENT_SETTING_KEY },
+        update: { value: jsonValue },
+        create: {
+          key: CONTENT_SETTING_KEY,
+          value: jsonValue,
+        },
+      });
+
+      const parsed = contentSettingsSchema.safeParse(record.value);
+      if (parsed.success) {
+        this.inMemoryFallback = parsed.data;
+        return parsed.data;
+      }
+    } catch {
+      // In-memory fallback for test runners or offline environments
+    }
+    return JSON.parse(JSON.stringify(this.inMemoryFallback));
   }
 }

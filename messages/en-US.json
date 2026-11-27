@@ -506,7 +506,6 @@
     "packagesDesc": "Manage commencement season branding, booking introduction, and weather guarantee vow.",
     "trackOrderTitle": "Track Order Page Guidance",
     "trackOrderDesc": "Manage lookup header, instructions, search guidance, and support prompts.",
-    "labelBadge": "Season Badge Text",
     "labelTitlePart1": "Title First Part",
     "labelTitleHighlight": "Highlighted Word (Accent)",
     "labelTitlePart2": "Title Trailing Part",
@@ -578,7 +577,16 @@
     "sampleTesti3Quote": "Seamless booking and stress-free photo session. Truly the best commencement studio.",
     "sampleTesti3Author": "Clarissa A., S.Ked",
     "sampleYear": "Class of 2025",
-    "previewFooter": "© 2025 Gradsun Studio. Fine-Art Commencement Photography."
+    "previewFooter": "© 2025 Gradsun Studio. Fine-Art Commencement Photography.",
+    "btnUploadImage": "Upload Photo",
+    "btnChangeImage": "Change Photo",
+    "btnUploading": "Uploading to Supabase...",
+    "msgUploadSuccess": "Photo uploaded to Supabase Storage",
+    "msgUploadError": "Failed to upload photo. Please try again.",
+    "msgInvalidFileType": "Please select a valid image file",
+    "msgFileTooLarge": "Image size must not exceed 10MB",
+    "labelOrPasteUrl": "Or paste image URL directly",
+    "hintStorageUpload": "Uploaded directly to Supabase Storage"
   },
   "adminDashboard": {
     "title": "Studio Overview & Operations",

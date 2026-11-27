@@ -1,7 +1,6 @@
 import { z } from "zod";
 
 export const homeHeroSchema = z.object({
-  badge: z.string().min(1),
   titlePart1: z.string().min(1),
   titleHighlight: z.string().min(1),
   titlePart2: z.string().min(1),

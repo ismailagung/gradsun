@@ -31,6 +31,7 @@ import { Input } from "@/common/components/ui/input";
 import { Label } from "@/common/components/ui/label";
 import { updateHomeContentAction } from "../actions/update-home-content.action";
 import type { HomeCms } from "../schemas/content-settings.schema";
+import { ImageUploaderField } from "./image-uploader-field";
 
 interface CmsHomeEditorProps {
   initialContent: HomeCms;
@@ -180,15 +181,6 @@ export function CmsHomeEditor({ initialContent }: CmsHomeEditorProps) {
               <CardDescription className="text-xs">{tCms("homeDesc")}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-3.5">
-              <div className="space-y-1.5">
-                <Label className="text-xs font-medium text-foreground">{tCms("labelBadge")}</Label>
-                <Input
-                  className="h-8 text-xs"
-                  value={content.hero.badge}
-                  onChange={(e) => handleHeroChange("badge", e.target.value)}
-                />
-              </div>
-
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                 <div className="space-y-1.5">
                   <Label className="text-xs font-medium text-foreground">
@@ -267,27 +259,19 @@ export function CmsHomeEditor({ initialContent }: CmsHomeEditorProps) {
                 />
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                <div className="space-y-1.5">
-                  <Label className="text-xs font-medium text-foreground">
-                    {tCms("labelHeroImage")}
-                  </Label>
-                  <Input
-                    className="h-8 text-xs font-mono"
-                    value={content.hero.heroImageUrl}
-                    onChange={(e) => handleHeroChange("heroImageUrl", e.target.value)}
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <Label className="text-xs font-medium text-foreground">
-                    {tCms("labelPolaroidImage")}
-                  </Label>
-                  <Input
-                    className="h-8 text-xs font-mono"
-                    value={content.hero.polaroidImageUrl}
-                    onChange={(e) => handleHeroChange("polaroidImageUrl", e.target.value)}
-                  />
-                </div>
+              <div className="space-y-3">
+                <ImageUploaderField
+                  label={tCms("labelHeroImage")}
+                  value={content.hero.heroImageUrl}
+                  onChange={(url) => handleHeroChange("heroImageUrl", url)}
+                  folder="hero"
+                />
+                <ImageUploaderField
+                  label={tCms("labelPolaroidImage")}
+                  value={content.hero.polaroidImageUrl}
+                  onChange={(url) => handleHeroChange("polaroidImageUrl", url)}
+                  folder="hero"
+                />
               </div>
             </CardContent>
           </Card>
@@ -585,14 +569,6 @@ export function CmsHomeEditor({ initialContent }: CmsHomeEditorProps) {
                       isMobile ? "w-full" : "sm:col-span-7"
                     }`}
                   >
-                    <Badge
-                      variant="secondary"
-                      className="gap-1.5 px-2.5 py-0.5 text-[10px] font-normal border border-border"
-                    >
-                      <Sun className="size-3 text-primary animate-pulse" />
-                      <span>{content.hero.badge}</span>
-                    </Badge>
-
                     <h1 className="font-serif text-xl sm:text-2xl lg:text-3xl tracking-tight leading-tight text-foreground">
                       <span>{content.hero.titlePart1}</span>{" "}
                       <span className="italic text-primary">{content.hero.titleHighlight}</span>{" "}
