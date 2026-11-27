@@ -243,7 +243,6 @@ export function AdminPackagesManager({ initialPackages }: AdminPackagesManagerPr
                   <TableHead>{tPackages("thDuration")}</TableHead>
                   <TableHead>{tPackages("thPrice")}</TableHead>
                   <TableHead>{tPackages("thQuota")}</TableHead>
-                  <TableHead>{tPackages("thDeposit")}</TableHead>
                   <TableHead>{tPackages("thIsActive")}</TableHead>
                   <TableHead className="text-right">{tPackages("thActions")}</TableHead>
                 </TableRow>
@@ -268,7 +267,6 @@ export function AdminPackagesManager({ initialPackages }: AdminPackagesManagerPr
                     <TableCell className="text-xs text-muted-foreground">
                       {pkg.editQuota} {tPackages("photosSuffix")}
                     </TableCell>
-                    <TableCell className="font-mono text-xs">{`${pkg.downPaymentPercent}%`}</TableCell>
                     <TableCell>
                       {pkg.isActive ? (
                         <Badge
@@ -370,7 +368,7 @@ export function AdminPackagesManager({ initialPackages }: AdminPackagesManagerPr
               />
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="space-y-1.5">
                 <Label htmlFor="pkg-price" className="text-xs font-medium">
                   {tPackages("fieldPrice")}
@@ -406,19 +404,6 @@ export function AdminPackagesManager({ initialPackages }: AdminPackagesManagerPr
                   type="number"
                   value={editQuota}
                   onChange={(e) => setEditQuota(Number(e.target.value))}
-                  className="h-8 text-xs font-mono"
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <Label htmlFor="pkg-deposit" className="text-xs font-medium">
-                  {tPackages("fieldDeposit")}
-                </Label>
-                <Input
-                  id="pkg-deposit"
-                  type="number"
-                  value={downPaymentPercent}
-                  onChange={(e) => setDownPaymentPercent(Number(e.target.value))}
                   className="h-8 text-xs font-mono"
                 />
               </div>
