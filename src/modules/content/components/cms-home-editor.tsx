@@ -24,14 +24,30 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/common/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/common/components/ui/dialog";
 import { Input } from "@/common/components/ui/input";
 import { Label } from "@/common/components/ui/label";
 import { updateHomeContentAction } from "../actions/update-home-content.action";
 import { DEFAULT_HOME_CONTENT, type HomeCms } from "../schemas/content-settings.schema";
 import { ImageUploaderField } from "./image-uploader-field";
+
+type SectionKey =
+  | "hero"
+  | "gallerySection"
+  | "packagesSection"
+  | "testimonialsSection"
+  | "manifesto";
 
 interface CmsHomeEditorProps {
   initialContent: HomeCms;
@@ -45,6 +61,10 @@ export function CmsHomeEditor({ initialContent }: CmsHomeEditorProps) {
   const [isSaved, setIsSaved] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const [savingSection, setSavingSection] = useState<SectionKey | null>(null);
+  const [savedSection, setSavedSection] = useState<SectionKey | null>(null);
+  const [resetConfirmSection, setResetConfirmSection] = useState<SectionKey | null>(null);
 
   const isMobile = device === "mobile";
 
@@ -106,10 +126,45 @@ export function CmsHomeEditor({ initialContent }: CmsHomeEditorProps) {
     }
   };
 
-  const handleReset = () => {
-    setContent(JSON.parse(JSON.stringify(DEFAULT_HOME_CONTENT)));
-    setIsSaved(false);
+  const handleSaveSection = async (section: SectionKey) => {
+    setSavingSection(section);
     setErrorMessage(null);
+    try {
+      const res = await updateHomeContentAction(content);
+      if (res?.data) {
+        setSavedSection(section);
+        setTimeout(() => setSavedSection((prev) => (prev === section ? null : prev)), 3000);
+      } else if (res?.serverError) {
+        setErrorMessage(res.serverError);
+      }
+    } catch {
+      setErrorMessage(tCms("saveError"));
+    } finally {
+      setSavingSection(null);
+    }
+  };
+
+  const handleConfirmReset = async () => {
+    if (!resetConfirmSection) return;
+    const targetSection = resetConfirmSection;
+    const updatedContent = {
+      ...content,
+      [targetSection]: JSON.parse(JSON.stringify(DEFAULT_HOME_CONTENT[targetSection])),
+    };
+    setContent(updatedContent);
+    setResetConfirmSection(null);
+    try {
+      setSavingSection(targetSection);
+      const res = await updateHomeContentAction(updatedContent);
+      if (res?.data) {
+        setSavedSection(targetSection);
+        setTimeout(() => setSavedSection((prev) => (prev === targetSection ? null : prev)), 3000);
+      }
+    } catch {
+      setErrorMessage(tCms("saveError"));
+    } finally {
+      setSavingSection(null);
+    }
   };
 
   return (
@@ -142,17 +197,6 @@ export function CmsHomeEditor({ initialContent }: CmsHomeEditorProps) {
               <span>{tCms("savedSuccess")}</span>
             </Badge>
           )}
-
-          <Button
-            variant="outline"
-            size="sm"
-            className="h-8 gap-1.5 text-xs"
-            onClick={handleReset}
-            disabled={isSaving}
-          >
-            <RotateCcw className="size-3.5" />
-            <span>{tCms("btnReset")}</span>
-          </Button>
 
           <Button
             size="sm"
@@ -274,6 +318,39 @@ export function CmsHomeEditor({ initialContent }: CmsHomeEditorProps) {
                 />
               </div>
             </CardContent>
+            <CardFooter className="flex items-center justify-between border-t pt-3 bg-muted/20">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="h-8 gap-1.5 text-xs text-muted-foreground hover:text-foreground"
+                onClick={() => setResetConfirmSection("hero")}
+              >
+                <RotateCcw className="size-3" />
+                <span>{tCms("btnResetHero")}</span>
+              </Button>
+              <div className="flex items-center gap-2">
+                {savedSection === "hero" && (
+                  <span className="text-[11px] text-emerald-600 font-medium">
+                    {tCms("sectionSavedSuccess")}
+                  </span>
+                )}
+                <Button
+                  type="button"
+                  size="sm"
+                  className="h-8 gap-1.5 text-xs"
+                  disabled={savingSection === "hero"}
+                  onClick={() => handleSaveSection("hero")}
+                >
+                  {savingSection === "hero" ? (
+                    <Loader2 className="size-3 animate-spin" />
+                  ) : (
+                    <Save className="size-3" />
+                  )}
+                  <span>{savingSection === "hero" ? tCms("btnSaving") : tCms("btnSaveHero")}</span>
+                </Button>
+              </div>
+            </CardFooter>
           </Card>
 
           {/* 2. RECENT GALLERY SECTION COPY */}
@@ -320,6 +397,43 @@ export function CmsHomeEditor({ initialContent }: CmsHomeEditorProps) {
                 />
               </div>
             </CardContent>
+            <CardFooter className="flex items-center justify-between border-t pt-3 bg-muted/20">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="h-8 gap-1.5 text-xs text-muted-foreground hover:text-foreground"
+                onClick={() => setResetConfirmSection("gallerySection")}
+              >
+                <RotateCcw className="size-3" />
+                <span>{tCms("btnResetGallery")}</span>
+              </Button>
+              <div className="flex items-center gap-2">
+                {savedSection === "gallerySection" && (
+                  <span className="text-[11px] text-emerald-600 font-medium">
+                    {tCms("sectionSavedSuccess")}
+                  </span>
+                )}
+                <Button
+                  type="button"
+                  size="sm"
+                  className="h-8 gap-1.5 text-xs"
+                  disabled={savingSection === "gallerySection"}
+                  onClick={() => handleSaveSection("gallerySection")}
+                >
+                  {savingSection === "gallerySection" ? (
+                    <Loader2 className="size-3 animate-spin" />
+                  ) : (
+                    <Save className="size-3" />
+                  )}
+                  <span>
+                    {savingSection === "gallerySection"
+                      ? tCms("btnSaving")
+                      : tCms("btnSaveGallery")}
+                  </span>
+                </Button>
+              </div>
+            </CardFooter>
           </Card>
 
           {/* 3. CURATED PACKAGES SECTION COPY */}
@@ -366,6 +480,43 @@ export function CmsHomeEditor({ initialContent }: CmsHomeEditorProps) {
                 />
               </div>
             </CardContent>
+            <CardFooter className="flex items-center justify-between border-t pt-3 bg-muted/20">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="h-8 gap-1.5 text-xs text-muted-foreground hover:text-foreground"
+                onClick={() => setResetConfirmSection("packagesSection")}
+              >
+                <RotateCcw className="size-3" />
+                <span>{tCms("btnResetPackages")}</span>
+              </Button>
+              <div className="flex items-center gap-2">
+                {savedSection === "packagesSection" && (
+                  <span className="text-[11px] text-emerald-600 font-medium">
+                    {tCms("sectionSavedSuccess")}
+                  </span>
+                )}
+                <Button
+                  type="button"
+                  size="sm"
+                  className="h-8 gap-1.5 text-xs"
+                  disabled={savingSection === "packagesSection"}
+                  onClick={() => handleSaveSection("packagesSection")}
+                >
+                  {savingSection === "packagesSection" ? (
+                    <Loader2 className="size-3 animate-spin" />
+                  ) : (
+                    <Save className="size-3" />
+                  )}
+                  <span>
+                    {savingSection === "packagesSection"
+                      ? tCms("btnSaving")
+                      : tCms("btnSavePackages")}
+                  </span>
+                </Button>
+              </div>
+            </CardFooter>
           </Card>
 
           {/* 4. TESTIMONIALS SECTION COPY */}
@@ -416,6 +567,43 @@ export function CmsHomeEditor({ initialContent }: CmsHomeEditorProps) {
                 />
               </div>
             </CardContent>
+            <CardFooter className="flex items-center justify-between border-t pt-3 bg-muted/20">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="h-8 gap-1.5 text-xs text-muted-foreground hover:text-foreground"
+                onClick={() => setResetConfirmSection("testimonialsSection")}
+              >
+                <RotateCcw className="size-3" />
+                <span>{tCms("btnResetTestimonials")}</span>
+              </Button>
+              <div className="flex items-center gap-2">
+                {savedSection === "testimonialsSection" && (
+                  <span className="text-[11px] text-emerald-600 font-medium">
+                    {tCms("sectionSavedSuccess")}
+                  </span>
+                )}
+                <Button
+                  type="button"
+                  size="sm"
+                  className="h-8 gap-1.5 text-xs"
+                  disabled={savingSection === "testimonialsSection"}
+                  onClick={() => handleSaveSection("testimonialsSection")}
+                >
+                  {savingSection === "testimonialsSection" ? (
+                    <Loader2 className="size-3 animate-spin" />
+                  ) : (
+                    <Save className="size-3" />
+                  )}
+                  <span>
+                    {savingSection === "testimonialsSection"
+                      ? tCms("btnSaving")
+                      : tCms("btnSaveTestimonials")}
+                  </span>
+                </Button>
+              </div>
+            </CardFooter>
           </Card>
 
           {/* 5. MANIFESTO BANNER COPY */}
@@ -472,6 +660,41 @@ export function CmsHomeEditor({ initialContent }: CmsHomeEditorProps) {
                 </div>
               </div>
             </CardContent>
+            <CardFooter className="flex items-center justify-between border-t pt-3 bg-muted/20">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="h-8 gap-1.5 text-xs text-muted-foreground hover:text-foreground"
+                onClick={() => setResetConfirmSection("manifesto")}
+              >
+                <RotateCcw className="size-3" />
+                <span>{tCms("btnResetManifesto")}</span>
+              </Button>
+              <div className="flex items-center gap-2">
+                {savedSection === "manifesto" && (
+                  <span className="text-[11px] text-emerald-600 font-medium">
+                    {tCms("sectionSavedSuccess")}
+                  </span>
+                )}
+                <Button
+                  type="button"
+                  size="sm"
+                  className="h-8 gap-1.5 text-xs"
+                  disabled={savingSection === "manifesto"}
+                  onClick={() => handleSaveSection("manifesto")}
+                >
+                  {savingSection === "manifesto" ? (
+                    <Loader2 className="size-3 animate-spin" />
+                  ) : (
+                    <Save className="size-3" />
+                  )}
+                  <span>
+                    {savingSection === "manifesto" ? tCms("btnSaving") : tCms("btnSaveManifesto")}
+                  </span>
+                </Button>
+              </div>
+            </CardFooter>
           </Card>
         </div>
 
@@ -976,6 +1199,42 @@ export function CmsHomeEditor({ initialContent }: CmsHomeEditorProps) {
           </div>
         </div>
       </div>
+
+      {/* Reset Confirmation Dialog */}
+      <Dialog
+        open={resetConfirmSection !== null}
+        onOpenChange={(open) => !open && setResetConfirmSection(null)}
+      >
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle className="font-serif text-lg">{tCms("dialogResetTitle")}</DialogTitle>
+            <DialogDescription className="text-xs text-muted-foreground">
+              {tCms("dialogResetDesc")}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="gap-2 sm:gap-0">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="h-8 text-xs"
+              onClick={() => setResetConfirmSection(null)}
+            >
+              <span>{tCms("btnCancel")}</span>
+            </Button>
+            <Button
+              type="button"
+              variant="destructive"
+              size="sm"
+              className="h-8 text-xs"
+              onClick={handleConfirmReset}
+            >
+              <RotateCcw className="size-3 mr-1" />
+              <span>{tCms("btnConfirmReset")}</span>
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
