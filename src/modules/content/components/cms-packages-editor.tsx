@@ -1,17 +1,20 @@
 "use client";
 
 import {
+  ArrowDown,
+  ArrowUp,
   Check,
-  CloudSun,
   Eye,
-  Info,
   Laptop,
+  Loader2,
+  Plus,
   RotateCcw,
   Save,
-  ShieldCheck,
   Smartphone,
-  Sparkles,
+  Sun,
+  Trash2,
 } from "lucide-react";
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Badge } from "@/common/components/ui/badge";
@@ -20,47 +23,262 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/common/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/common/components/ui/dialog";
 import { Input } from "@/common/components/ui/input";
 import { Label } from "@/common/components/ui/label";
-import type { PackagesCms } from "../schemas/content-settings.schema";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/common/components/ui/select";
+import type { PackageWithAddons } from "@/modules/packages/repositories/package.repository";
+import { updatePackagesContentAction } from "../actions/update-packages-content.action";
+import {
+  DEFAULT_PACKAGES_CONTENT,
+  type PackageCardPresentation,
+  type PackagesCms,
+} from "../schemas/content-settings.schema";
+import { ImageUploaderField } from "./image-uploader-field";
 
 interface CmsPackagesEditorProps {
   initialContent: PackagesCms;
+  availablePackages: PackageWithAddons[];
 }
 
-export function CmsPackagesEditor({ initialContent }: CmsPackagesEditorProps) {
+export function CmsPackagesEditor({ initialContent, availablePackages }: CmsPackagesEditorProps) {
   const tCms = useTranslations("adminCms");
+  const tPackages = useTranslations("adminPackages");
 
   const [content, setContent] = useState<PackagesCms>(initialContent);
   const [device, setDevice] = useState<"desktop" | "mobile">("desktop");
-  const [isSaved, setIsSaved] = useState(false);
+
+  // Section 1: Intro & Vow state
+  const [savingIntro, setSavingIntro] = useState(false);
+  const [savedIntro, setSavedIntro] = useState(false);
+  const [isResetIntroDialogOpen, setIsResetIntroDialogOpen] = useState(false);
+
+  // Section 2: Presentation Cards state
+  const [savingCards, setSavingCards] = useState(false);
+  const [savedCards, setSavedCards] = useState(false);
+  const [isResetCardsDialogOpen, setIsResetCardsDialogOpen] = useState(false);
+
+  // Card Modal Dialogs
+  const [isCardDialogOpen, setIsCardDialogOpen] = useState(false);
+  const [editingCardId, setEditingCardId] = useState<string | null>(null);
+  const [isDeleteCardDialogOpen, setIsDeleteCardDialogOpen] = useState(false);
+  const [deletingCard, setDeletingCard] = useState<PackageCardPresentation | null>(null);
+
+  // Card Form State
+  const [cardPackageId, setCardPackageId] = useState("");
+  const [cardThumbnailUrl, setCardThumbnailUrl] = useState("/logo-bg.jpg");
+  const [cardBadge, setCardBadge] = useState("");
+  const [cardFeatures, setCardFeatures] = useState<string[]>([]);
+  const [cardOrder, setCardOrder] = useState(0);
 
   const isMobile = device === "mobile";
 
-  const handleChange = (field: keyof PackagesCms, value: string) => {
+  const formatPrice = (val: number) => {
+    return new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      maximumFractionDigits: 0,
+    }).format(val);
+  };
+
+  // Section 1 Handlers
+  const handleIntroChange = (field: keyof Omit<PackagesCms, "cards">, value: string) => {
     setContent((prev) => ({
       ...prev,
       [field]: value,
     }));
-    setIsSaved(false);
+    setSavedIntro(false);
   };
 
-  const handleSave = () => {
-    setIsSaved(true);
-    setTimeout(() => setIsSaved(false), 3000);
+  const handleSaveIntro = async () => {
+    setSavingIntro(true);
+    try {
+      const res = await updatePackagesContentAction(content);
+      if (res?.data) {
+        setContent(res.data);
+        setSavedIntro(true);
+        setTimeout(() => setSavedIntro(false), 3000);
+      }
+    } catch {
+      // Fallback
+    } finally {
+      setSavingIntro(false);
+    }
   };
 
-  const handleReset = () => {
-    setContent(initialContent);
-    setIsSaved(false);
+  const handleResetIntro = () => {
+    setContent((prev) => ({
+      ...prev,
+      seasonTag: DEFAULT_PACKAGES_CONTENT.seasonTag,
+      title: DEFAULT_PACKAGES_CONTENT.title,
+      subtitle: DEFAULT_PACKAGES_CONTENT.subtitle,
+      vowTitle: DEFAULT_PACKAGES_CONTENT.vowTitle,
+      vowSubtitle: DEFAULT_PACKAGES_CONTENT.vowSubtitle,
+    }));
+    setIsResetIntroDialogOpen(false);
+    setSavedIntro(false);
+  };
+
+  // Section 2 Handlers
+  const handleSaveCards = async () => {
+    setSavingCards(true);
+    try {
+      const res = await updatePackagesContentAction(content);
+      if (res?.data) {
+        setContent(res.data);
+        setSavedCards(true);
+        setTimeout(() => setSavedCards(false), 3000);
+      }
+    } catch {
+      // Fallback
+    } finally {
+      setSavingCards(false);
+    }
+  };
+
+  const handleResetCards = () => {
+    setContent((prev) => ({
+      ...prev,
+      cards: DEFAULT_PACKAGES_CONTENT.cards,
+    }));
+    setIsResetCardsDialogOpen(false);
+    setSavedCards(false);
+  };
+
+  // Card CRUD Handlers
+  const openAddCardDialog = () => {
+    setEditingCardId(null);
+    setCardPackageId(availablePackages[0]?.id || "");
+    setCardThumbnailUrl("/logo-bg.jpg");
+    setCardBadge("");
+    setCardFeatures(["", ""]);
+    setCardOrder((content.cards.length ?? 0) + 1);
+    setIsCardDialogOpen(true);
+  };
+
+  const openEditCardDialog = (card: PackageCardPresentation) => {
+    setEditingCardId(card.id);
+    setCardPackageId(card.packageId);
+    setCardThumbnailUrl(card.thumbnailUrl);
+    setCardBadge(card.badge || "");
+    setCardFeatures(
+      card.customFeatures && card.customFeatures.length > 0 ? card.customFeatures : [""],
+    );
+    setCardOrder(card.order);
+    setIsCardDialogOpen(true);
+  };
+
+  const openDeleteCardDialog = (card: PackageCardPresentation) => {
+    setDeletingCard(card);
+    setIsDeleteCardDialogOpen(true);
+  };
+
+  const handleAddFeatureBullet = () => {
+    setCardFeatures((prev) => [...prev, ""]);
+  };
+
+  const handleFeatureChange = (index: number, val: string) => {
+    setCardFeatures((prev) => {
+      const next = [...prev];
+      next[index] = val;
+      return next;
+    });
+  };
+
+  const handleRemoveFeature = (index: number) => {
+    setCardFeatures((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleSaveCardModal = () => {
+    if (!cardPackageId) return;
+
+    const cleanFeatures = cardFeatures.filter((f) => f.trim().length > 0);
+
+    if (editingCardId) {
+      setContent((prev) => ({
+        ...prev,
+        cards: prev.cards.map((c) =>
+          c.id === editingCardId
+            ? {
+                ...c,
+                packageId: cardPackageId,
+                thumbnailUrl: cardThumbnailUrl,
+                badge: cardBadge.trim(),
+                customFeatures: cleanFeatures,
+                order: cardOrder,
+              }
+            : c,
+        ),
+      }));
+    } else {
+      const newCard: PackageCardPresentation = {
+        id: `card-${Date.now()}`,
+        packageId: cardPackageId,
+        thumbnailUrl: cardThumbnailUrl,
+        badge: cardBadge.trim(),
+        customFeatures: cleanFeatures,
+        order: cardOrder,
+      };
+      setContent((prev) => ({
+        ...prev,
+        cards: [...prev.cards, newCard],
+      }));
+    }
+
+    setIsCardDialogOpen(false);
+  };
+
+  const handleDeleteCardConfirm = () => {
+    if (!deletingCard) return;
+    setContent((prev) => ({
+      ...prev,
+      cards: prev.cards.filter((c) => c.id !== deletingCard.id),
+    }));
+    setIsDeleteCardDialogOpen(false);
+    setDeletingCard(null);
+  };
+
+  const handleMoveCard = (index: number, direction: "up" | "down") => {
+    setContent((prev) => {
+      const newCards = [...prev.cards];
+      const targetIndex = direction === "up" ? index - 1 : index + 1;
+      if (targetIndex < 0 || targetIndex >= newCards.length) return prev;
+
+      const temp = newCards[index];
+      newCards[index] = newCards[targetIndex];
+      newCards[targetIndex] = temp;
+
+      return {
+        ...prev,
+        cards: newCards.map((c, i) => ({ ...c, order: i + 1 })),
+      };
+    });
+  };
+
+  const findLinkedPackage = (pkgId: string) => {
+    return availablePackages.find((p) => p.id === pkgId || p.slug === pkgId);
   };
 
   return (
     <div className="space-y-6">
-      {/* CMS Header & Actions Bar */}
+      {/* CMS Header Bar */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b pb-4">
         <div>
           <h1 className="font-serif text-2xl font-semibold tracking-tight lg:text-3xl">
@@ -69,217 +287,624 @@ export function CmsPackagesEditor({ initialContent }: CmsPackagesEditorProps) {
           <p className="mt-1 text-sm text-muted-foreground font-sans">{tCms("packagesDesc")}</p>
         </div>
 
+        {/* Viewport Switcher */}
         <div className="flex items-center gap-2">
-          {isSaved && (
-            <Badge
-              variant="outline"
-              className="gap-1 border-emerald-500/50 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-mono text-xs"
+          <Badge
+            variant="outline"
+            className="gap-1 border-primary/40 bg-primary/5 text-primary font-sans text-xs"
+          >
+            <Eye className="size-3" />
+            <span>{tCms("previewBadge")}</span>
+          </Badge>
+
+          <div className="flex items-center rounded-lg border bg-muted/30 p-0.5">
+            <Button
+              variant={!isMobile ? "secondary" : "ghost"}
+              size="sm"
+              className="h-7 px-2.5 text-xs gap-1.5"
+              onClick={() => setDevice("desktop")}
             >
-              <Check className="size-3" />
-              <span>{tCms("savedSuccess")}</span>
-            </Badge>
-          )}
-
-          <Button variant="outline" size="sm" className="h-8 gap-1.5 text-xs" onClick={handleReset}>
-            <RotateCcw className="size-3.5" />
-            <span>{tCms("btnReset")}</span>
-          </Button>
-
-          <Button size="sm" className="h-8 gap-1.5 text-xs" onClick={handleSave}>
-            <Save className="size-3.5" />
-            <span>{tCms("btnSave")}</span>
-          </Button>
+              <Laptop className="size-3.5" />
+              <span>{tCms("previewDesktop")}</span>
+            </Button>
+            <Button
+              variant={isMobile ? "secondary" : "ghost"}
+              size="sm"
+              className="h-7 px-2.5 text-xs gap-1.5"
+              onClick={() => setDevice("mobile")}
+            >
+              <Smartphone className="size-3.5" />
+              <span>{tCms("previewMobile")}</span>
+            </Button>
+          </div>
         </div>
       </div>
 
       {/* Main Split Grid: Editor (Left) & Live Preview (Right) */}
       <div className="grid gap-6 lg:grid-cols-12 items-start">
         {/* Left Column: Form Controls */}
-        <div className="lg:col-span-6 space-y-4">
-          {/* Operational Separation Notice Card */}
-          <Card className="border-primary/30 bg-primary/5 shadow-xs">
-            <CardContent className="p-3.5 flex items-start gap-3">
-              <Info className="size-4 text-primary shrink-0 mt-0.5" />
-              <div className="text-xs space-y-1">
-                <p className="font-semibold text-foreground">{tCms("dataNoticeOperational")}</p>
-                <p className="text-muted-foreground leading-relaxed">
-                  {tCms("packagesDataNotice")}
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-
+        <div className="lg:col-span-6 space-y-6">
+          {/* SECTION 1: Headline, Narrative & Weather Guarantee Vow */}
           <Card className="bg-card shadow-xs">
-            <CardHeader>
-              <CardTitle className="text-base font-semibold">{tCms("packagesTitle")}</CardTitle>
-              <CardDescription className="text-xs">{tCms("packagesDesc")}</CardDescription>
+            <CardHeader className="pb-3 border-b">
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle className="font-serif text-base font-semibold">
+                    {tCms("sectionPackagesIntro")}
+                  </CardTitle>
+                  <CardDescription className="text-xs">{tCms("packagesDesc")}</CardDescription>
+                </div>
+              </div>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-4 pt-4">
               <div className="space-y-1.5">
-                <Label className="text-xs font-medium text-foreground">
+                <Label htmlFor="season-tag" className="text-xs font-medium">
                   {tCms("labelSeasonTag")}
                 </Label>
                 <Input
-                  className="h-8 text-xs"
+                  id="season-tag"
                   value={content.seasonTag}
-                  onChange={(e) => handleChange("seasonTag", e.target.value)}
+                  onChange={(e) => handleIntroChange("seasonTag", e.target.value)}
+                  className="h-8 text-xs font-sans"
                 />
               </div>
 
               <div className="space-y-1.5">
-                <Label className="text-xs font-medium text-foreground">
+                <Label htmlFor="intro-title" className="text-xs font-medium">
                   {tCms("labelPackagesHeading")}
                 </Label>
                 <Input
-                  className="h-8 text-xs font-serif font-medium text-base"
+                  id="intro-title"
                   value={content.title}
-                  onChange={(e) => handleChange("title", e.target.value)}
+                  onChange={(e) => handleIntroChange("title", e.target.value)}
+                  className="h-8 text-xs font-sans"
                 />
               </div>
 
               <div className="space-y-1.5">
-                <Label className="text-xs font-medium text-foreground">
+                <Label htmlFor="intro-subtitle" className="text-xs font-medium">
                   {tCms("labelPackagesSubtitle")}
                 </Label>
                 <Input
-                  className="h-8 text-xs"
+                  id="intro-subtitle"
                   value={content.subtitle}
-                  onChange={(e) => handleChange("subtitle", e.target.value)}
+                  onChange={(e) => handleIntroChange("subtitle", e.target.value)}
+                  className="h-8 text-xs font-sans"
                 />
               </div>
 
-              <div className="space-y-1.5">
-                <Label className="text-xs font-medium text-foreground">
-                  {tCms("labelVowTitle")}
-                </Label>
-                <Input
-                  className="h-8 text-xs"
-                  value={content.vowTitle}
-                  onChange={(e) => handleChange("vowTitle", e.target.value)}
-                />
-              </div>
+              <div className="grid grid-cols-2 gap-3 pt-2 border-t">
+                <div className="space-y-1.5">
+                  <Label htmlFor="vow-title" className="text-xs font-medium">
+                    {tCms("labelVowTitle")}
+                  </Label>
+                  <Input
+                    id="vow-title"
+                    value={content.vowTitle}
+                    onChange={(e) => handleIntroChange("vowTitle", e.target.value)}
+                    className="h-8 text-xs font-sans"
+                  />
+                </div>
 
-              <div className="space-y-1.5">
-                <Label className="text-xs font-medium text-foreground">
-                  {tCms("labelVowSubtitle")}
-                </Label>
-                <Input
-                  className="h-8 text-xs"
-                  value={content.vowSubtitle}
-                  onChange={(e) => handleChange("vowSubtitle", e.target.value)}
-                />
+                <div className="space-y-1.5">
+                  <Label htmlFor="vow-subtitle" className="text-xs font-medium">
+                    {tCms("labelVowSubtitle")}
+                  </Label>
+                  <Input
+                    id="vow-subtitle"
+                    value={content.vowSubtitle}
+                    onChange={(e) => handleIntroChange("vowSubtitle", e.target.value)}
+                    className="h-8 text-xs font-sans"
+                  />
+                </div>
+              </div>
+            </CardContent>
+            <CardFooter className="flex items-center justify-between border-t pt-3 bg-muted/10">
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-8 text-xs gap-1.5"
+                onClick={() => setIsResetIntroDialogOpen(true)}
+              >
+                <RotateCcw className="size-3" />
+                <span>{tCms("btnResetPackagesIntro")}</span>
+              </Button>
+
+              <div className="flex items-center gap-2">
+                {savedIntro && (
+                  <Badge
+                    variant="outline"
+                    className="gap-1 border-emerald-500/50 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs"
+                  >
+                    <Check className="size-3" />
+                    <span>{tCms("sectionSavedSuccess")}</span>
+                  </Badge>
+                )}
+                <Button
+                  size="sm"
+                  className="h-8 text-xs gap-1.5"
+                  onClick={handleSaveIntro}
+                  disabled={savingIntro}
+                >
+                  {savingIntro ? (
+                    <Loader2 className="size-3.5 animate-spin" />
+                  ) : (
+                    <Save className="size-3.5" />
+                  )}
+                  <span>{savingIntro ? tCms("btnSaving") : tCms("btnSavePackagesIntro")}</span>
+                </Button>
+              </div>
+            </CardFooter>
+          </Card>
+
+          {/* SECTION 2: Storefront Showcase Cards (Visual Presentation) */}
+          <Card className="bg-card shadow-xs">
+            <CardHeader className="pb-3 border-b">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                <div>
+                  <CardTitle className="font-serif text-base font-semibold">
+                    {tCms("sectionPackagesCards")}
+                  </CardTitle>
+                  <CardDescription className="text-xs">{tCms("dialogCardDesc")}</CardDescription>
+                </div>
+                <Button
+                  size="sm"
+                  className="h-8 text-xs gap-1.5 shrink-0"
+                  onClick={openAddCardDialog}
+                >
+                  <Plus className="size-3.5" />
+                  <span>{tCms("btnAddPackageCard")}</span>
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-3 pt-4">
+              {content.cards.length === 0 ? (
+                <div className="py-8 text-center text-xs text-muted-foreground">
+                  {tCms("noPackageCards")}
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  {content.cards.map((card, index) => {
+                    const linkedPkg = findLinkedPackage(card.packageId);
+                    return (
+                      <div
+                        key={card.id}
+                        className="flex items-center justify-between gap-3 p-2.5 border rounded-lg bg-card hover:bg-muted/30 transition-colors"
+                      >
+                        <div className="flex items-center gap-3 min-w-0">
+                          {/* Arched Thumbnail Preview */}
+                          <div className="relative w-10 h-14 rounded-t-lg rounded-b-sm overflow-hidden bg-muted border shrink-0">
+                            <Image
+                              src={card.thumbnailUrl}
+                              alt={linkedPkg?.title || card.packageId}
+                              fill
+                              unoptimized
+                              className="object-cover"
+                            />
+                          </div>
+
+                          {/* Card Details */}
+                          <div className="flex flex-col min-w-0">
+                            <div className="flex items-center gap-1.5 flex-wrap">
+                              <span className="font-medium text-xs text-foreground truncate">
+                                {linkedPkg ? linkedPkg.title : tCms("unlinkedPackageWarning")}
+                              </span>
+                              {card.badge && (
+                                <Badge
+                                  variant="secondary"
+                                  className="text-[10px] px-1.5 py-0 font-medium"
+                                >
+                                  {card.badge}
+                                </Badge>
+                              )}
+                            </div>
+                            <span className="text-[11px] text-muted-foreground font-mono">
+                              {`${linkedPkg ? formatPrice(linkedPkg.basePrice) : "-"} • ${tCms("cardHighlightsCount", { count: card.customFeatures.length })}`}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Controls */}
+                        <div className="flex items-center gap-1 shrink-0">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-7 w-7 p-0"
+                            onClick={() => handleMoveCard(index, "up")}
+                            disabled={index === 0}
+                            aria-label={tCms("btnMoveUp")}
+                          >
+                            <ArrowUp className="size-3" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-7 w-7 p-0"
+                            onClick={() => handleMoveCard(index, "down")}
+                            disabled={index === content.cards.length - 1}
+                            aria-label={tCms("btnMoveDown")}
+                          >
+                            <ArrowDown className="size-3" />
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-7 text-xs px-2"
+                            onClick={() => openEditCardDialog(card)}
+                          >
+                            <span>{tCms("btnEditCard")}</span>
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-7 w-7 p-0 text-destructive hover:text-destructive"
+                            onClick={() => openDeleteCardDialog(card)}
+                            aria-label={tCms("btnDeleteCard")}
+                          >
+                            <Trash2 className="size-3" />
+                          </Button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </CardContent>
+            <CardFooter className="flex items-center justify-between border-t pt-3 bg-muted/10">
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-8 text-xs gap-1.5"
+                onClick={() => setIsResetCardsDialogOpen(true)}
+              >
+                <RotateCcw className="size-3" />
+                <span>{tCms("btnResetPackagesCards")}</span>
+              </Button>
+
+              <div className="flex items-center gap-2">
+                {savedCards && (
+                  <Badge
+                    variant="outline"
+                    className="gap-1 border-emerald-500/50 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs"
+                  >
+                    <Check className="size-3" />
+                    <span>{tCms("sectionSavedSuccess")}</span>
+                  </Badge>
+                )}
+                <Button
+                  size="sm"
+                  className="h-8 text-xs gap-1.5"
+                  onClick={handleSaveCards}
+                  disabled={savingCards}
+                >
+                  {savingCards ? (
+                    <Loader2 className="size-3.5 animate-spin" />
+                  ) : (
+                    <Save className="size-3.5" />
+                  )}
+                  <span>{savingCards ? tCms("btnSaving") : tCms("btnSavePackagesCards")}</span>
+                </Button>
+              </div>
+            </CardFooter>
+          </Card>
+        </div>
+
+        {/* Right Column: Live Storefront Preview */}
+        <div className="lg:col-span-6 sticky top-20">
+          <Card className="overflow-hidden border shadow-sm">
+            <CardHeader className="py-2.5 px-4 border-b bg-muted/40">
+              <div className="flex items-center justify-between">
+                <span className="font-mono text-xs text-muted-foreground">
+                  {"gradsun.studio/packages"}
+                </span>
+                <Badge variant="outline" className="text-[10px] uppercase font-mono">
+                  {`${device} view`}
+                </Badge>
+              </div>
+            </CardHeader>
+            <CardContent className="p-0 bg-background max-h-[80vh] overflow-y-auto">
+              <div
+                className={`mx-auto transition-all duration-300 p-4 sm:p-6 ${
+                  isMobile ? "max-w-[360px]" : "w-full"
+                }`}
+              >
+                {/* Header Intro */}
+                <div className="space-y-2 pb-6 border-b">
+                  <Badge
+                    variant="outline"
+                    className="text-[10px] tracking-wide uppercase px-2 py-0.5 border-primary/30 text-primary font-sans"
+                  >
+                    {content.seasonTag}
+                  </Badge>
+                  <h1 className="font-serif text-xl sm:text-2xl font-bold tracking-tight text-foreground">
+                    {content.title}
+                  </h1>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    {content.subtitle}
+                  </p>
+
+                  {/* Weather Guarantee Banner */}
+                  <div className="flex items-center gap-2 p-2.5 rounded-lg border bg-amber-500/10 border-amber-500/20 text-foreground mt-3">
+                    <Sun className="size-4 text-amber-500 shrink-0" />
+                    <div className="flex flex-col">
+                      <span className="text-[11px] font-semibold">{content.vowTitle}</span>
+                      <span className="text-[10px] text-muted-foreground">
+                        {content.vowSubtitle}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Arched Showcase Cards Grid */}
+                <div className="pt-6">
+                  <div
+                    className={`grid gap-4 ${
+                      isMobile ? "grid-cols-1" : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+                    }`}
+                  >
+                    {content.cards.map((card) => {
+                      const linkedPkg = findLinkedPackage(card.packageId);
+                      return (
+                        <div
+                          key={card.id}
+                          className="rounded-t-[2.5rem] rounded-b-xl border bg-card p-3 shadow-2xs flex flex-col justify-between"
+                        >
+                          <div>
+                            {/* Arched Top Image */}
+                            <div className="relative aspect-[3/4] rounded-t-[2.2rem] rounded-b-lg overflow-hidden bg-muted mb-3">
+                              <Image
+                                src={card.thumbnailUrl}
+                                alt={linkedPkg?.title || "Package thumbnail"}
+                                fill
+                                unoptimized
+                                className="object-cover"
+                              />
+                              {card.badge && (
+                                <Badge className="absolute top-2.5 left-2.5 bg-background/90 text-foreground backdrop-blur-xs text-[10px] font-medium shadow-xs border">
+                                  {card.badge}
+                                </Badge>
+                              )}
+                            </div>
+
+                            {/* Title & Price */}
+                            <div className="space-y-1 mb-3">
+                              <h3 className="font-serif text-sm font-bold text-foreground">
+                                {linkedPkg ? linkedPkg.title : tCms("unlinkedPackageWarning")}
+                              </h3>
+                              <p className="font-mono text-xs font-semibold text-primary">
+                                {linkedPkg ? formatPrice(linkedPkg.basePrice) : "-"}
+                              </p>
+                              {linkedPkg && (
+                                <p className="text-[10px] text-muted-foreground">
+                                  {`${linkedPkg.durationMinutes} ${tPackages("minutesSuffix")} • ${linkedPkg.editQuota} ${tPackages("photosSuffix")}`}
+                                </p>
+                              )}
+                            </div>
+
+                            {/* Features list */}
+                            {card.customFeatures.length > 0 && (
+                              <ul className="space-y-1 mb-4">
+                                {card.customFeatures.map((feat) => (
+                                  <li
+                                    key={`${card.id}-${feat}`}
+                                    className="flex items-start gap-1.5 text-[10px] text-muted-foreground"
+                                  >
+                                    <Check className="size-3 text-emerald-500 shrink-0 mt-0.5" />
+                                    <span>{feat}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            )}
+                          </div>
+
+                          <Button size="sm" className="w-full h-7 text-[11px] mt-2">
+                            {tCms("btnBookTier")}
+                          </Button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
               </div>
             </CardContent>
           </Card>
         </div>
-
-        {/* Right Column: Live Preview */}
-        <div className="lg:col-span-6 sticky top-20 space-y-3">
-          <div className="flex items-center justify-between p-2 rounded-xl border bg-card shadow-xs">
-            <div className="flex items-center gap-1.5">
-              <Badge
-                variant="outline"
-                className="gap-1 border-primary/40 text-primary font-mono text-[10px] uppercase tracking-wider"
-              >
-                <Eye className="size-3 text-primary animate-pulse" />
-                <span>{tCms("previewBadge")}</span>
-              </Badge>
-              <span className="hidden sm:inline text-[11px] text-muted-foreground">
-                {tCms("liveSyncActive")}
-              </span>
-            </div>
-
-            <div className="flex items-center gap-1">
-              <Button
-                variant={device === "desktop" ? "secondary" : "ghost"}
-                size="sm"
-                className="h-7 px-2 gap-1 text-xs"
-                onClick={() => setDevice("desktop")}
-              >
-                <Laptop className="size-3.5" />
-                <span>{tCms("previewDesktop")}</span>
-              </Button>
-              <Button
-                variant={device === "mobile" ? "secondary" : "ghost"}
-                size="sm"
-                className="h-7 px-2 gap-1 text-xs"
-                onClick={() => setDevice("mobile")}
-              >
-                <Smartphone className="size-3.5" />
-                <span>{tCms("previewMobile")}</span>
-              </Button>
-            </div>
-          </div>
-
-          {/* Interactive Live View */}
-          <div
-            className={`mx-auto transition-all duration-300 rounded-2xl border-2 border-border shadow-lg bg-background overflow-hidden ${
-              isMobile ? "max-w-[340px]" : "w-full"
-            }`}
-          >
-            {/* Device Browser Bar */}
-            <div className="flex items-center justify-between px-3 py-2 border-b bg-muted/60 text-[11px] text-muted-foreground select-none">
-              <div className="flex items-center gap-1.5">
-                <div className="size-2 rounded-full bg-rose-400" />
-                <div className="size-2 rounded-full bg-amber-400" />
-                <div className="size-2 rounded-full bg-emerald-400" />
-              </div>
-              <div className="font-mono text-[10px] px-2 py-0.5 rounded bg-background/80 border text-muted-foreground">
-                {isMobile ? "gradsun.studio/packages (mobile)" : "gradsun.studio/packages"}
-              </div>
-              <div className="size-2" />
-            </div>
-
-            {/* Live Packages Header & Weather Vow */}
-            <div className="p-4 sm:p-6 space-y-6 max-h-[640px] overflow-y-auto">
-              <div className="space-y-3">
-                <Badge
-                  variant="outline"
-                  className="gap-1.5 px-2.5 py-0.5 text-[10px] uppercase font-mono tracking-wider border-border"
-                >
-                  <Sparkles className="size-3 text-primary" />
-                  <span>{content.seasonTag}</span>
-                </Badge>
-
-                <h1 className="font-serif text-2xl sm:text-3xl tracking-tight text-foreground">
-                  {content.title}
-                </h1>
-
-                <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                  {content.subtitle}
-                </p>
-              </div>
-
-              {/* Weather Vow Guarantee Banner */}
-              <div className="p-3.5 rounded-xl border border-amber-500/30 bg-amber-500/5 space-y-1">
-                <div className="flex items-center gap-2">
-                  <CloudSun className="size-4 text-amber-500" />
-                  <span className="text-xs font-semibold text-foreground">{content.vowTitle}</span>
-                </div>
-                <p className="text-[11px] text-muted-foreground leading-relaxed pl-6">
-                  {content.vowSubtitle}
-                </p>
-              </div>
-
-              {/* Sample Package Preview Card */}
-              <div className="p-3.5 rounded-xl border bg-card space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-foreground">
-                    {tCms("samplePackageTitle")}
-                  </span>
-                  <span className="text-xs font-semibold text-primary font-mono">
-                    {tCms("samplePackagePrice")}
-                  </span>
-                </div>
-                <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground">
-                  <ShieldCheck className="size-3 text-emerald-500" />
-                  <span>{tCms("samplePackageDetails")}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
+
+      {/* Add / Edit Presentation Card Dialog */}
+      <Dialog open={isCardDialogOpen} onOpenChange={setIsCardDialogOpen}>
+        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="font-serif">
+              {editingCardId ? tCms("dialogEditCardTitle") : tCms("dialogAddCardTitle")}
+            </DialogTitle>
+            <DialogDescription className="text-xs font-sans">
+              {tCms("dialogCardDesc")}
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4 py-2">
+            {/* Select Master Package */}
+            <div className="space-y-1.5">
+              <Label className="text-xs font-medium">{tCms("labelSelectPackage")}</Label>
+              <Select value={cardPackageId} onValueChange={setCardPackageId}>
+                <SelectTrigger className="h-8 text-xs w-full">
+                  <SelectValue placeholder={tCms("labelSelectPackage")} />
+                </SelectTrigger>
+                <SelectContent>
+                  {availablePackages.map((pkg) => (
+                    <SelectItem key={pkg.id} value={pkg.id} className="text-xs">
+                      {`${pkg.title} (${formatPrice(pkg.basePrice)})`}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Arched Thumbnail Photo via ImageUploaderField */}
+            <ImageUploaderField
+              label={tCms("labelCardThumbnail")}
+              value={cardThumbnailUrl}
+              onChange={setCardThumbnailUrl}
+              folder="packages"
+            />
+
+            {/* Marketing Ribbon Badge */}
+            <div className="space-y-1.5">
+              <Label htmlFor="card-badge" className="text-xs font-medium">
+                {tCms("labelCardBadge")}
+              </Label>
+              <Input
+                id="card-badge"
+                value={cardBadge}
+                onChange={(e) => setCardBadge(e.target.value)}
+                placeholder={tCms("placeholderCardBadge")}
+                className="h-8 text-xs font-sans"
+              />
+            </div>
+
+            {/* Custom Features Bullets */}
+            <div className="space-y-2 pt-2 border-t">
+              <div className="flex items-center justify-between">
+                <Label className="text-xs font-medium">{tCms("labelCardFeatures")}</Label>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="h-7 text-xs gap-1"
+                  onClick={handleAddFeatureBullet}
+                >
+                  <Plus className="size-3" />
+                  <span>{tCms("btnAddFeatureBullet")}</span>
+                </Button>
+              </div>
+
+              <div className="space-y-1.5">
+                {cardFeatures.map((feat, idx) => (
+                  // biome-ignore lint/suspicious/noArrayIndexKey: form inputs
+                  <div key={idx} className="flex items-center gap-2">
+                    <Input
+                      value={feat}
+                      onChange={(e) => handleFeatureChange(idx, e.target.value)}
+                      placeholder={tCms("placeholderFeature")}
+                      className="h-8 text-xs font-sans flex-1"
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      className="h-8 w-8 p-0 text-destructive"
+                      onClick={() => handleRemoveFeature(idx)}
+                      aria-label={tCms("btnRemoveBullet")}
+                    >
+                      <Trash2 className="size-3.5" />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <DialogFooter className="gap-2 sm:gap-0">
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-8 text-xs"
+              onClick={() => setIsCardDialogOpen(false)}
+            >
+              {tPackages("btnCancel")}
+            </Button>
+            <Button size="sm" className="h-8 text-xs" onClick={handleSaveCardModal}>
+              {tPackages("btnSave")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Card Confirmation Dialog */}
+      <Dialog open={isDeleteCardDialogOpen} onOpenChange={setIsDeleteCardDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="font-serif">{tCms("dialogDeleteCardTitle")}</DialogTitle>
+            <DialogDescription className="text-xs font-sans">
+              {tCms("dialogDeleteCardDesc")}
+            </DialogDescription>
+          </DialogHeader>
+
+          <DialogFooter className="gap-2 sm:gap-0">
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-8 text-xs"
+              onClick={() => setIsDeleteCardDialogOpen(false)}
+            >
+              {tPackages("btnCancel")}
+            </Button>
+            <Button
+              variant="destructive"
+              size="sm"
+              className="h-8 text-xs"
+              onClick={handleDeleteCardConfirm}
+            >
+              {tCms("btnDeleteCard")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Reset Section 1 Confirmation Dialog */}
+      <Dialog open={isResetIntroDialogOpen} onOpenChange={setIsResetIntroDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="font-serif">
+              {tCms("dialogResetPackagesIntroTitle")}
+            </DialogTitle>
+            <DialogDescription className="text-xs font-sans">
+              {tCms("dialogResetPackagesIntroDesc")}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="gap-2 sm:gap-0">
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-8 text-xs"
+              onClick={() => setIsResetIntroDialogOpen(false)}
+            >
+              {tCms("btnCancel")}
+            </Button>
+            <Button size="sm" className="h-8 text-xs" onClick={handleResetIntro}>
+              {tCms("btnConfirmReset")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Reset Section 2 Confirmation Dialog */}
+      <Dialog open={isResetCardsDialogOpen} onOpenChange={setIsResetCardsDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="font-serif">
+              {tCms("dialogResetPackagesCardsTitle")}
+            </DialogTitle>
+            <DialogDescription className="text-xs font-sans">
+              {tCms("dialogResetPackagesCardsDesc")}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="gap-2 sm:gap-0">
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-8 text-xs"
+              onClick={() => setIsResetCardsDialogOpen(false)}
+            >
+              {tCms("btnCancel")}
+            </Button>
+            <Button size="sm" className="h-8 text-xs" onClick={handleResetCards}>
+              {tCms("btnConfirmReset")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

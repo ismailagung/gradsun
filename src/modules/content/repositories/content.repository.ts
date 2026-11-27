@@ -5,6 +5,7 @@ import {
   contentSettingsSchema,
   DEFAULT_GALLERY_CONTENT,
   DEFAULT_HOME_CONTENT,
+  DEFAULT_PACKAGES_CONTENT,
 } from "../schemas/content-settings.schema";
 
 export interface IContentRepository {
@@ -17,14 +18,7 @@ export const CONTENT_SETTING_KEY = "content_settings";
 export const DEFAULT_CONTENT_SETTINGS: ContentSettings = {
   home: DEFAULT_HOME_CONTENT,
   gallery: DEFAULT_GALLERY_CONTENT,
-  packages: {
-    seasonTag: "Commencement Season 2025",
-    title: "Reserve Your Golden Hour Chapter",
-    subtitle:
-      "Secure your commencement date with our stress-free reservation flow. Tailored lighting, tactile memory folios, and seamless coordination.",
-    vowTitle: "100% Golden Weather Vow",
-    vowSubtitle: "Free reschedule for rainy days",
-  },
+  packages: DEFAULT_PACKAGES_CONTENT,
   trackOrder: {
     tag: "Client Services",
     title: "Track Your Milestone Folio",

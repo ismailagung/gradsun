@@ -9,7 +9,7 @@ describe("Admin App Sidebar Navigation Structure (TDD)", () => {
     expect(groups[1]?.labelKey).toBe("sectionContent");
   });
 
-  it("retains all original operational pages inside Studio Operations", () => {
+  it("retains core operational pages inside Studio Operations", () => {
     const groups = getAdminNavGroups((key: string) => key);
     const operationsGroup = groups[0];
     expect(operationsGroup).toBeDefined();
@@ -20,22 +20,16 @@ describe("Admin App Sidebar Navigation Structure (TDD)", () => {
       "/admin/bookings",
       "/admin/packages",
       "/admin/studios",
-      "/admin/galleries",
       "/admin/customers",
     ]);
   });
 
-  it("contains all 4 public portal client-side management pages inside Content Management", () => {
+  it("contains curated public portal management pages inside Content Management", () => {
     const groups = getAdminNavGroups((key: string) => key);
     const contentGroup = groups[1];
     expect(contentGroup).toBeDefined();
 
     const urls = contentGroup?.items.map((i) => i.url);
-    expect(urls).toEqual([
-      "/admin/content",
-      "/admin/content/gallery",
-      "/admin/content/packages",
-      "/admin/content/track-order",
-    ]);
+    expect(urls).toEqual(["/admin/content", "/admin/content/gallery", "/admin/content/packages"]);
   });
 });
