@@ -16,8 +16,7 @@ describe("Database Seeders (Idempotent & Realistic Synthetic Data)", () => {
       expect(solo?.basePrice).toBe(1500000);
       expect(solo?.editQuota).toBe(5);
       expect(solo?.durationMinutes).toBe(45);
-      expect(solo?.addons.some((a) => a.name.includes("Photobook"))).toBe(true);
-      expect(solo?.addons.some((a) => a.name.includes("Proofing"))).toBe(true);
+      expect(solo?.addons).toEqual([]);
 
       const besties = COMMENCEMENT_PACKAGES.find((p) => p.slug === "besties-and-duo");
       expect(besties).toBeDefined();
@@ -32,7 +31,7 @@ describe("Database Seeders (Idempotent & Realistic Synthetic Data)", () => {
       expect(cohort?.durationMinutes).toBe(90);
     });
 
-    it("seeds packages and add-ons idempotently using upsert", async () => {
+    it("seeds packages idempotently using upsert", async () => {
       const mockUpsert = vi.fn().mockImplementation(({ create }) => ({
         id: `mock-pkg-${create.slug}`,
         ...create,
@@ -59,25 +58,13 @@ describe("Database Seeders (Idempotent & Realistic Synthetic Data)", () => {
 
       expect(result).toHaveLength(3);
       expect(mockUpsert).toHaveBeenCalledTimes(3);
-      expect(mockCreateAddon).toHaveBeenCalled();
     });
 
-    it("updates existing add-ons when re-run to guarantee idempotency without collisions", async () => {
-      const existingAddon = {
-        id: "existing-addon-id",
-        packageId: "pkg-id",
-        name: "Fine-Art Hardcover Photobook",
-        price: 400000,
-        description: "Old description",
-        maxQuantity: 1,
-      };
-
+    it("handles packages without add-ons cleanly during seed run", async () => {
       const mockUpsert = vi.fn().mockResolvedValue({ id: "pkg-id", slug: "solo-commencement" });
-      const mockFindFirstAddon = vi.fn().mockResolvedValue(existingAddon);
+      const mockFindFirstAddon = vi.fn();
       const mockCreateAddon = vi.fn();
-      const mockUpdateAddon = vi
-        .fn()
-        .mockImplementation(({ data }) => ({ ...existingAddon, ...data }));
+      const mockUpdateAddon = vi.fn();
 
       const mockPrisma = {
         package: {
@@ -93,7 +80,7 @@ describe("Database Seeders (Idempotent & Realistic Synthetic Data)", () => {
       await seedPackages(mockPrisma);
 
       expect(mockCreateAddon).not.toHaveBeenCalled();
-      expect(mockUpdateAddon).toHaveBeenCalled();
+      expect(mockUpdateAddon).not.toHaveBeenCalled();
     });
   });
 

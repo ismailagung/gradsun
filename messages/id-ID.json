@@ -462,7 +462,7 @@
     "badgeStaff": "Staf Admin",
     "dashboard": "Dasbor",
     "bookings": "Reservasi",
-    "packages": "Paket & Add-on",
+    "packages": "Master Paket",
     "studios": "Studio & Libur",
     "galleries": "Bukti Galeri",
     "customers": "Pelanggan",
@@ -815,7 +815,7 @@
     "noSpecialNotes": "Tidak ada catatan khusus"
   },
   "adminPackages": {
-    "title": "Master Paket & Layanan Tambahan",
+    "title": "Master Paket",
     "subtitle": "Atur pilihan paket layanan, durasi sesi, kuota foto edit, dan harga.",
     "statusActive": "Aktif",
     "statusArchived": "Diarsipkan",
