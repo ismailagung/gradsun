@@ -164,11 +164,8 @@ describe("Packages CMS & Master Data Use Cases", () => {
 
   describe("UpdatePackagesContentUseCase", () => {
     const validPackagesCms: PackagesCms = {
-      seasonTag: "Commencement Season 2026",
       title: "Capture The Moment",
       subtitle: "New editorial collections.",
-      vowTitle: "Weather Guarantee Vow",
-      vowSubtitle: "Reschedule anytime within 1 year",
       cards: [
         {
           id: "card-1",

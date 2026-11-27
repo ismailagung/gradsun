@@ -1,6 +1,4 @@
-import { Sun } from "lucide-react";
 import { getTranslations } from "next-intl/server";
-import { Badge } from "@/common/components/ui/badge";
 import { ContentRepository } from "@/modules/content/repositories/content.repository";
 import { GetContentSettingsUseCase } from "@/modules/content/use-cases/get-content-settings.use-case";
 import { PackageRepository } from "@/modules/packages/repositories/package.repository";
@@ -229,33 +227,12 @@ export default async function PackagesBookingPage() {
         {/* Page Header */}
         <div className="pb-10 border-b border-border">
           <div className="flex flex-col gap-2 max-w-2xl">
-            {cmsPackages?.seasonTag && (
-              <Badge
-                variant="outline"
-                className="w-fit text-xs font-sans border-primary/30 text-primary tracking-wide uppercase px-2.5 py-0.5"
-              >
-                {cmsPackages.seasonTag}
-              </Badge>
-            )}
             <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-foreground tracking-tight">
               {cmsPackages?.title || tPkg("headerTitle")}
             </h1>
             <p className="text-sm sm:text-base text-muted-foreground mt-1">
               {cmsPackages?.subtitle || tPkg("headerSubtitle")}
             </p>
-
-            {/* Weather Guarantee Banner */}
-            {cmsPackages?.vowTitle && (
-              <div className="mt-4 flex items-center gap-3 p-3.5 rounded-xl border bg-amber-500/10 border-amber-500/20 max-w-xl">
-                <Sun className="size-5 text-amber-500 shrink-0" />
-                <div className="flex flex-col">
-                  <span className="text-xs font-semibold text-foreground">
-                    {cmsPackages.vowTitle}
-                  </span>
-                  <span className="text-xs text-muted-foreground">{cmsPackages.vowSubtitle}</span>
-                </div>
-              </div>
-            )}
           </div>
         </div>
 
