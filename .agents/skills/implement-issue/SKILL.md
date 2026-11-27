@@ -65,6 +65,7 @@ This skill defines the standard procedure for implementing an assigned GitHub Is
     gh issue comment <N> --body "Implementation complete. Opened PR #<PR_NUMBER> for review."
     ```
 
-11. **SemVer Advisory & Release Prompt:**
+11. **Decisive SemVer Advisory & Changelog Hygiene:**
     - Immediately after PR merge, inspect the pending Release Please PR.
-    - Explicitly advise the user whether to bump the release version now (e.g. milestone reached) or stay on the current version while further issues are developed.
+    - Provide a decisive, opinionated recommendation (YES or NO)—never ambiguous options—on whether to cut a release now (milestone completed) or hold off.
+    - Before cutting any release, audit the release notes to ensure strict net-delta compliance ($\Delta = \text{State}(V_{\text{curr}}) - \text{State}(V_{\text{prev}})$), removing any intermediate draft churn or self-canceling internal commits ($\Delta = 0$).

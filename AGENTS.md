@@ -27,7 +27,9 @@ Welcome, agentic collaborators. This repository is built strictly with Next.js 1
 5. **TDD Iron Law:** Write failing unit tests in `tests/unit/` before writing use-case or repository implementations.
 6. **Data Privacy:** Real customer names, phone numbers, or credentials are strictly forbidden in repo commits, seeders, or test fixtures. Use fake data only.
 7. **Language Mandate:** 100% US English (`en-US`) across all code, identifiers, comments, commit messages, and PRs (enforced by `cspell`).
-8. **SemVer Advisory Mandate:** After merging any issue PR, the agent MUST explicitly advise the user whether to cut a new release (merge the pending Release Please PR to bump version) or stay on the current version.
+8. **Decisive SemVer & Net-Delta Changelog Mandate:**
+   - **Opinionated Release Guidance:** After merging any issue PR, the agent MUST provide a decisive, opinionated recommendation (YES or NO)—never ambiguous options—on whether to cut a new release or stay on the current version based on milestone completeness.
+   - **Net-Delta Changelog Hygiene:** Changelogs and Release Notes MUST strictly represent the net delta between the previous release and current release ($\Delta = \text{State}(V_{\text{curr}}) - \text{State}(V_{\text{prev}})$). Only 3 categories qualify: Added (absent before, present now), Changed/Fixed (A before, B now), or Removed (present before, deleted now). Intermediate draft churn, self-canceling experiments, or features added and removed during the same development cycle ($\Delta = 0$) are strictly forbidden from release notes.
 
 ## The 6 Mechanical Laws
 
