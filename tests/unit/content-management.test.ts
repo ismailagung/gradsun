@@ -48,8 +48,7 @@ describe("Content Management System (TDD)", () => {
     expect(settings.gallery.subtitle).toBeDefined();
 
     // Packages Page CMS
-    expect(settings.packages.seasonTag).toBe("Commencement Season 2025");
-    expect(settings.packages.vowTitle).toBe("100% Golden Weather Vow");
+    expect(settings.packages.title).toBe("Reserve Your Golden Hour Chapter");
 
     // Track Order Page CMS
     expect(settings.trackOrder.title).toBe("Track Your Milestone Folio");
@@ -101,7 +100,7 @@ describe("Content Management System (TDD)", () => {
       },
       packages: {
         ...current.packages,
-        vowTitle: "Flexible Weather Assurance Guarantee",
+        title: "Exclusive Commencement Packages",
       },
       trackOrder: {
         ...current.trackOrder,
@@ -110,7 +109,7 @@ describe("Content Management System (TDD)", () => {
     });
 
     expect(updated.gallery.title).toBe("Exclusive Graduation Archives");
-    expect(updated.packages.vowTitle).toBe("Flexible Weather Assurance Guarantee");
+    expect(updated.packages.title).toBe("Exclusive Commencement Packages");
     expect(updated.trackOrder.title).toBe("Check Your Delivery Status");
   });
 

@@ -11,7 +11,6 @@ import {
   RotateCcw,
   Save,
   Smartphone,
-  Sun,
   Trash2,
 } from "lucide-react";
 import Image from "next/image";
@@ -129,8 +128,6 @@ export function CmsPackagesEditor({ initialContent, availablePackages }: CmsPack
       seasonTag: DEFAULT_PACKAGES_CONTENT.seasonTag,
       title: DEFAULT_PACKAGES_CONTENT.title,
       subtitle: DEFAULT_PACKAGES_CONTENT.subtitle,
-      vowTitle: DEFAULT_PACKAGES_CONTENT.vowTitle,
-      vowSubtitle: DEFAULT_PACKAGES_CONTENT.vowSubtitle,
     }));
     setIsResetIntroDialogOpen(false);
     setSavedIntro(false);
@@ -338,18 +335,6 @@ export function CmsPackagesEditor({ initialContent, availablePackages }: CmsPack
             </CardHeader>
             <CardContent className="space-y-4 pt-4">
               <div className="space-y-1.5">
-                <Label htmlFor="season-tag" className="text-xs font-medium">
-                  {tCms("labelSeasonTag")}
-                </Label>
-                <Input
-                  id="season-tag"
-                  value={content.seasonTag}
-                  onChange={(e) => handleIntroChange("seasonTag", e.target.value)}
-                  className="h-8 text-xs font-sans"
-                />
-              </div>
-
-              <div className="space-y-1.5">
                 <Label htmlFor="intro-title" className="text-xs font-medium">
                   {tCms("labelPackagesHeading")}
                 </Label>
@@ -371,32 +356,6 @@ export function CmsPackagesEditor({ initialContent, availablePackages }: CmsPack
                   onChange={(e) => handleIntroChange("subtitle", e.target.value)}
                   className="h-8 text-xs font-sans"
                 />
-              </div>
-
-              <div className="grid grid-cols-2 gap-3 pt-2 border-t">
-                <div className="space-y-1.5">
-                  <Label htmlFor="vow-title" className="text-xs font-medium">
-                    {tCms("labelVowTitle")}
-                  </Label>
-                  <Input
-                    id="vow-title"
-                    value={content.vowTitle}
-                    onChange={(e) => handleIntroChange("vowTitle", e.target.value)}
-                    className="h-8 text-xs font-sans"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <Label htmlFor="vow-subtitle" className="text-xs font-medium">
-                    {tCms("labelVowSubtitle")}
-                  </Label>
-                  <Input
-                    id="vow-subtitle"
-                    value={content.vowSubtitle}
-                    onChange={(e) => handleIntroChange("vowSubtitle", e.target.value)}
-                    className="h-8 text-xs font-sans"
-                  />
-                </div>
               </div>
             </CardContent>
             <CardFooter className="flex items-center justify-between border-t pt-3 bg-muted/10">
@@ -610,29 +569,12 @@ export function CmsPackagesEditor({ initialContent, availablePackages }: CmsPack
               >
                 {/* Header Intro */}
                 <div className="space-y-2 pb-6 border-b">
-                  <Badge
-                    variant="outline"
-                    className="text-[10px] tracking-wide uppercase px-2 py-0.5 border-primary/30 text-primary font-sans"
-                  >
-                    {content.seasonTag}
-                  </Badge>
                   <h1 className="font-serif text-xl sm:text-2xl font-bold tracking-tight text-foreground">
                     {content.title}
                   </h1>
                   <p className="text-xs text-muted-foreground leading-relaxed">
                     {content.subtitle}
                   </p>
-
-                  {/* Weather Guarantee Banner */}
-                  <div className="flex items-center gap-2 p-2.5 rounded-lg border bg-amber-500/10 border-amber-500/20 text-foreground mt-3">
-                    <Sun className="size-4 text-amber-500 shrink-0" />
-                    <div className="flex flex-col">
-                      <span className="text-[11px] font-semibold">{content.vowTitle}</span>
-                      <span className="text-[10px] text-muted-foreground">
-                        {content.vowSubtitle}
-                      </span>
-                    </div>
-                  </div>
                 </div>
 
                 {/* Arched Showcase Cards Grid */}

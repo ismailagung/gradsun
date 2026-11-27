@@ -61,11 +61,11 @@ export const packageCardPresentationSchema = z.object({
 });
 
 export const packagesCmsSchema = z.object({
-  seasonTag: z.string().min(1),
+  seasonTag: z.string().optional(),
   title: z.string().min(1),
   subtitle: z.string().min(1),
-  vowTitle: z.string().min(1),
-  vowSubtitle: z.string().min(1),
+  vowTitle: z.string().optional(),
+  vowSubtitle: z.string().optional(),
   cards: z.array(packageCardPresentationSchema).default([]),
 });
 
@@ -216,12 +216,9 @@ export const DEFAULT_PACKAGES_CARDS: PackageCardPresentation[] = [
 ];
 
 export const DEFAULT_PACKAGES_CONTENT: PackagesCms = {
-  seasonTag: "Commencement Season 2025",
   title: "Reserve Your Golden Hour Chapter",
   subtitle:
     "Secure your commencement date with our stress-free reservation flow. Tailored lighting, tactile memory folios, and seamless coordination.",
-  vowTitle: "100% Golden Weather Vow",
-  vowSubtitle: "Free reschedule for rainy days",
   cards: DEFAULT_PACKAGES_CARDS,
 };
 
