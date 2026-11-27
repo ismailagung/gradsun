@@ -9,6 +9,8 @@ export const homeHeroSchema = z.object({
   primaryCta: z.string().min(1),
   secondaryCta: z.string().min(1),
   badgeTitle: z.string().min(1),
+  heroImageUrl: z.string().min(1),
+  polaroidImageUrl: z.string().min(1),
 });
 
 export const homeManifestoSchema = z.object({

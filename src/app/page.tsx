@@ -5,8 +5,15 @@ import { getTranslations } from "next-intl/server";
 import { Badge } from "@/common/components/ui/badge";
 import { Button } from "@/common/components/ui/button";
 import { Card, CardContent } from "@/common/components/ui/card";
+import { ContentRepository } from "@/modules/content/repositories/content.repository";
+import { GetContentSettingsUseCase } from "@/modules/content/use-cases/get-content-settings.use-case";
 
 export default async function HomePage() {
+  const contentRepo = new ContentRepository();
+  const getContentUseCase = new GetContentSettingsUseCase(contentRepo);
+  const settings = await getContentUseCase.execute();
+  const homeContent = settings.home;
+
   const tHero = await getTranslations("hero");
   const tPortfolio = await getTranslations("landingPortfolio");
   const tPkg = await getTranslations("packagesSummary");
@@ -27,24 +34,26 @@ export default async function HomePage() {
                 className="gap-2 px-3.5 py-1 text-xs font-normal border border-border"
               >
                 <Sun className="size-3.5 text-primary animate-pulse" />
-                <span>{tHero("badge")}</span>
+                <span>{homeContent.hero.badge || tHero("badge")}</span>
               </Badge>
 
               <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl tracking-tight leading-[1.1] text-foreground">
-                <span>{tHero("titlePart1")}</span>{" "}
-                <span className="italic text-primary">{tHero("titleHighlight")}</span>{" "}
-                <span>{tHero("titlePart2")}</span>
+                <span>{homeContent.hero.titlePart1 || tHero("titlePart1")}</span>{" "}
+                <span className="italic text-primary">
+                  {homeContent.hero.titleHighlight || tHero("titleHighlight")}
+                </span>{" "}
+                <span>{homeContent.hero.titlePart2 || tHero("titlePart2")}</span>
               </h1>
 
               <p className="text-base sm:text-lg text-muted-foreground max-w-xl leading-relaxed">
-                {tHero("subtitle")}
+                {homeContent.hero.subtitle || tHero("subtitle")}
               </p>
 
               <div className="flex flex-wrap items-center gap-4 pt-2 w-full sm:w-auto">
                 <Button size="lg" asChild className="gap-2 rounded-xl shadow-sm text-sm">
                   <Link href="/packages">
                     <Sparkles className="size-4" />
-                    <span>{tHero("primaryCta")}</span>
+                    <span>{homeContent.hero.primaryCta || tHero("primaryCta")}</span>
                   </Link>
                 </Button>
                 <Button
@@ -54,7 +63,7 @@ export default async function HomePage() {
                   className="gap-2 rounded-xl text-sm border-border"
                 >
                   <Link href="/gallery">
-                    <span>{tHero("secondaryCta")}</span>
+                    <span>{homeContent.hero.secondaryCta || tHero("secondaryCta")}</span>
                     <ArrowRight className="size-4" />
                   </Link>
                 </Button>
@@ -67,7 +76,7 @@ export default async function HomePage() {
                 {/* Main Arched Frame */}
                 <div className="relative rounded-t-[10rem] rounded-b-3xl overflow-hidden border border-border bg-card shadow-xl aspect-[3/4]">
                   <Image
-                    src="/logo-bg.jpg"
+                    src={homeContent.hero.heroImageUrl || "/logo-bg.jpg"}
                     alt={tHero("imageAlt")}
                     fill
                     className="object-cover"
@@ -80,7 +89,7 @@ export default async function HomePage() {
                 <div className="absolute -bottom-6 -left-6 sm:-left-8 w-44 sm:w-52 p-2.5 rounded-2xl bg-white border-2 border-border shadow-2xl rotate-[-3deg] transition-transform duration-300 hover:rotate-0">
                   <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden bg-muted border border-border/40">
                     <Image
-                      src="/logo-bg.jpg"
+                      src={homeContent.hero.polaroidImageUrl || "/logo-bg.jpg"}
                       alt={tHero("imageAlt")}
                       fill
                       className="object-cover"
@@ -88,7 +97,7 @@ export default async function HomePage() {
                   </div>
                   <div className="pt-2 px-1 flex items-center justify-between">
                     <span className="text-[11px] font-medium text-muted-foreground italic">
-                      {tHero("badgeTitle")}
+                      {homeContent.hero.badgeTitle || tHero("badgeTitle")}
                     </span>
                     <Heart className="size-3 text-muted-foreground stroke-[1.5]" />
                   </div>
@@ -532,10 +541,10 @@ export default async function HomePage() {
           <div className="relative rounded-3xl overflow-hidden border border-border bg-foreground text-background p-8 sm:p-14 shadow-xl">
             <div className="relative z-10 max-w-2xl flex flex-col gap-4">
               <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl tracking-tight leading-tight">
-                {tMani("title")}
+                {homeContent.manifesto.title || tMani("title")}
               </h2>
               <p className="text-sm sm:text-base text-background/80 leading-relaxed max-w-xl">
-                {tMani("subtitle")}
+                {homeContent.manifesto.subtitle || tMani("subtitle")}
               </p>
               <div className="flex flex-wrap items-center gap-4 pt-4">
                 <Button
@@ -544,7 +553,7 @@ export default async function HomePage() {
                   className="gap-2 rounded-xl text-sm shadow-md bg-background text-foreground hover:bg-background/90 font-medium"
                 >
                   <Link href="/packages">
-                    <span>{tMani("primaryCta")}</span>
+                    <span>{homeContent.manifesto.primaryCta || tMani("primaryCta")}</span>
                     <ArrowRight className="size-4" />
                   </Link>
                 </Button>
@@ -555,7 +564,7 @@ export default async function HomePage() {
                   className="gap-2 rounded-xl text-sm border-background/30 bg-transparent text-background hover:bg-background/10 hover:text-background"
                 >
                   <Link href="/packages">
-                    <span>{tMani("secondaryCta")}</span>
+                    <span>{homeContent.manifesto.secondaryCta || tMani("secondaryCta")}</span>
                   </Link>
                 </Button>
               </div>
