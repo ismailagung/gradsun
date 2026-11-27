@@ -113,13 +113,15 @@ export default async function HomePage() {
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
               <div className="flex flex-col gap-2 max-w-xl">
                 <span className="text-xs font-semibold uppercase tracking-widest text-primary">
-                  {tPortfolio("tag")}
+                  {homeContent.gallerySection?.tag || tPortfolio("tag")}
                 </span>
                 <h2 className="font-serif text-3xl sm:text-4xl text-foreground tracking-tight">
-                  {tPortfolio("title")}
+                  {homeContent.gallerySection?.title || tPortfolio("title")}
                 </h2>
               </div>
-              <p className="text-sm text-muted-foreground max-w-md">{tPortfolio("subtitle")}</p>
+              <p className="text-sm text-muted-foreground max-w-md">
+                {homeContent.gallerySection?.subtitle || tPortfolio("subtitle")}
+              </p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -211,13 +213,15 @@ export default async function HomePage() {
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
             <div className="flex flex-col gap-2 max-w-xl">
               <span className="text-xs font-semibold uppercase tracking-widest text-primary">
-                {tPkg("tag")}
+                {homeContent.packagesSection?.tag || tPkg("tag")}
               </span>
               <h2 className="font-serif text-3xl sm:text-4xl text-foreground tracking-tight">
-                {tPkg("title")}
+                {homeContent.packagesSection?.title || tPkg("title")}
               </h2>
             </div>
-            <p className="text-sm text-muted-foreground max-w-md">{tPkg("subtitle")}</p>
+            <p className="text-sm text-muted-foreground max-w-md">
+              {homeContent.packagesSection?.subtitle || tPkg("subtitle")}
+            </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -428,13 +432,15 @@ export default async function HomePage() {
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
             <div className="flex flex-col gap-2 max-w-xl">
               <span className="text-xs font-semibold uppercase tracking-widest text-primary">
-                {tTesti("tag")}
+                {homeContent.testimonialsSection?.tag || tTesti("tag")}
               </span>
               <h2 className="font-serif text-3xl sm:text-4xl text-foreground tracking-tight">
-                {tTesti("title")}
+                {homeContent.testimonialsSection?.title || tTesti("title")}
               </h2>
             </div>
-            <p className="text-sm text-muted-foreground max-w-md">{tTesti("subtitle")}</p>
+            <p className="text-sm text-muted-foreground max-w-md">
+              {homeContent.testimonialsSection?.subtitle || tTesti("subtitle")}
+            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

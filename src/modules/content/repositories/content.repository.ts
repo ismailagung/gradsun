@@ -20,6 +20,23 @@ const DEFAULT_CONTENT_SETTINGS: ContentSettings = {
       heroImageUrl: "/logo-bg.jpg",
       polaroidImageUrl: "/logo-bg.jpg",
     },
+    gallerySection: {
+      tag: "Recent Gallery Showcase",
+      title: "Milestones Captured in Light",
+      subtitle: "A glimpse of recent graduation portraits celebrated across prestigious campuses.",
+    },
+    packagesSection: {
+      tag: "Curated Commemorative Tiers",
+      title: "Reserve Your Golden Hour Chapter",
+      subtitle:
+        "Tailored lighting, tactile memory folios, and seamless coordination for every milestone.",
+    },
+    testimonialsSection: {
+      tag: "Wall of Love",
+      title: "Words of Joy From Graduates",
+      subtitle:
+        "Heartfelt reflections from alumni and families who entrusted us with their milestone day.",
+    },
     manifesto: {
       title: "Ready to Capture Your Graduation Milestone?",
       subtitle:
