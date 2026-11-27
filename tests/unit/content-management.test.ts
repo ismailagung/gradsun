@@ -210,4 +210,36 @@ describe("Content Management System (TDD)", () => {
     expect(result.publicUrl).toContain("commencement-sample.webp");
     expect(result.key).toMatch(/^cms\/hero\/\d+-commencement-sample\.webp$/);
   });
+
+  it("automatically transcodes raw PNG input into compressed WebP and normalizes extension", async () => {
+    const sharp = (await import("sharp")).default;
+    const { UploadCmsAssetUseCase } = await import(
+      "@/modules/content/use-cases/upload-cms-asset.use-case"
+    );
+
+    // Create a 100x100 solid PNG image
+    const rawPngBuffer = await sharp({
+      create: {
+        width: 100,
+        height: 100,
+        channels: 4,
+        background: { r: 217, g: 119, b: 6, alpha: 1 },
+      },
+    })
+      .png()
+      .toBuffer();
+
+    const base64Data = `data:image/png;base64,${rawPngBuffer.toString("base64")}`;
+
+    const useCase = new UploadCmsAssetUseCase();
+    const result = await useCase.execute({
+      folder: "hero",
+      fileName: "editorial-original-portrait.png",
+      contentType: "image/png",
+      base64Data,
+    });
+
+    expect(result.key).toMatch(/^cms\/hero\/\d+-editorial-original-portrait\.webp$/);
+    expect(result.publicUrl).toContain(".webp");
+  });
 });
