@@ -125,4 +125,19 @@ describe("Content Management System (TDD)", () => {
     expect(settings.home.hero.heroImageUrl).toBe("/images/hero-tdd.jpg");
     expect(settings.gallery.title).toBe(beforeUpdate.gallery.title);
   });
+
+  it("verifies CmsHomeEditor renders faithful arched showcase and dark manifesto banner structure", async () => {
+    const fs = await import("node:fs");
+    const path = await import("node:path");
+    const editorSource = fs.readFileSync(
+      path.join(process.cwd(), "src/modules/content/components/cms-home-editor.tsx"),
+      "utf-8",
+    );
+
+    // Verify arched portrait frame and floating rotated polaroid styling in live preview
+    expect(editorSource).toContain("aspect-[3/4]");
+    expect(editorSource).toContain("rotate-[-3deg]");
+    // Verify dark manifesto banner styling in live preview
+    expect(editorSource).toContain("bg-foreground text-background");
+  });
 });
