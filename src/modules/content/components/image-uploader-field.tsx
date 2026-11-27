@@ -14,7 +14,7 @@ interface ImageUploaderFieldProps {
   label: string;
   value: string;
   onChange: (url: string) => void;
-  folder?: "hero" | "manifesto" | "general";
+  folder?: "hero" | "gallery" | "packages" | "manifesto" | "general";
   description?: string;
 }
 

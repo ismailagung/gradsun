@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const uploadCmsAssetSchema = z.object({
-  folder: z.enum(["hero", "manifesto", "general"]).default("hero"),
+  folder: z.enum(["hero", "gallery", "packages", "manifesto", "general"]).default("hero"),
   fileName: z.string().min(1, "File name is required"),
   contentType: z.string().min(1, "Content type is required"),
   base64Data: z.string().min(1, "Base64 data is required"),

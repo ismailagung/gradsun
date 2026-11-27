@@ -3,6 +3,7 @@ import { prisma } from "@/infrastructure/prisma/client";
 import {
   type ContentSettings,
   contentSettingsSchema,
+  DEFAULT_GALLERY_CONTENT,
   DEFAULT_HOME_CONTENT,
 } from "../schemas/content-settings.schema";
 
@@ -15,14 +16,7 @@ export const CONTENT_SETTING_KEY = "content_settings";
 
 export const DEFAULT_CONTENT_SETTINGS: ContentSettings = {
   home: DEFAULT_HOME_CONTENT,
-  gallery: {
-    tag: "Fine-Art Archives",
-    title: "The Gradsun Gallery",
-    subtitle:
-      "A curated visual anthology of commencement portraiture, intimate academic celebrations, and timeless collegiate milestones.",
-    filterNote:
-      "All portrait files and photo proofing galleries are dynamically synchronized from client sessions via Gallery Proofs.",
-  },
+  gallery: DEFAULT_GALLERY_CONTENT,
   packages: {
     seasonTag: "Commencement Season 2025",
     title: "Reserve Your Golden Hour Chapter",
