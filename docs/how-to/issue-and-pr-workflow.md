@@ -22,10 +22,22 @@ Every task must strictly adhere to its assigned `Owned Paths` to prevent merge c
 
 All pull requests must be merged via **Squash and Merge**.
 
-## Issue-First Protocol & SemVer Advisory
+## Issue-First Protocol & Decisive SemVer Advisory
 
 1. **Issue-First Protocol:** Every task, feature request, ad-hoc change, or maintenance chore must originate with a tracked GitHub Issue before creating a branch. Direct pushes to `main` are strictly forbidden.
-2. **SemVer Advisory:** Collaborating agents must proactively advise the user after every merged issue on whether to trigger a release or maintain current version status.
+2. **Decisive SemVer Advisory:** Collaborating agents must provide an opinionated, decisive recommendation (YES or NO)—never ambiguous options—after every merged issue on whether to trigger a release or maintain current version status based on milestone completeness.
+
+## Changelog Hygiene & Net-Delta Protocol
+
+Release notes and changelogs represent solely the user-facing delta between the previous release and current release ($\Delta = \text{State}(V_{\text{curr}}) - \text{State}(V_{\text{prev}})$).
+
+Only three change types qualify for publication:
+
+1. **Added:** Present in current version, absent in previous version.
+2. **Changed / Fixed:** Existed as $A$ in previous version, transformed to $B$ in current version.
+3. **Removed:** Existed in previous version, excised in current version.
+
+**Internal Churn Rule:** Features, fields, or chores introduced and subsequently removed or superseded within the same sprint cycle ($\Delta = 0$) are considered internal drafting noise and must be expunged from release notes before publishing.
 
 ## Pull Request Title & Conventional Commits
 
