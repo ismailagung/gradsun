@@ -33,35 +33,22 @@
 * **navigation:** add active route highlight indicator to public navbar ([#83](https://github.com/ismailagung/gradsun/issues/83)) ([#84](https://github.com/ismailagung/gradsun/issues/84)) ([54408a6](https://github.com/ismailagung/gradsun/commit/54408a6de955e456e904bb46321b5f0445750f37))
 * **navigation:** relocate studio admin link to footer and update terms copy ([#74](https://github.com/ismailagung/gradsun/issues/74)) ([7b0b4aa](https://github.com/ismailagung/gradsun/commit/7b0b4aa7d5703ac4b5a223406a069b9a5d88d9c7))
 * **notifications:** implement automated reminder cron jobs for upcoming sessions ([#59](https://github.com/ismailagung/gradsun/issues/59)) ([6fe61f9](https://github.com/ismailagung/gradsun/commit/6fe61f9f54a9092bffcd0526c93291b9cee2d13e))
-* **packages:** implement master packages CRUD and presentation CMS with live preview ([#114](https://github.com/ismailagung/gradsun/issues/114)) ([4440fc0](https://github.com/ismailagung/gradsun/commit/4440fc01942750be4752bd79801931c5baed4776))
-* **packages:** implement original 4 Gradsun packages in database and CMS ([#122](https://github.com/ismailagung/gradsun/issues/122)) ([5f8bb87](https://github.com/ismailagung/gradsun/commit/5f8bb87f25900952bbe67d470793bec63833dc89))
+* **packages:** implement Master Packages and Presentation CMS with authentic Gradsun packages ([#114](https://github.com/ismailagung/gradsun/issues/114), [#122](https://github.com/ismailagung/gradsun/issues/122))
 * **packages:** iterative visual polish, 24h time picker, and reservation summary ([#70](https://github.com/ismailagung/gradsun/issues/70)) ([c9641ec](https://github.com/ismailagung/gradsun/commit/c9641ec1ba2b6f84ff6f6b9abe3720618d86793b))
 * **proofing:** implement interactive client photo selection and order tracking portal ([#55](https://github.com/ismailagung/gradsun/issues/55)) ([d21b6a7](https://github.com/ismailagung/gradsun/commit/d21b6a79e82ad7e2b7f7b0e281803618e71ec256))
 * **reservations:** implement booking creation use-case, repository, and safe action with dynamic slot reservation ([#50](https://github.com/ismailagung/gradsun/issues/50)) ([78e90b0](https://github.com/ismailagung/gradsun/commit/78e90b0639986b13144488497126a6ac4e29da16))
 * **schema:** isolate schema migration for comprehensive reservations, invoice records, and manual payment tracking ([#48](https://github.com/ismailagung/gradsun/issues/48)) ([5aa4d10](https://github.com/ismailagung/gradsun/commit/5aa4d10cf2d3cebd65035d4ca89ebaacac492bc5))
 * **schema:** isolate schema migration for photo galleries, proofing sessions, and client photo selections ([#53](https://github.com/ismailagung/gradsun/issues/53)) ([eb80457](https://github.com/ismailagung/gradsun/commit/eb804575a27a879c782fb5af74a0ed58bfcd05b8))
+* **seo:** implement dynamic opengraph metadata, json-ld structured data, and sitemap for campus search visibility ([#60](https://github.com/ismailagung/gradsun/issues/60)) ([b6a840a](https://github.com/ismailagung/gradsun/commit/b6a840a13429dfeecf6d41a26cf4bd677591f593))
 * **track-order:** comprehensive order tracking UI with status timeline, client details, and invoice download ([#72](https://github.com/ismailagung/gradsun/issues/72)) ([06cd4bf](https://github.com/ismailagung/gradsun/commit/06cd4bf39dac4a839a183e677cb9b9eebfcb0862))
 
 
 ### Bug Fixes
 
 * **branding:** retain original logo dimensions while displaying brand name only ([#90](https://github.com/ismailagung/gradsun/issues/90)) ([a527c8d](https://github.com/ismailagung/gradsun/commit/a527c8d323dc71343d4e1cc368b4e6071e894ff8))
-* **cms:** polish Packages CMS presentation modal and arched preview UI ([#118](https://github.com/ismailagung/gradsun/issues/118)) ([976a5de](https://github.com/ismailagung/gradsun/commit/976a5dec3adafa6d50c13b3f8c949a73b4091158))
 * **home:** resolve button contrast and invisible label in manifesto banner ([#81](https://github.com/ismailagung/gradsun/issues/81)) ([#82](https://github.com/ismailagung/gradsun/issues/82)) ([335f84a](https://github.com/ismailagung/gradsun/commit/335f84a1f87976bbcc30fa9b0e21ff90d730d0db))
 * **home:** resolve hero card transparency and map tailwind v4 theme tokens ([#77](https://github.com/ismailagung/gradsun/issues/77)) ([793892d](https://github.com/ismailagung/gradsun/commit/793892d76ccd849dbcd0b10d884d481e95d0e1b6))
 * **theme:** restore neutral base palette and eliminate golden color shift ([#80](https://github.com/ismailagung/gradsun/issues/80)) ([8fc7a2b](https://github.com/ismailagung/gradsun/commit/8fc7a2b988e679bbebd31ac3bb9ea33bb6c8b6e8))
-
-
-### Miscellaneous Chores
-
-* **packages:** remove add-ons system from master packages management ([#120](https://github.com/ismailagung/gradsun/issues/120)) ([f1d572a](https://github.com/ismailagung/gradsun/commit/f1d572afed9c7c4d7fcf8151e5d57512f28c4c15))
-* **packages:** remove weather guarantee vow and season tag badge ([#116](https://github.com/ismailagung/gradsun/issues/116)) ([4fec58f](https://github.com/ismailagung/gradsun/commit/4fec58fa4fba54a40a9183053d5965285bfd66a3))
-* **seo:** implement dynamic opengraph metadata, json-ld structured data, and sitemap for campus search visibility ([#60](https://github.com/ismailagung/gradsun/issues/60)) ([b6a840a](https://github.com/ismailagung/gradsun/commit/b6a840a13429dfeecf6d41a26cf4bd677591f593))
-
-
-### Refactoring
-
-* **packages:** remove package-level deposit inputs and table column ([#124](https://github.com/ismailagung/gradsun/issues/124)) ([823b2b5](https://github.com/ismailagung/gradsun/commit/823b2b58c501eddc543d13e5d6c27a7cd7a664d7))
 
 ## [0.4.0](https://github.com/najmialazhar/gradsun/compare/gradsun-v0.3.0...gradsun-v0.4.0) (2026-11-22)
 
