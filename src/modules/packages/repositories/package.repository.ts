@@ -8,8 +8,12 @@ export type PackageWithAddons = Prisma.PackageGetPayload<{
 
 export interface IPackageRepository {
   findActivePackages(): Promise<PackageWithAddons[]>;
+  findAll(): Promise<PackageWithAddons[]>;
+  findById(id: string): Promise<PackageWithAddons | null>;
   findBySlug(slug: string): Promise<PackageWithAddons | null>;
   create(data: CreatePackageInput): Promise<PackageWithAddons>;
+  update(id: string, data: Partial<CreatePackageInput>): Promise<PackageWithAddons>;
+  delete(id: string): Promise<void>;
 }
 
 export class PackageRepository implements IPackageRepository {
@@ -22,6 +26,28 @@ export class PackageRepository implements IPackageRepository {
         },
       },
       orderBy: { basePrice: "asc" },
+    });
+  }
+
+  async findAll(): Promise<PackageWithAddons[]> {
+    return prisma.package.findMany({
+      include: {
+        addons: {
+          orderBy: { price: "asc" },
+        },
+      },
+      orderBy: { basePrice: "asc" },
+    });
+  }
+
+  async findById(id: string): Promise<PackageWithAddons | null> {
+    return prisma.package.findUnique({
+      where: { id },
+      include: {
+        addons: {
+          orderBy: { price: "asc" },
+        },
+      },
     });
   }
 
@@ -55,6 +81,40 @@ export class PackageRepository implements IPackageRepository {
       include: {
         addons: true,
       },
+    });
+  }
+
+  async update(id: string, data: Partial<CreatePackageInput>): Promise<PackageWithAddons> {
+    const { addons, ...packageData } = data;
+
+    return prisma.package.update({
+      where: { id },
+      data: {
+        ...packageData,
+        addons:
+          addons !== undefined
+            ? {
+                deleteMany: {},
+                create: addons.map((addon) => ({
+                  name: addon.name,
+                  price: addon.price,
+                  description: addon.description ?? null,
+                  maxQuantity: addon.maxQuantity ?? 1,
+                })),
+              }
+            : undefined,
+      },
+      include: {
+        addons: {
+          orderBy: { price: "asc" },
+        },
+      },
+    });
+  }
+
+  async delete(id: string): Promise<void> {
+    await prisma.package.delete({
+      where: { id },
     });
   }
 }

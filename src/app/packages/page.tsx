@@ -1,56 +1,143 @@
+import { Sun } from "lucide-react";
 import { getTranslations } from "next-intl/server";
+import { Badge } from "@/common/components/ui/badge";
+import { ContentRepository } from "@/modules/content/repositories/content.repository";
+import { GetContentSettingsUseCase } from "@/modules/content/use-cases/get-content-settings.use-case";
+import { PackageRepository } from "@/modules/packages/repositories/package.repository";
 import {
   PackagesBookingFlow,
   type PackagesBookingFlowLabels,
   type PackageTierItem,
 } from "@/modules/reservations/components/packages-booking-flow";
 
+export const dynamic = "force-dynamic";
+
 export default async function PackagesBookingPage() {
   const tPkg = await getTranslations("packagesPage");
   const tPkgSummary = await getTranslations("packagesSummary");
 
-  const packageTiers: PackageTierItem[] = [
-    {
-      id: "pkg-single-1",
-      title: tPkgSummary("pkg1Title"),
-      price: tPkgSummary("pkg1Price"),
-      dpPrice: "IDR 225,000",
-      duration: tPkgSummary("pkg1Duration"),
-      scope: tPkgSummary("pkg1Scope"),
-      feats: [tPkgSummary("pkg1Feat1"), tPkgSummary("pkg1Feat2"), tPkgSummary("pkg1Feat3")],
-      iconType: "single",
-    },
-    {
-      id: "pkg-single-2",
-      title: tPkgSummary("pkg2Title"),
-      price: tPkgSummary("pkg2Price"),
-      dpPrice: "IDR 325,000",
-      duration: tPkgSummary("pkg2Duration"),
-      scope: tPkgSummary("pkg2Scope"),
-      feats: [tPkgSummary("pkg2Feat1"), tPkgSummary("pkg2Feat2"), tPkgSummary("pkg2Feat3")],
-      iconType: "sparkles",
-    },
-    {
-      id: "pkg-group-1",
-      title: tPkgSummary("pkg3Title"),
-      price: tPkgSummary("pkg3Price"),
-      dpPrice: "IDR 425,000",
-      duration: tPkgSummary("pkg3Duration"),
-      scope: tPkgSummary("pkg3Scope"),
-      feats: [tPkgSummary("pkg3Feat1"), tPkgSummary("pkg3Feat2"), tPkgSummary("pkg3Feat3")],
-      iconType: "group",
-    },
-    {
-      id: "pkg-group-2",
-      title: tPkgSummary("pkg4Title"),
-      price: tPkgSummary("pkg4Price"),
-      dpPrice: "IDR 625,000",
-      duration: tPkgSummary("pkg4Duration"),
-      scope: tPkgSummary("pkg4Scope"),
-      feats: [tPkgSummary("pkg4Feat1"), tPkgSummary("pkg4Feat2"), tPkgSummary("pkg4Feat3")],
-      iconType: "group",
-    },
-  ];
+  // Fetch dynamic CMS content settings and master packages
+  const contentRepository = new ContentRepository();
+  const getContentUseCase = new GetContentSettingsUseCase(contentRepository);
+  const content = await getContentUseCase.execute();
+  const cmsPackages = content.packages;
+
+  const packageRepository = new PackageRepository();
+  const activePackages = await packageRepository.findActivePackages();
+
+  const formatPrice = (val: number) => {
+    return new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      maximumFractionDigits: 0,
+    }).format(val);
+  };
+
+  // Derive dynamic tiers from CMS Presentation Cards joined with Master Packages
+  let packageTiers: PackageTierItem[] = [];
+
+  if (cmsPackages?.cards && cmsPackages.cards.length > 0) {
+    packageTiers = cmsPackages.cards
+      .map((card) => {
+        const pkg = activePackages.find(
+          (p) => p.id === card.packageId || p.slug === card.packageId,
+        );
+        if (!pkg) return null;
+
+        const dpAmount = Math.round((pkg.basePrice * pkg.downPaymentPercent) / 100);
+        let iconType: "single" | "sparkles" | "group" = "single";
+        if (pkg.slug.includes("group") || pkg.slug.includes("cohort")) {
+          iconType = "group";
+        } else if (pkg.slug.includes("duo") || pkg.slug.includes("besties")) {
+          iconType = "sparkles";
+        }
+
+        return {
+          id: pkg.id,
+          title: pkg.title,
+          price: formatPrice(pkg.basePrice),
+          dpPrice: formatPrice(dpAmount),
+          duration: `${pkg.durationMinutes} Minutes`,
+          scope: `${pkg.editQuota} Edited Photos • Studio Session`,
+          feats:
+            card.customFeatures && card.customFeatures.length > 0
+              ? card.customFeatures
+              : [tPkgSummary("pkg1Feat1"), tPkgSummary("pkg1Feat2"), tPkgSummary("pkg1Feat3")],
+          iconType,
+        };
+      })
+      .filter((tier): tier is PackageTierItem => tier !== null);
+  }
+
+  // Fallback to active master packages or default tiers if cards are not yet configured
+  if (packageTiers.length === 0 && activePackages.length > 0) {
+    packageTiers = activePackages.map((pkg) => {
+      const dpAmount = Math.round((pkg.basePrice * pkg.downPaymentPercent) / 100);
+      let iconType: "single" | "sparkles" | "group" = "single";
+      if (pkg.slug.includes("group") || pkg.slug.includes("cohort")) {
+        iconType = "group";
+      } else if (pkg.slug.includes("duo") || pkg.slug.includes("besties")) {
+        iconType = "sparkles";
+      }
+
+      return {
+        id: pkg.id,
+        title: pkg.title,
+        price: formatPrice(pkg.basePrice),
+        dpPrice: formatPrice(dpAmount),
+        duration: `${pkg.durationMinutes} Minutes`,
+        scope: `${pkg.editQuota} Edited Photos • Studio Session`,
+        feats: [tPkgSummary("pkg1Feat1"), tPkgSummary("pkg1Feat2"), tPkgSummary("pkg1Feat3")],
+        iconType,
+      };
+    });
+  }
+
+  // Fallback if database is entirely unseeded
+  if (packageTiers.length === 0) {
+    packageTiers = [
+      {
+        id: "pkg-single-1",
+        title: tPkgSummary("pkg1Title"),
+        price: tPkgSummary("pkg1Price"),
+        dpPrice: "IDR 225,000",
+        duration: tPkgSummary("pkg1Duration"),
+        scope: tPkgSummary("pkg1Scope"),
+        feats: [tPkgSummary("pkg1Feat1"), tPkgSummary("pkg1Feat2"), tPkgSummary("pkg1Feat3")],
+        iconType: "single",
+      },
+      {
+        id: "pkg-single-2",
+        title: tPkgSummary("pkg2Title"),
+        price: tPkgSummary("pkg2Price"),
+        dpPrice: "IDR 325,000",
+        duration: tPkgSummary("pkg2Duration"),
+        scope: tPkgSummary("pkg2Scope"),
+        feats: [tPkgSummary("pkg2Feat1"), tPkgSummary("pkg2Feat2"), tPkgSummary("pkg2Feat3")],
+        iconType: "sparkles",
+      },
+      {
+        id: "pkg-group-1",
+        title: tPkgSummary("pkg3Title"),
+        price: tPkgSummary("pkg3Price"),
+        dpPrice: "IDR 425,000",
+        duration: tPkgSummary("pkg3Duration"),
+        scope: tPkgSummary("pkg3Scope"),
+        feats: [tPkgSummary("pkg3Feat1"), tPkgSummary("pkg3Feat2"), tPkgSummary("pkg3Feat3")],
+        iconType: "group",
+      },
+      {
+        id: "pkg-group-2",
+        title: tPkgSummary("pkg4Title"),
+        price: tPkgSummary("pkg4Price"),
+        dpPrice: "IDR 625,000",
+        duration: tPkgSummary("pkg4Duration"),
+        scope: tPkgSummary("pkg4Scope"),
+        feats: [tPkgSummary("pkg4Feat1"), tPkgSummary("pkg4Feat2"), tPkgSummary("pkg4Feat3")],
+        iconType: "group",
+      },
+    ];
+  }
 
   const flowLabels: PackagesBookingFlowLabels = {
     step1Title: tPkg("step1Title"),
@@ -142,12 +229,33 @@ export default async function PackagesBookingPage() {
         {/* Page Header */}
         <div className="pb-10 border-b border-border">
           <div className="flex flex-col gap-2 max-w-2xl">
+            {cmsPackages?.seasonTag && (
+              <Badge
+                variant="outline"
+                className="w-fit text-xs font-sans border-primary/30 text-primary tracking-wide uppercase px-2.5 py-0.5"
+              >
+                {cmsPackages.seasonTag}
+              </Badge>
+            )}
             <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-foreground tracking-tight">
-              {tPkg("headerTitle")}
+              {cmsPackages?.title || tPkg("headerTitle")}
             </h1>
             <p className="text-sm sm:text-base text-muted-foreground mt-1">
-              {tPkg("headerSubtitle")}
+              {cmsPackages?.subtitle || tPkg("headerSubtitle")}
             </p>
+
+            {/* Weather Guarantee Banner */}
+            {cmsPackages?.vowTitle && (
+              <div className="mt-4 flex items-center gap-3 p-3.5 rounded-xl border bg-amber-500/10 border-amber-500/20 max-w-xl">
+                <Sun className="size-5 text-amber-500 shrink-0" />
+                <div className="flex flex-col">
+                  <span className="text-xs font-semibold text-foreground">
+                    {cmsPackages.vowTitle}
+                  </span>
+                  <span className="text-xs text-muted-foreground">{cmsPackages.vowSubtitle}</span>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 

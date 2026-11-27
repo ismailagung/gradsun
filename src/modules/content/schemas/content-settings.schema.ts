@@ -51,12 +51,22 @@ export const galleryCmsSchema = z.object({
   items: z.array(galleryPortfolioItemSchema).default([]),
 });
 
+export const packageCardPresentationSchema = z.object({
+  id: z.string(),
+  packageId: z.string().min(1),
+  thumbnailUrl: z.string().min(1),
+  badge: z.string().default(""),
+  customFeatures: z.array(z.string()).default([]),
+  order: z.number().default(0),
+});
+
 export const packagesCmsSchema = z.object({
   seasonTag: z.string().min(1),
   title: z.string().min(1),
   subtitle: z.string().min(1),
   vowTitle: z.string().min(1),
   vowSubtitle: z.string().min(1),
+  cards: z.array(packageCardPresentationSchema).default([]),
 });
 
 export const trackOrderCmsSchema = z.object({
@@ -77,6 +87,7 @@ export const contentSettingsSchema = z.object({
 export type HomeCms = z.infer<typeof homeCmsSchema>;
 export type GalleryPortfolioItem = z.infer<typeof galleryPortfolioItemSchema>;
 export type GalleryCms = z.infer<typeof galleryCmsSchema>;
+export type PackageCardPresentation = z.infer<typeof packageCardPresentationSchema>;
 export type PackagesCms = z.infer<typeof packagesCmsSchema>;
 export type TrackOrderCms = z.infer<typeof trackOrderCmsSchema>;
 export type ContentSettings = z.infer<typeof contentSettingsSchema>;
@@ -163,6 +174,55 @@ export const DEFAULT_GALLERY_CONTENT: GalleryCms = {
     "A curated visual anthology of commencement portraiture, intimate academic celebrations, and timeless collegiate milestones.",
   filterNote: "",
   items: DEFAULT_GALLERY_ITEMS,
+};
+
+export const DEFAULT_PACKAGES_CARDS: PackageCardPresentation[] = [
+  {
+    id: "pkg-card-1",
+    packageId: "solo-commencement",
+    thumbnailUrl: "/logo-bg.jpg",
+    badge: "Classic Solo",
+    customFeatures: [
+      "Dedicated Studio Lighting & Portraitist",
+      "All Raw Photos + 5 High-End Retouched",
+      "Private Online Gallery Delivery in 48h",
+    ],
+    order: 1,
+  },
+  {
+    id: "pkg-card-2",
+    packageId: "besties-and-duo",
+    thumbnailUrl: "/logo-bg.jpg",
+    badge: "Most Popular",
+    customFeatures: [
+      "60 Mins Duo/Besties Studio Session",
+      "All Uncompressed High-Res Originals",
+      "10 Fine-Art Retouched Commencement Plates",
+    ],
+    order: 2,
+  },
+  {
+    id: "pkg-card-3",
+    packageId: "sunset-cohort",
+    thumbnailUrl: "/logo-bg.jpg",
+    badge: "Group Milestone",
+    customFeatures: [
+      "90 Mins Cohort Circle (up to 8 people)",
+      "Studio + Outdoor Campus Sunset Golden Hour",
+      "20 Editorial Retouched Master Prints",
+    ],
+    order: 3,
+  },
+];
+
+export const DEFAULT_PACKAGES_CONTENT: PackagesCms = {
+  seasonTag: "Commencement Season 2025",
+  title: "Reserve Your Golden Hour Chapter",
+  subtitle:
+    "Secure your commencement date with our stress-free reservation flow. Tailored lighting, tactile memory folios, and seamless coordination.",
+  vowTitle: "100% Golden Weather Vow",
+  vowSubtitle: "Free reschedule for rainy days",
+  cards: DEFAULT_PACKAGES_CARDS,
 };
 
 export const DEFAULT_HOME_CONTENT: HomeCms = {

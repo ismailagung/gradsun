@@ -38,8 +38,12 @@ describe("Packages Domain Use Cases", () => {
     overrides: Partial<IPackageRepository> = {},
   ): IPackageRepository => ({
     findActivePackages: vi.fn().mockResolvedValue([mockPackage]),
+    findAll: vi.fn().mockResolvedValue([mockPackage]),
+    findById: vi.fn().mockResolvedValue(mockPackage),
     findBySlug: vi.fn().mockResolvedValue(null),
     create: vi.fn().mockResolvedValue(mockPackage),
+    update: vi.fn().mockResolvedValue(mockPackage),
+    delete: vi.fn().mockResolvedValue(undefined),
     ...overrides,
   });
 
