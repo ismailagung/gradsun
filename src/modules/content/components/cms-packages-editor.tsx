@@ -720,12 +720,6 @@ export function CmsPackagesEditor({ initialContent, availablePackages }: CmsPack
                   >
                     {`${selectedPkgDetails.editQuota} ${tPackages("photosSuffix")}`}
                   </Badge>
-                  <Badge
-                    variant="outline"
-                    className="text-[10px] py-0 px-2 font-normal text-muted-foreground border-border bg-muted/40"
-                  >
-                    {tCms("dpPill", { percent: selectedPkgDetails.downPaymentPercent })}
-                  </Badge>
                 </div>
               ) : null}
             </div>
