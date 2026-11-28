@@ -59,7 +59,7 @@ describe("Middleware Admin Portal Access Governance", () => {
 
   it("allows admin access in production when authorization header or bypass header exists", () => {
     const withBearer = checkAdminAccess({
-      pathname: "/admin/studios",
+      pathname: "/admin/packages",
       nodeEnv: "production",
       hasAuthHeader: true,
     });

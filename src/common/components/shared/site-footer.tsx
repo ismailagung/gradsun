@@ -4,8 +4,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
+import type {
+  BrandingSettings,
+  FooterSettings,
+} from "@/modules/settings/schemas/general-settings.schema";
 
-export function SiteFooter() {
+interface SiteFooterProps {
+  footer?: FooterSettings;
+  branding?: BrandingSettings;
+}
+
+export function SiteFooter({ footer, branding }: SiteFooterProps) {
   const pathname = usePathname();
   const tNav = useTranslations("nav");
   const tFoot = useTranslations("footer");
@@ -15,6 +24,13 @@ export function SiteFooter() {
     return null;
   }
 
+  const logoSrc = branding?.logoUrl || "/gradsun-no-bg.png";
+  const brandName = branding?.brandName || tNav("brand");
+  const description = footer?.description || tFoot("description");
+  const ownerName = footer?.ownerName || tFoot("ownerValue");
+  const waUrl = footer?.whatsappUrl || "https://wa.me";
+  const igUrl = footer?.instagramUrl || "https://instagram.com";
+
   return (
     <footer className="border-t border-border bg-card pt-14 pb-8 px-4 sm:px-6 lg:px-8 mt-auto">
       <div className="mx-auto max-w-7xl grid grid-cols-1 md:grid-cols-3 gap-8 pb-10 border-b border-border">
@@ -22,22 +38,23 @@ export function SiteFooter() {
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-3">
             <Image
-              src="/gradsun-no-bg.png"
+              src={logoSrc}
               alt={tNav("logoAlt")}
               width={32}
               height={32}
               className="size-8 object-contain"
+              unoptimized
             />
             <span className="font-serif text-lg font-semibold tracking-tight text-foreground">
-              {tNav("brand")}
+              {brandName}
             </span>
           </div>
-          <p className="text-xs text-muted-foreground leading-relaxed">{tFoot("description")}</p>
+          <p className="text-xs text-muted-foreground leading-relaxed">{description}</p>
           <div className="pt-2">
             <span className="text-[11px] font-semibold text-foreground uppercase tracking-wider block font-serif">
               {tFoot("ownerTitle")}
             </span>
-            <span className="text-xs text-muted-foreground">{tFoot("ownerValue")}</span>
+            <span className="text-xs text-muted-foreground">{ownerName}</span>
           </div>
         </div>
 
@@ -66,7 +83,7 @@ export function SiteFooter() {
           </span>
           <div className="flex flex-col gap-1.5 text-xs text-muted-foreground">
             <a
-              href="https://instagram.com"
+              href={igUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-primary transition-colors"
@@ -74,7 +91,7 @@ export function SiteFooter() {
               {tFoot("instagram")}
             </a>
             <a
-              href="https://wa.me"
+              href={waUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-primary transition-colors"
