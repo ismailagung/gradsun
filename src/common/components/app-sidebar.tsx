@@ -1,12 +1,12 @@
 "use client";
 
 import {
-  Building2,
   CalendarCheck,
   FileText,
   Images,
   Layers,
   LayoutDashboard,
+  Settings,
   Sparkles,
   Users,
 } from "lucide-react";
@@ -34,8 +34,8 @@ export function getAdminNavGroups(tNav: (key: string) => string): AdminNavGroup[
         { title: tNav("dashboard"), url: "/admin", icon: LayoutDashboard },
         { title: tNav("bookings"), url: "/admin/bookings", icon: CalendarCheck },
         { title: tNav("packages"), url: "/admin/packages", icon: Layers },
-        { title: tNav("studios"), url: "/admin/studios", icon: Building2 },
         { title: tNav("customers"), url: "/admin/customers", icon: Users },
+        { title: tNav("generalSettings"), url: "/admin/settings", icon: Settings },
       ],
     },
     {

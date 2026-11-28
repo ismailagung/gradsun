@@ -19,8 +19,8 @@ describe("Admin App Sidebar Navigation Structure (TDD)", () => {
       "/admin",
       "/admin/bookings",
       "/admin/packages",
-      "/admin/studios",
       "/admin/customers",
+      "/admin/settings",
     ]);
   });
 

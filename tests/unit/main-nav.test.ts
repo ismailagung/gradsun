@@ -50,7 +50,7 @@ describe("Public Navigation & Site Header Governance", () => {
     it("suppresses public header on admin, invoice, and auth routes", () => {
       expect(shouldRenderSiteHeader("/admin")).toBe(false);
       expect(shouldRenderSiteHeader("/admin/bookings")).toBe(false);
-      expect(shouldRenderSiteHeader("/admin/studios")).toBe(false);
+      expect(shouldRenderSiteHeader("/admin/packages")).toBe(false);
       expect(shouldRenderSiteHeader("/invoice/INV-123")).toBe(false);
       expect(shouldRenderSiteHeader("/login")).toBe(false);
     });

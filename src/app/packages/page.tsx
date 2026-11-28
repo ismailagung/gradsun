@@ -7,6 +7,8 @@ import {
   type PackagesBookingFlowLabels,
   type PackageTierItem,
 } from "@/modules/reservations/components/packages-booking-flow";
+import { GeneralSettingsRepository } from "@/modules/settings/repositories/general-settings.repository";
+import { GetGeneralSettingsUseCase } from "@/modules/settings/use-cases/get-general-settings.use-case";
 
 export const dynamic = "force-dynamic";
 
@@ -22,6 +24,11 @@ export default async function PackagesBookingPage() {
 
   const packageRepository = new PackageRepository();
   const activePackages = await packageRepository.findActivePackages();
+
+  const settingsRepository = new GeneralSettingsRepository();
+  const getSettingsUseCase = new GetGeneralSettingsUseCase(settingsRepository);
+  const generalSettings = await getSettingsUseCase.execute();
+  const globalDpPercent = generalSettings.orders.downPaymentPercent;
 
   const formatPrice = (val: number) => {
     return new Intl.NumberFormat("id-ID", {
@@ -42,7 +49,7 @@ export default async function PackagesBookingPage() {
         );
         if (!pkg) return null;
 
-        const dpAmount = Math.round((pkg.basePrice * pkg.downPaymentPercent) / 100);
+        const dpAmount = Math.round((pkg.basePrice * globalDpPercent) / 100);
         let iconType: "single" | "sparkles" | "group" = "single";
         if (pkg.slug.includes("group") || pkg.slug.includes("cohort")) {
           iconType = "group";
@@ -70,7 +77,7 @@ export default async function PackagesBookingPage() {
   // Fallback to active master packages or default tiers if cards are not yet configured
   if (packageTiers.length === 0 && activePackages.length > 0) {
     packageTiers = activePackages.map((pkg) => {
-      const dpAmount = Math.round((pkg.basePrice * pkg.downPaymentPercent) / 100);
+      const dpAmount = Math.round((pkg.basePrice * globalDpPercent) / 100);
       let iconType: "single" | "sparkles" | "group" = "single";
       if (pkg.slug.includes("group") || pkg.slug.includes("cohort")) {
         iconType = "group";

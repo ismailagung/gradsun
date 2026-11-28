@@ -7,6 +7,8 @@ import type {
 } from "@/modules/reservations/repositories/reservation.repository";
 import type { CreateReservationInput } from "@/modules/reservations/schemas/create-reservation.schema";
 import { CreateReservationUseCase } from "@/modules/reservations/use-cases/create-reservation.use-case";
+import type { IGeneralSettingsRepository } from "@/modules/settings/repositories/general-settings.repository";
+import { DEFAULT_GENERAL_SETTINGS } from "@/modules/settings/schemas/general-settings.schema";
 
 describe("CreateReservationUseCase (TDD)", () => {
   const mockPackage: ReservationPackageInfo = {
@@ -60,7 +62,10 @@ describe("CreateReservationUseCase (TDD)", () => {
     findConfirmedSessions: vi.fn().mockResolvedValue([]),
     findBlackoutDates: vi.fn().mockResolvedValue([]),
     findByCode: vi.fn().mockResolvedValue(null),
-    create: vi.fn().mockResolvedValue(mockCreatedReservation),
+    create: vi.fn().mockImplementation(async (data) => ({
+      ...mockCreatedReservation,
+      ...data,
+    })),
     updateStatus: vi.fn().mockResolvedValue(mockCreatedReservation),
     updatePaymentStatus: vi.fn().mockResolvedValue(mockCreatedReservation),
     findAll: vi.fn().mockResolvedValue([mockCreatedReservation]),
@@ -108,6 +113,22 @@ describe("CreateReservationUseCase (TDD)", () => {
     expect(createdData.paymentStatus).toBe("UNPAID");
     expect(createdData.startTime).toBe("10:00");
     expect(createdData.endTime).toBe("10:45");
+  });
+
+  it("generates booking code using dynamic prefix from general settings repository", async () => {
+    const repository = createMockRepo();
+    const mockSettingsRepo: IGeneralSettingsRepository = {
+      getSettings: vi.fn().mockResolvedValue({
+        ...DEFAULT_GENERAL_SETTINGS,
+        orders: { ...DEFAULT_GENERAL_SETTINGS.orders, trackingCodePrefix: "GRAD-" },
+      }),
+      updateSettings: vi.fn().mockImplementation(async (d) => d),
+    };
+    const useCase = new CreateReservationUseCase(repository, mockSettingsRepo);
+
+    const result = await useCase.execute(validInput);
+
+    expect(result.code).toMatch(/^GRAD-\d{4}-\d{4}$/);
   });
 
   it("rejects booking when the requested slot overlaps with a confirmed session", async () => {

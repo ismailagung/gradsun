@@ -1,3 +1,4 @@
+import type { IGeneralSettingsRepository } from "@/modules/settings/repositories/general-settings.repository";
 import type {
   CreateReservationData,
   IReservationRepository,
@@ -26,7 +27,10 @@ function formatMinutesToTime(minutesTotal: number): string {
 }
 
 export class CreateReservationUseCase {
-  constructor(private readonly repository: IReservationRepository) {}
+  constructor(
+    private readonly repository: IReservationRepository,
+    private readonly settingsRepo?: IGeneralSettingsRepository,
+  ) {}
 
   async execute(input: CreateReservationInput): Promise<CreateReservationResult> {
     const pkg = await this.repository.findPackageById(input.packageId);
@@ -105,15 +109,26 @@ export class CreateReservationUseCase {
 
   private async generateUniqueCode(date: Date): Promise<string> {
     const year = date.getUTCFullYear();
+    let prefix = "GS-";
+    if (this.settingsRepo) {
+      try {
+        const settings = await this.settingsRepo.getSettings();
+        if (settings?.orders?.trackingCodePrefix) {
+          prefix = settings.orders.trackingCodePrefix;
+        }
+      } catch {
+        prefix = "GS-";
+      }
+    }
     for (let attempts = 0; attempts < 5; attempts++) {
       const randomDigits = Math.floor(1000 + Math.random() * 9000);
-      const code = `GS-${year}-${randomDigits}`;
+      const code = `${prefix}${year}-${randomDigits}`;
       const existing = await this.repository.findByCode(code);
       if (!existing) {
         return code;
       }
     }
     const fallbackTimestamp = Date.now().toString().slice(-4);
-    return `GS-${year}-${fallbackTimestamp}`;
+    return `${prefix}${year}-${fallbackTimestamp}`;
   }
 }

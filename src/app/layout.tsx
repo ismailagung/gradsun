@@ -7,6 +7,8 @@ import { SiteFooter } from "@/common/components/shared/site-footer";
 import { SiteHeader } from "@/common/components/shared/site-header";
 import { TooltipProvider } from "@/common/components/ui/tooltip";
 import { env } from "@/env";
+import { GeneralSettingsRepository } from "@/modules/settings/repositories/general-settings.repository";
+import { GetGeneralSettingsUseCase } from "@/modules/settings/use-cases/get-general-settings.use-case";
 import "./globals.css";
 
 const playfair = Playfair_Display({
@@ -54,6 +56,9 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const messages = await getMessages();
+  const settingsRepo = new GeneralSettingsRepository();
+  const settingsUseCase = new GetGeneralSettingsUseCase(settingsRepo);
+  const settings = await settingsUseCase.execute();
 
   return (
     <html lang="en" className={`${plusJakarta.variable} ${playfair.variable}`}>
@@ -61,9 +66,9 @@ export default async function RootLayout({
         <NextIntlClientProvider messages={messages}>
           <TooltipProvider>
             <JsonLd />
-            <SiteHeader />
+            <SiteHeader branding={settings.branding} />
             <div className="flex-1 flex flex-col">{children}</div>
-            <SiteFooter />
+            <SiteFooter footer={settings.footer} branding={settings.branding} />
           </TooltipProvider>
         </NextIntlClientProvider>
       </body>
