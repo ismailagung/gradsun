@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.6.0](https://github.com/ismailagung/gradsun/compare/gradsun-v0.5.0...gradsun-v0.6.0) (2026-11-28)
+
+
+### Features
+
+* **settings:** introduce General Settings module and decommission studios ([#128](https://github.com/ismailagung/gradsun/issues/128)) ([#129](https://github.com/ismailagung/gradsun/issues/129)) ([cb20c31](https://github.com/ismailagung/gradsun/commit/cb20c3143ede0dea800efc394fdd1a4dafca9c76))
+
+
+### Documentation
+
+* **changelog:** clean up v0.5.0 release notes to reflect net deliverables ([8b34707](https://github.com/ismailagung/gradsun/commit/8b34707f71e9df2a423ac9bb5a5ee9afe837f1d8))
+* **changelog:** consolidate v0.5.0 release notes to strict delta from v0.4.0 ([68b2c8b](https://github.com/ismailagung/gradsun/commit/68b2c8bf9348799c8aaf7b683b22bd265d5d0d70))
+
+
+### Miscellaneous Chores
+
+* **governance:** enshrine decisive semver advisory and net-delta changelog hygiene in rules and SOPs ([#127](https://github.com/ismailagung/gradsun/issues/127)) ([385c433](https://github.com/ismailagung/gradsun/commit/385c433c77bc8880949aadd2c8bb906fe30032eb))
+
 ## [0.5.0](https://github.com/ismailagung/gradsun/compare/gradsun-v0.4.0...gradsun-v0.5.0) (2026-11-27)
 
 
